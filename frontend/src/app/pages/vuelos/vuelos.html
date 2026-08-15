@@ -1,0 +1,385 @@
+<section class="page-container">
+    <header class="page-header items-center text-center">
+        <div>
+            <h1 class="page-title">Vuelos</h1>
+
+            <p class="page-description">
+                Gestiona los vuelos y su capacidad de
+                carga.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <p-button label="Excel" icon="pi pi-file-excel"
+                [style]="{ background: '#166534', 'border-color': '#166534', color: '#ffffff' }"
+                [loading]="exportando()" (onClick)="exportarExcel()" />
+
+            <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" [style]="{ color: '#ffffff' }"
+                [loading]="exportando()" (onClick)="exportarPdf()" />
+
+            <p-button label="Nuevo vuelo" icon="pi pi-plus" (onClick)="abrirNuevo()" />
+        </div>
+    </header>
+
+    <section class="card-panel">
+        <div class="flex flex-wrap items-end gap-4">
+            <div class="field-group min-w-56 flex-1">
+                <label class="field-label" for="busqueda">
+                    Buscar
+                </label>
+
+                <input id="busqueda" pInputText class="w-full" type="text"
+                    placeholder="Código, origen o destino"
+                    [value]="busqueda()"
+                    (input)="busqueda.set($any($event.target).value)"
+                    (keyup.enter)="buscar()" />
+            </div>
+
+            <p-button label="Buscar" icon="pi pi-search" (onClick)="buscar()" />
+
+            <p-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+                (onClick)="limpiarFiltros()" />
+
+            <div class="field-group">
+                <label class="field-label" for="desde">
+                    Desde
+                </label>
+
+                <input id="desde" pInputText class="w-full" type="date"
+                    [value]="desde()"
+                    (change)="desde.set($any($event.target).value || null); buscar()" />
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="hasta">
+                    Hasta
+                </label>
+
+                <input id="hasta" pInputText class="w-full" type="date"
+                    [value]="hasta()"
+                    (change)="hasta.set($any($event.target).value || null); buscar()" />
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="estado">
+                    Estado
+                </label>
+
+                <p-select inputId="estado" class="w-44" [options]="opcionesEstado" optionLabel="label"
+                    optionValue="value" placeholder="Todos" [showClear]="true"
+                    [overlayOptions]="{ mode: 'overlay' }"
+                    [ngModel]="estado()"
+                    (ngModelChange)="estado.set($event); buscar()" />
+            </div>
+        </div>
+    </section>
+
+    <section class="card-panel overflow-x-auto p-0">
+        <p-table [value]="vuelos()" [loading]="cargando()" [lazy]="true" [paginator]="true" [rows]="tamanio()"
+            [totalRecords]="total()" [rowsPerPageOptions]="[5, 10, 20]" [tableStyle]="{
+        'min-width': '950px'
+      }" (onLazyLoad)="cambiarPagina($event)">
+            <ng-template #header>
+                <tr>
+                    <th>Código</th>
+                    <th>Ruta</th>
+                    <th>Salida</th>
+                    <th>Capacidad</th>
+                    <th>Ocupación</th>
+                    <th>Estado</th>
+                    <th class="text-right">Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-vuelo>
+                <tr>
+                    <td>
+                        <strong>{{ vuelo.codigo }}</strong>
+                    </td>
+
+                    <td>
+                        <p class="font-medium">
+                            {{ vuelo.origen }}
+                        </p>
+
+                        <p class="text-sm text-slate-500">
+                            hacia {{ vuelo.destino }}
+                        </p>
+                    </td>
+
+                    <td>
+                        <p>
+                            {{
+                            vuelo.fechaSalida
+                            | date: 'dd/MM/yyyy'
+                            }}
+                        </p>
+
+                        <p class="text-sm text-slate-500">
+                            {{
+                            vuelo.horaSalida.substring(0, 5)
+                            }}
+                        </p>
+                    </td>
+
+                    <td>
+                        {{
+                        vuelo.capacidadMaximaKg
+                        | number: '1.0-2'
+                        }}
+                        kg
+                    </td>
+
+                    <td class="min-w-52">
+                        <div class="mb-2 flex items-center
+                     justify-between gap-2
+                     text-xs text-slate-500">
+                            <span>
+                                {{
+                                vuelo.pesoOcupadoKg
+                                | number: '1.0-2'
+                                }}
+                                kg
+                            </span>
+
+                            <span class="flex items-center gap-1.5">
+                                @if (alertaOcupacion(vuelo) === 'lleno') {
+                                <p-tag value="Lleno" severity="danger" />
+                                } @else if (alertaOcupacion(vuelo) === 'casi-lleno') {
+                                <p-tag value="Casi lleno" severity="warn" />
+                                }
+
+                                {{
+                                porcentaje(vuelo)
+                                | number: '1.0-0'
+                                }}%
+                            </span>
+                        </div>
+
+                        <p-progressbar [value]="porcentaje(vuelo)" [showValue]="false"
+                            [color]="colorOcupacion(vuelo)" />
+                    </td>
+
+                    <td>
+                        <p-tag [value]="nombreEstado(vuelo.estado)" [severity]="severidad(vuelo.estado)" />
+                    </td>
+
+                    <td>
+                        <div class="flex justify-end gap-2">
+                            <p-button icon="pi pi-list" severity="info" [outlined]="true" [rounded]="true"
+                                ariaLabel="Ver manifiesto" (onClick)="abrirManifiesto(vuelo)" />
+
+                            <p-button icon="pi pi-pencil" severity="secondary" [outlined]="true" [rounded]="true"
+                                ariaLabel="Editar vuelo" [disabled]="
+                  vuelo.estado !== 'PROGRAMADO'
+                " (onClick)="abrirEdicion(vuelo)" />
+
+                            <p-button icon="pi pi-trash" severity="danger" [outlined]="true" [rounded]="true"
+                                ariaLabel="Eliminar vuelo" [disabled]="
+                  vuelo.estado !== 'PROGRAMADO'
+                " (onClick)="
+                  confirmarEliminar(vuelo)
+                " />
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="7" class="py-12 text-center text-slate-500">
+                        No existen vuelos registrados.
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </section>
+</section>
+
+<p-dialog [visible]="dialogoVisible()" (visibleChange)="dialogoVisible.set($event)" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [closable]="!guardando()" [closeOnEscape]="!guardando()"
+    [dismissableMask]="!guardando()" [style]="{
+    width: 'min(94vw, 720px)'
+  }" [header]="
+    vueloEditado()
+      ? 'Editar vuelo'
+      : 'Registrar vuelo'
+  ">
+    <form class="grid gap-5 sm:grid-cols-2" [formGroup]="formulario" (ngSubmit)="guardar()">
+        <div class="field-group">
+            <label class="field-label" for="codigo">
+                Código
+            </label>
+
+            <input id="codigo" pInputText class="w-full uppercase" formControlName="codigo" maxlength="15" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="capacidad">
+                Capacidad máxima
+            </label>
+
+            <p-inputnumber inputId="capacidad" styleClass="w-full" inputStyleClass="w-full"
+                formControlName="capacidadMaximaKg" suffix=" kg" [min]="0.01" [minFractionDigits]="2"
+                [maxFractionDigits]="2" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="origen">
+                Origen
+            </label>
+
+            <input id="origen" pInputText class="w-full" formControlName="origen" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="destino">
+                Destino
+            </label>
+
+            <input id="destino" pInputText class="w-full" formControlName="destino" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="fecha">
+                Fecha de salida
+            </label>
+
+            <input id="fecha" pInputText class="w-full" type="date" formControlName="fechaSalida" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="hora">
+                Hora de salida
+            </label>
+
+            <input id="hora" pInputText class="w-full" type="time" formControlName="horaSalida" />
+        </div>
+
+        @if (
+        formulario.touched &&
+        formulario.invalid
+        ) {
+        <p class="text-sm text-red-600
+               sm:col-span-2">
+            Completa correctamente todos los campos.
+        </p>
+        }
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:col-span-2 sm:flex-row
+             sm:justify-end">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" [disabled]="guardando()"
+                (onClick)="cerrarDialogo()" />
+
+            <p-button type="submit" [label]="
+          vueloEditado()
+            ? 'Guardar cambios'
+            : 'Registrar vuelo'
+        " icon="pi pi-save" [loading]="guardando()" [disabled]="guardando()" />
+        </footer>
+    </form>
+</p-dialog>
+
+<!-- Manifiesto de vuelo -->
+<p-dialog [visible]="manifiestoVisible()" (visibleChange)="manifiestoVisible.set($event)" appendTo="body"
+    [modal]="true" [draggable]="false" [resizable]="false" [blockScroll]="true" [style]="{
+    width: 'min(96vw, 900px)'
+  }" header="Manifiesto de vuelo" (onHide)="cerrarManifiesto()">
+    @if (vueloManifiesto(); as vuelo) {
+    <div class="mb-5 flex flex-wrap items-center
+         justify-between gap-4 rounded-xl
+         border border-slate-200 bg-slate-50 p-4
+         dark:border-slate-700 dark:bg-slate-800">
+        <div>
+            <strong class="text-lg">{{ vuelo.codigo }}</strong>
+
+            <p class="text-sm text-slate-500">
+                {{ vuelo.origen }} → {{ vuelo.destino }} ·
+                {{ vuelo.fechaSalida | date: 'dd/MM/yyyy' }}
+                {{ vuelo.horaSalida.substring(0, 5) }}
+            </p>
+        </div>
+
+        <div class="min-w-52">
+            <div class="mb-1 flex justify-between text-xs
+                 text-slate-500">
+                <span>
+                    {{ vuelo.pesoOcupadoKg | number: '1.0-2' }} /
+                    {{ vuelo.capacidadMaximaKg | number: '1.0-2' }} kg
+                </span>
+
+                <span>{{ porcentaje(vuelo) | number: '1.0-0' }}%</span>
+            </div>
+
+            <p-progressbar [value]="porcentaje(vuelo)" [showValue]="false" />
+        </div>
+    </div>
+    }
+
+    <p-table [value]="encomiendasManifiesto()" [loading]="cargandoManifiesto()" [tableStyle]="{
+      'min-width': '700px'
+    }">
+        <ng-template #header>
+            <tr>
+                <th>Código</th>
+                <th>Descripción</th>
+                <th>Remitente / destinatario</th>
+                <th>Peso</th>
+                <th>Estado</th>
+            </tr>
+        </ng-template>
+
+        <ng-template #body let-encomienda>
+            <tr>
+                <td>
+                    <strong>{{ encomienda.codigo }}</strong>
+                </td>
+
+                <td>
+                    <p class="max-w-56 truncate" [title]="encomienda.descripcion">
+                        {{ encomienda.descripcion }}
+                    </p>
+                </td>
+
+                <td>
+                    <p class="text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-slate-400">De:</span>
+                        {{ encomienda.remitente }}
+                    </p>
+
+                    <p class="mt-1 text-sm text-slate-700 dark:text-slate-300">
+                        <span class="text-slate-400">Para:</span>
+                        {{ encomienda.destinatario }}
+                    </p>
+                </td>
+
+                <td>
+                    <strong>
+                        {{ encomienda.pesoCobrableKg | number: '1.0-2' }} kg
+                    </strong>
+                </td>
+
+                <td>
+                    <p-tag [value]="nombreEstadoEncomienda(encomienda.estado)"
+                        [severity]="severidadEncomienda(encomienda.estado)" />
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template #emptymessage>
+            <tr>
+                <td colspan="5" class="py-10 text-center text-slate-500">
+                    Este vuelo no tiene encomiendas asignadas.
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <footer class="mt-5 flex justify-end
+         border-t border-slate-200 pt-5
+         dark:border-slate-700">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" (onClick)="cerrarManifiesto()" />
+    </footer>
+</p-dialog>

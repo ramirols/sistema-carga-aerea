@@ -1,0 +1,189 @@
+<section class="page-container">
+    <header>
+        <h1 class="page-title">Dashboard</h1>
+
+        <p class="page-description">
+            Resumen general de la operación logística.
+        </p>
+    </header>
+
+    @if (cargando()) {
+    <div class="grid gap-4 sm:grid-cols-2
+             xl:grid-cols-4">
+        @for (item of [1, 2, 3, 4]; track item) {
+        <p-skeleton height="9rem" />
+        } 
+    </div>
+    } @else {
+    <div class="grid gap-4 sm:grid-cols-2
+             xl:grid-cols-4">
+        <article class="card-panel">
+            <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-blue-100 text-blue-700">
+                <i class="pi pi-send"></i>
+            </div>
+
+            <p class="mt-5 text-sm text-slate-500">
+                Vuelos programados
+            </p>
+
+            <strong class="mt-1 block text-3xl text-slate-900">
+                {{ contarVuelos('PROGRAMADO') }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-emerald-100 text-emerald-700">
+                <i class="pi pi-check-circle"></i>
+            </div>
+
+            <p class="mt-5 text-sm text-slate-500">
+                Vuelos despachados
+            </p>
+
+            <strong class="mt-1 block text-3xl text-slate-900">
+                {{ contarVuelos('DESPACHADO') }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-amber-100 text-amber-700">
+                <i class="pi pi-box"></i>
+            </div>
+
+            <p class="mt-5 text-sm text-slate-500">
+                Encomiendas en almacén
+            </p>
+
+            <strong class="mt-1 block text-3xl text-slate-900">
+                {{
+                contarEncomiendas('EN_ALMACEN')
+                }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-violet-100 text-violet-700">
+                <i class="pi pi-truck"></i>
+            </div>
+
+            <p class="mt-5 text-sm text-slate-500">
+                Encomiendas embarcadas
+            </p>
+
+            <strong class="mt-1 block text-3xl text-slate-900">
+                {{ contarEncomiendas('EMBARCADA') }}
+            </strong>
+        </article>
+    </div>
+
+    <div class="grid gap-4 lg:grid-cols-2">
+        <section class="card-panel">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Encomiendas por estado
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Distribución del total registrado.
+                    </p>
+                </div>
+
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold
+                     text-slate-700 dark:bg-slate-800 dark:text-slate-100">
+                    {{ totalEncomiendas() }} en total
+                </span>
+            </div>
+
+            <div class="relative mt-4 h-72">
+                <p-chart type="doughnut" [data]="datosEncomiendas()" [options]="opcionesEncomiendas" />
+            </div>
+        </section>
+
+        <section class="card-panel">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h2 class="text-lg font-bold text-slate-900">
+                        Vuelos por estado
+                    </h2>
+
+                    <p class="text-sm text-slate-500">
+                        Distribución del total registrado.
+                    </p>
+                </div>
+
+                <span class="rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold
+                     text-slate-700 dark:bg-slate-800 dark:text-slate-100">
+                    {{ totalVuelos() }} en total
+                </span>
+            </div>
+
+            <div class="relative mt-4 h-72">
+                <p-chart type="bar" [data]="datosVuelos()" [options]="opcionesVuelos" />
+            </div>
+        </section>
+    </div>
+
+    <section class="card-panel">
+        <div>
+            <h2 class="text-lg font-bold text-slate-900">
+                Ocupación de vuelos programados
+            </h2>
+
+            <p class="text-sm text-slate-500">
+                Capacidad utilizada actualmente.
+            </p>
+        </div>
+
+        <div class="mt-6 space-y-5">
+            @for (
+            vuelo of vuelos().slice(0, 5);
+            track vuelo.id
+            ) {
+            <article>
+                <div class="mb-2 flex items-center
+                     justify-between gap-4">
+                    <div>
+                        <strong class="text-slate-800">
+                            {{ vuelo.codigo }}
+                        </strong>
+
+                        <span class="ml-2 text-sm text-slate-500">
+                            {{ vuelo.origen }} →
+                            {{ vuelo.destino }}
+                        </span>
+                    </div>
+
+                    <span class="text-sm text-slate-600">
+                        {{
+                        vuelo.pesoOcupadoKg
+                        | number: '1.0-2'
+                        }}
+                        /
+                        {{
+                        vuelo.capacidadMaximaKg
+                        | number: '1.0-2'
+                        }}
+                        kg
+                    </span>
+                </div>
+
+                <p-progressbar [value]="porcentaje(vuelo)" [showValue]="true" />
+            </article>
+            } @empty {
+            <p class="py-8 text-center text-slate-500">
+                No existen vuelos registrados.
+            </p>
+            }
+        </div>
+    </section>
+    }
+</section>

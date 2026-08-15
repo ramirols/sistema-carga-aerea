@@ -1,0 +1,31 @@
+{
+  "name": "sistema-carga-aerea",
+  "version": "1.0.0",
+  "description": "Sistema web de gestión y control de carga aérea",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend && mvnw.cmd spring-boot:run",
+    "frontend": "pnpm --dir frontend start",
+    "dev": "concurrently --kill-others-on-fail -n BACKEND,FRONTEND -c blue,magenta \"pnpm backend\" \"pnpm frontend\"",
+    "test:backend": "cd backend && mvnw.cmd test",
+    "test:frontend": "pnpm --dir frontend test --watch=false",
+    "build:backend": "cd backend && mvnw.cmd clean package",
+    "build:frontend": "pnpm --dir frontend build",
+    "build": "pnpm build:backend && pnpm build:frontend"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.15.1",
+      "onFail": "download"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "concurrently": "^10.0.4"
+  }
+}

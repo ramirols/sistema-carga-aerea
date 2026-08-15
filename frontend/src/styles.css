@@ -1,0 +1,155 @@
+@layer theme, base, primeng, components, utilities;
+
+@import "tailwindcss";
+@import "primeicons/primeicons.css";
+
+@custom-variant dark (&:where(.app-dark, .app-dark *));
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    margin: 0;
+    background: #f8fafc;
+    color: #0f172a;
+    font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        sans-serif;
+    transition: background-color 160ms ease, color 160ms ease;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button,
+input,
+textarea,
+select {
+    font: inherit;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.page-header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.page-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0f172a;
+}
+
+.app-dark .page-title {
+    color: #f1f5f9;
+}
+
+.page-description {
+    margin-top: 0.25rem;
+    color: #64748b;
+}
+
+.app-dark .page-description {
+    color: #94a3b8;
+}
+
+.card-panel {
+    border: 1px solid #e2e8f0;
+    border-radius: 1rem;
+    background: white;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.06);
+    transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.app-dark .card-panel {
+    border-color: #1e293b;
+    background: #111827;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+}
+
+.field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.field-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.app-dark .field-label {
+    color: #cbd5e1;
+}
+
+.field-error {
+    font-size: 0.75rem;
+    color: #dc2626;
+}
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    border-radius: 0.75rem;
+    padding: 0.85rem 1rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 160ms ease;
+}
+
+.menu-link:hover {
+    background: rgb(255 255 255 / 0.06);
+    color: white;
+}
+
+.menu-link-active {
+    background: #2563eb;
+    color: white;
+}
+
+.p-dialog-content {
+    overflow: visible !important;
+}
+
+p-chart {
+    display: block;
+    height: 100%;
+}
+
+p-chart > div {
+    height: 100%;
+    position: relative;
+}
+
+/* Mejora el contraste del texto de las tablas en modo oscuro. */
+.app-dark .p-datatable .text-slate-900,
+.app-dark .p-datatable .text-slate-800 {
+    color: #f1f5f9;
+}
+
+.app-dark .p-datatable .text-slate-700,
+.app-dark .p-datatable .text-slate-600 {
+    color: #e2e8f0;
+}
+
+.app-dark .p-datatable .text-slate-500,
+.app-dark .p-datatable .text-slate-400 {
+    color: #94a3b8;
+}
+

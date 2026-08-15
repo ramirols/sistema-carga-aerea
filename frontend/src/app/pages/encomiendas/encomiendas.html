@@ -1,0 +1,489 @@
+<section class="page-container">
+    <header class="page-header items-center text-center">
+        <div>
+            <h1 class="page-title">
+                Encomiendas
+            </h1>
+
+            <p class="page-description">
+                Administra los paquetes y su asignación a
+                vuelos.
+            </p>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <p-button label="Excel" icon="pi pi-file-excel"
+                [style]="{ background: '#166534', 'border-color': '#166534', color: '#ffffff' }"
+                [loading]="exportando()" (onClick)="exportarExcel()" />
+
+            <p-button label="PDF" icon="pi pi-file-pdf" severity="danger" [style]="{ color: '#ffffff' }"
+                [loading]="exportando()" (onClick)="exportarPdf()" />
+
+            <p-button label="Nueva encomienda" icon="pi pi-plus" (onClick)="abrirNueva()" />
+        </div>
+    </header>
+
+    <div class="grid gap-4 sm:grid-cols-2
+           xl:grid-cols-4">
+        <article class="card-panel">
+            <p class="text-sm text-slate-500">
+                Total registrado
+            </p>
+
+            <strong class="mt-2 block text-2xl">
+                {{ total() }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <p class="text-sm text-slate-500">
+                En almacén
+            </p>
+
+            <strong class="mt-2 block text-2xl
+               text-amber-600">
+                {{ contarEstado('EN_ALMACEN') }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <p class="text-sm text-slate-500">
+                Embarcadas
+            </p>
+
+            <strong class="mt-2 block text-2xl
+               text-blue-600">
+                {{ contarEstado('EMBARCADA') }}
+            </strong>
+        </article>
+
+        <article class="card-panel">
+            <p class="text-sm text-slate-500">
+                Entregadas
+            </p>
+
+            <strong class="mt-2 block text-2xl
+               text-emerald-600">
+                {{ contarEstado('ENTREGADA') }}
+            </strong>
+        </article>
+    </div>
+
+    <section class="card-panel">
+        <div class="flex flex-wrap items-end gap-4">
+            <div class="field-group min-w-56 flex-1">
+                <label class="field-label" for="busqueda">
+                    Buscar
+                </label>
+
+                <input id="busqueda" pInputText class="w-full" type="text"
+                    placeholder="Código, remitente o destinatario"
+                    [value]="busqueda()"
+                    (input)="busqueda.set($any($event.target).value)"
+                    (keyup.enter)="buscar()" />
+            </div>
+
+            <p-button label="Buscar" icon="pi pi-search" (onClick)="buscar()" />
+
+            <p-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+                (onClick)="limpiarFiltros()" />
+
+            <div class="field-group">
+                <label class="field-label" for="desde">
+                    Desde
+                </label>
+
+                <input id="desde" pInputText class="w-full" type="date"
+                    [value]="desde()"
+                    (change)="desde.set($any($event.target).value || null); buscar()" />
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="hasta">
+                    Hasta
+                </label>
+
+                <input id="hasta" pInputText class="w-full" type="date"
+                    [value]="hasta()"
+                    (change)="hasta.set($any($event.target).value || null); buscar()" />
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="estadoFiltro">
+                    Estado
+                </label>
+
+                <p-select inputId="estadoFiltro" class="w-44" [options]="opcionesEstado" optionLabel="label"
+                    optionValue="value" placeholder="Todos" [showClear]="true"
+                    [overlayOptions]="{ mode: 'overlay' }"
+                    [ngModel]="estadoFiltro()"
+                    (ngModelChange)="estadoFiltro.set($event); buscar()" />
+            </div>
+        </div>
+    </section>
+
+    <section class="card-panel overflow-x-auto p-0">
+        <p-table [value]="encomiendas()" [loading]="cargando()" [lazy]="true" [paginator]="true" [rows]="tamanio()"
+            [first]="pagina() * tamanio()" [totalRecords]="total()" [rowsPerPageOptions]="[5, 10, 20]"
+            [showCurrentPageReport]="true" currentPageReportTemplate="{first}–{last} de {totalRecords}" [tableStyle]="{
+        'min-width': '1050px'
+      }" (onLazyLoad)="cambiarPagina($event)">
+            <ng-template #header>
+                <tr>
+                    <th>Código</th>
+                    <th>Descripción</th>
+                    <th>Remitente / destinatario</th>
+                    <th>Peso</th>
+                    <th>Vuelo</th>
+                    <th>Estado</th>
+                    <th class="text-right">Acciones</th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-encomienda>
+                <tr>
+                    <td>
+                        <strong class="text-slate-800">
+                            {{ encomienda.codigo }}
+                        </strong>
+
+                        <p class="mt-1 text-xs text-slate-400">
+                            {{
+                            encomienda.fechaRegistro
+                            | date: 'dd/MM/yyyy HH:mm'
+                            }}
+                        </p>
+                    </td>
+
+                    <td>
+                        <p class="max-w-64 truncate
+                     text-slate-700" [title]="encomienda.descripcion">
+                            {{ encomienda.descripcion }}
+                        </p>
+                    </td>
+
+                    <td>
+                        <p class="text-sm text-slate-700">
+                            <span class="text-slate-400">
+                                De:
+                            </span>
+                            {{ encomienda.remitente }}
+                        </p>
+
+                        <p class="mt-1 text-sm text-slate-700">
+                            <span class="text-slate-400">
+                                Para:
+                            </span>
+                            {{ encomienda.destinatario }}
+                        </p>
+                    </td>
+
+                    <td>
+                        <strong>
+                            {{
+                            encomienda.pesoCobrableKg
+                            | number: '1.0-2'
+                            }}
+                            kg
+                        </strong>
+
+                        @if (encomienda.pesoCobrableKg > encomienda.pesoKg) {
+                        <p class="mt-1 text-xs text-amber-600">
+                            Volumétrico ·
+                            {{
+                            encomienda.pesoKg
+                            | number: '1.0-2'
+                            }}
+                            kg reales
+                        </p>
+                        }
+                    </td>
+
+                    <td>
+                        @if (encomienda.codigoVuelo) {
+                        <span class="inline-flex items-center
+                       gap-2 rounded-lg bg-blue-50
+                       px-3 py-2 text-sm
+                       font-semibold text-blue-700">
+                            <i class="pi pi-send"></i>
+                            {{ encomienda.codigoVuelo }}
+                        </span>
+                        } @else {
+                        <span class="text-sm text-slate-400">
+                            Sin asignar
+                        </span>
+                        }
+                    </td>
+
+                    <td>
+                        <p-tag [value]="nombreEstado(encomienda.estado)" [severity]="
+                severidadEstado(encomienda.estado)
+              " />
+                    </td>
+
+                    <td>
+                        <div class="flex justify-end gap-2">
+                            <p-button icon="pi pi-pencil" severity="secondary" [outlined]="true" [rounded]="true"
+                                ariaLabel="Editar encomienda" [disabled]="
+                  encomienda.estado !== 'EN_ALMACEN'
+                " (onClick)="abrirEdicion(encomienda)" />
+
+                            <p-button icon="pi pi-send" severity="info" [outlined]="true" [rounded]="true"
+                                ariaLabel="Asignar vuelo" [disabled]="
+                  encomienda.estado !== 'EN_ALMACEN'
+                " (onClick)="
+                  abrirAsignacion(encomienda)
+                " />
+
+                            <p-button icon="pi pi-sync" severity="warn" [outlined]="true" [rounded]="true"
+                                ariaLabel="Cambiar estado" (onClick)="
+                  abrirCambioEstado(encomienda)
+                " />
+
+                            <p-button icon="pi pi-trash" severity="danger" [outlined]="true" [rounded]="true"
+                                ariaLabel="Eliminar encomienda" (onClick)="
+                  confirmarEliminar(encomienda)
+                " />
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="7">
+                        <div class="py-14 text-center">
+                            <i class="pi pi-box text-3xl
+                       text-slate-300"></i>
+
+                            <p class="mt-3 font-medium
+                       text-slate-600">
+                                No existen encomiendas registradas
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </section>
+</section>
+
+<!-- Registrar o editar -->
+<p-dialog [visible]="dialogoVisible()" (visibleChange)="dialogoVisible.set($event)" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [blockScroll]="true" [closable]="!guardando()" [style]="{
+    width: 'min(94vw, 720px)'
+  }" [header]="
+    encomiendaEditada()
+      ? 'Editar encomienda'
+      : 'Registrar encomienda'
+  " (onHide)="alOcultarFormulario()">
+    <form class="grid gap-5 sm:grid-cols-2" [formGroup]="formulario" (ngSubmit)="guardar()">
+        <div class="field-group">
+            <label class="field-label" for="codigoEncomienda">
+                Código
+            </label>
+
+            <input id="codigoEncomienda" pInputText class="w-full uppercase" maxlength="20" formControlName="codigo"
+                placeholder="ENC-001" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="pesoKg">
+                Peso
+            </label>
+
+            <p-inputnumber inputId="pesoKg" class="w-full" inputStyleClass="w-full" formControlName="pesoKg"
+                suffix=" kg" [min]="0.01" [minFractionDigits]="2" [maxFractionDigits]="2" />
+        </div>
+
+        <div class="field-group sm:col-span-2">
+            <label class="field-label" for="descripcion">
+                Descripción
+            </label>
+
+            <textarea id="descripcion" pTextarea class="min-h-24 w-full resize-y" maxlength="250"
+                formControlName="descripcion" placeholder="Contenido de la encomienda"></textarea>
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="remitente">
+                Remitente
+            </label>
+
+            <input id="remitente" pInputText class="w-full" maxlength="120" formControlName="remitente" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="destinatario">
+                Destinatario
+            </label>
+
+            <input id="destinatario" pInputText class="w-full" maxlength="120" formControlName="destinatario" />
+        </div>
+
+        <div class="field-group sm:col-span-2">
+            <label class="field-label">
+                Dimensiones (opcional)
+            </label>
+
+            <p class="-mt-1 mb-1 text-xs text-slate-400">
+                Si las completas, se usará el mayor entre el peso real y el
+                peso volumétrico (largo × ancho × alto ÷ 5000) para ocupar
+                espacio en el vuelo.
+            </p>
+
+            <div class="grid grid-cols-3 gap-3">
+                <p-inputnumber inputId="largoCm" class="w-full" inputStyleClass="w-full" formControlName="largoCm"
+                    suffix=" cm" placeholder="Largo" [min]="0.01" [minFractionDigits]="0" [maxFractionDigits]="2" />
+
+                <p-inputnumber inputId="anchoCm" class="w-full" inputStyleClass="w-full" formControlName="anchoCm"
+                    suffix=" cm" placeholder="Ancho" [min]="0.01" [minFractionDigits]="0" [maxFractionDigits]="2" />
+
+                <p-inputnumber inputId="altoCm" class="w-full" inputStyleClass="w-full" formControlName="altoCm"
+                    suffix=" cm" placeholder="Alto" [min]="0.01" [minFractionDigits]="0" [maxFractionDigits]="2" />
+            </div>
+        </div>
+
+        @if (
+        formulario.touched &&
+        formulario.invalid
+        ) {
+        <small class="field-error sm:col-span-2">
+            Completa correctamente todos los campos.
+        </small>
+        }
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:col-span-2 sm:flex-row
+             sm:justify-end">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true"
+                (onClick)="cerrarFormulario()" />
+
+            <p-button type="submit" icon="pi pi-save" [label]="
+          encomiendaEditada()
+            ? 'Guardar cambios'
+            : 'Registrar encomienda'
+        " [loading]="guardando()" />
+        </footer>
+    </form>
+</p-dialog>
+
+<!-- Asignación de vuelo -->
+<p-dialog [visible]="dialogoAsignacionVisible()" (visibleChange)="
+    dialogoAsignacionVisible.set($event)
+  " appendTo="body" [modal]="true" [draggable]="false" [resizable]="false" [blockScroll]="true" [style]="{
+    width: 'min(94vw, 560px)'
+  }" header="Asignar vuelo" (onHide)="alOcultarAsignacion()">
+    <form class="space-y-5" [formGroup]="formularioAsignacion" (ngSubmit)="asignarVuelo()">
+        @if (encomiendaSeleccionada()) {
+        <div class="rounded-xl border border-slate-200
+               bg-slate-50 p-4">
+            <p class="text-xs text-slate-500">
+                Encomienda seleccionada
+            </p>
+
+            <div class="mt-1 flex items-center
+                 justify-between gap-4">
+                <strong>
+                    {{ encomiendaSeleccionada()?.codigo }}
+                </strong>
+
+                <span class="text-sm text-slate-600">
+                    {{
+                    encomiendaSeleccionada()?.pesoCobrableKg
+                    | number: '1.0-2'
+                    }}
+                    kg
+                </span>
+            </div>
+        </div>
+        }
+
+        <div class="field-group">
+            <label class="field-label" for="vueloId">
+                Vuelo programado
+            </label>
+
+            <p-select inputId="vueloId" class="w-full" [overlayOptions]="{ mode: 'overlay' }"
+                [options]="vuelosDisponibles()" optionLabel="codigo" optionValue="id" formControlName="vueloId"
+                placeholder="Selecciona un vuelo"
+                [filter]="true" filterBy="codigo,origen,destino" emptyMessage="No hay vuelos programados">
+                <ng-template #item let-vuelo>
+                    <div class="w-full py-1">
+                        <div class="flex items-center
+                     justify-between gap-4">
+                            <div>
+                                <strong>{{ vuelo.codigo }}</strong>
+
+                                <p class="text-xs text-slate-500">
+                                    {{ vuelo.origen }} →
+                                    {{ vuelo.destino }}
+                                </p>
+                            </div>
+
+                            <span class="text-sm text-emerald-700">
+                                {{
+                                vuelo.capacidadDisponibleKg
+                                | number: '1.0-2'
+                                }}
+                                kg libres
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-select>
+        </div>
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:flex-row sm:justify-end">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true"
+                (onClick)="cerrarAsignacion()" />
+
+            <p-button type="submit" label="Asignar vuelo" icon="pi pi-send" [loading]="asignando()" [disabled]="
+          formularioAsignacion.invalid
+        " />
+        </footer>
+    </form>
+</p-dialog>
+
+<!-- Cambio de estado -->
+<p-dialog [visible]="dialogoEstadoVisible()" (visibleChange)="
+    dialogoEstadoVisible.set($event)
+  " appendTo="body" [modal]="true" [draggable]="false" [resizable]="false" [blockScroll]="true" [style]="{
+    width: 'min(94vw, 500px)'
+  }" header="Cambiar estado" (onHide)="alOcultarEstado()">
+    <form class="space-y-5" [formGroup]="formularioEstado" (ngSubmit)="cambiarEstado()">
+        <div class="field-group">
+            <label class="field-label" for="estadoEncomienda">
+                Nuevo estado
+            </label>
+
+            <p-select inputId="estadoEncomienda" class="w-full" [overlayOptions]="{ mode: 'overlay' }"
+                [options]="opcionesEstado" optionLabel="label" optionValue="value" formControlName="estado" />
+        </div>
+
+        @if (
+        formularioEstado.controls.estado.value ===
+        'EMBARCADA' &&
+        !encomiendaSeleccionada()?.vueloId
+        ) {
+        <div class="rounded-xl border border-amber-200
+               bg-amber-50 p-4 text-sm
+               text-amber-800">
+            Debes asignar un vuelo antes de marcar la
+            encomienda como embarcada.
+        </div>
+        }
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:flex-row sm:justify-end">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true"
+                (onClick)="cerrarEstado()" />
+
+            <p-button type="submit" label="Guardar estado" icon="pi pi-check" [loading]="cambiandoEstado()" />
+        </footer>
+    </form>
+</p-dialog>

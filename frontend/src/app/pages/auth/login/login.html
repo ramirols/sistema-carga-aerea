@@ -1,0 +1,110 @@
+<main class="flex min-h-screen items-center
+         justify-center bg-white p-5
+         lg:bg-[linear-gradient(to_right,_#1d4ed8_50%,_#ffffff_50%)]">
+    <section class="grid w-full max-w-5xl overflow-hidden
+           rounded-3xl bg-white shadow-2xl
+           lg:grid-cols-2">
+        <div class="hidden flex-col justify-between
+             bg-gradient-to-br from-blue-700
+             to-slate-950 p-12 text-white lg:flex">
+            <div>
+                <div class="mb-8 flex justify-center">
+                    <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-20 w-auto object-contain" />
+                </div>
+
+                <h1 class="text-4xl font-bold leading-tight">
+                    Gestión y control de carga aérea
+                </h1>
+
+                <p class="mt-5 max-w-md text-blue-100">
+                    Administra vuelos, encomiendas y
+                    capacidad de carga desde un único
+                    sistema.
+                </p>
+            </div>
+
+            <p class="text-sm text-blue-200">
+                Sistema logístico de carga aérea
+            </p>
+        </div>
+
+        <div class="p-7 sm:p-12">
+            <div class="mx-auto max-w-md">
+                <div class="mb-6 flex justify-center lg:hidden">
+                    <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-16 w-auto object-contain" />
+                </div>
+
+                <p class="text-sm font-semibold uppercase
+                 tracking-wider text-blue-600">
+                    Acceso al sistema
+                </p>
+
+                <h2 class="mt-2 text-3xl font-bold
+                 text-slate-900">
+                    Iniciar sesión
+                </h2>
+
+                <p class="mt-2 text-slate-500">
+                    Ingresa tus credenciales para continuar.
+                </p>
+
+                @if (mensajeError()) {
+                <p-message class="mt-6 w-full" severity="error">
+                    {{ mensajeError() }}
+                </p-message>
+                }
+
+                <form class="mt-7 space-y-5" [formGroup]="formulario" (ngSubmit)="ingresar()">
+                    <div class="field-group">
+                        <label class="field-label" for="username">
+                            Usuario
+                        </label>
+
+                        <input id="username" pInputText class="w-full" type="text" formControlName="username"
+                            autocomplete="username" placeholder="Ingresa tu usuario" />
+
+                        @if (
+                        formulario.controls.username.touched &&
+                        formulario.controls.username.invalid
+                        ) {
+                        <small class="field-error">
+                            El usuario es obligatorio.
+                        </small>
+                        }
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label" for="password">
+                            Contraseña
+                        </label>
+
+                        <p-password inputId="password" styleClass="w-full" inputStyleClass="w-full"
+                            formControlName="password" [feedback]="false" [toggleMask]="true"
+                            autocomplete="current-password" placeholder="Ingresa tu contraseña" />
+
+                        @if (
+                        formulario.controls.password.touched &&
+                        formulario.controls.password.invalid
+                        ) {
+                        <small class="field-error">
+                            La contraseña es obligatoria.
+                        </small>
+                        }
+                    </div>
+
+                    <p-button styleClass="w-full" type="submit" label="Ingresar al sistema" icon="pi pi-sign-in"
+                        [loading]="cargando()" [disabled]="cargando()" />
+                </form>
+
+                <div class="mt-6 rounded-xl bg-slate-50 p-4
+                 text-sm text-slate-500">
+                    Usuario inicial:
+                    <strong>admin</strong><br />
+
+                    Contraseña:
+                    <strong>Admin123*</strong>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

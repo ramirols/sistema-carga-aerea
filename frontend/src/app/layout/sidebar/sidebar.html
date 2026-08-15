@@ -1,0 +1,66 @@
+@if (abierto()) {
+<button type="button" class="fixed inset-0 z-30 bg-slate-950/50
+           lg:hidden" aria-label="Cerrar menú" (click)="cerrar.emit()"></button>
+}
+
+<aside class="fixed inset-y-0 left-0 z-40 flex w-72
+         flex-col bg-slate-950 text-white
+         transition-transform duration-300
+         lg:translate-x-0" [class.translate-x-0]="abierto()" [class.-translate-x-full]="!abierto()">
+    <div class="flex h-20 items-center gap-3
+           border-b border-white/10 px-6">
+        <div class="min-w-0">
+            <p class="truncate font-bold leading-tight">Sistema de carga aérea</p>
+            <p class="truncate text-xs text-slate-400">
+                Panel de gestión logística
+            </p>
+        </div>
+
+        <button type="button" class="ml-auto shrink-0 text-slate-400 lg:hidden" aria-label="Cerrar menú" (click)="cerrar.emit()">
+            <i class="pi pi-times"></i>
+        </button>
+    </div>
+
+    <nav class="flex-1 space-y-2 overflow-y-auto p-4">
+        <a class="menu-link" routerLink="/dashboard" routerLinkActive="menu-link-active" (click)="cerrar.emit()">
+            <i class="pi pi-home"></i>
+            Dashboard
+        </a>
+
+        <a class="menu-link" routerLink="/vuelos" routerLinkActive="menu-link-active" (click)="cerrar.emit()">
+            <i class="pi pi-send"></i>
+            Vuelos
+        </a>
+
+        <a class="menu-link" routerLink="/encomiendas" routerLinkActive="menu-link-active" (click)="cerrar.emit()">
+            <i class="pi pi-box"></i>
+            Encomiendas
+        </a>
+
+        @if (esAdministrador()) {
+        <a class="menu-link" routerLink="/usuarios" routerLinkActive="menu-link-active" (click)="cerrar.emit()">
+            <i class="pi pi-users"></i>
+            Usuarios
+        </a>
+
+        <a class="menu-link" routerLink="/auditoria" routerLinkActive="menu-link-active" (click)="cerrar.emit()">
+            <i class="pi pi-history"></i>
+            Auditoría
+        </a>
+        }
+    </nav>
+
+    <div class="border-t border-white/10 p-4">
+        <div class="rounded-xl bg-white/5 p-4">
+            <p class="truncate text-sm font-semibold">
+                {{
+                authService.usuario()?.nombreCompleto
+                }}
+            </p>
+
+            <p class="mt-1 text-xs text-slate-400">
+                {{ nombreRol() }}
+            </p>
+        </div>
+    </div>
+</aside>

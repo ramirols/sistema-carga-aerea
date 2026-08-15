@@ -1,0 +1,339 @@
+<section class="page-container">
+    <header class="page-header items-center text-center">
+        <div>
+            <h1 class="page-title">
+                Usuarios
+            </h1>
+
+            <p class="page-description">
+                Administra los accesos y roles del sistema.
+            </p>
+        </div>
+
+        <p-button label="Nuevo usuario" icon="pi pi-user-plus" (onClick)="abrirNuevo()" />
+    </header>
+
+    <div class="grid gap-4 sm:grid-cols-3">
+        <article class="card-panel">
+            <div class="flex items-center gap-4">
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-blue-100 text-blue-700">
+                    <i class="pi pi-users"></i>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Total registrado
+                    </p>
+
+                    <strong class="text-2xl text-slate-900">
+                        {{ total() }}
+                    </strong>
+                </div>
+            </div>
+        </article>
+
+        <article class="card-panel">
+            <div class="flex items-center gap-4">
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-emerald-100 text-emerald-700">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Activos en esta página
+                    </p>
+
+                    <strong class="text-2xl text-slate-900">
+                        {{ cantidadActivos() }}
+                    </strong>
+                </div>
+            </div>
+        </article>
+
+        <article class="card-panel">
+            <div class="flex items-center gap-4">
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-red-100 text-red-700">
+                    <i class="pi pi-ban"></i>
+                </div>
+
+                <div>
+                    <p class="text-sm text-slate-500">
+                        Inactivos en esta página
+                    </p>
+
+                    <strong class="text-2xl text-slate-900">
+                        {{ cantidadInactivos() }}
+                    </strong>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <section class="card-panel">
+        <div class="flex flex-wrap items-end gap-4">
+            <div class="field-group min-w-56 flex-1">
+                <label class="field-label" for="busqueda">
+                    Buscar
+                </label>
+
+                <input id="busqueda" pInputText class="w-full" type="text"
+                    placeholder="Usuario o nombre completo"
+                    [value]="busqueda()"
+                    (input)="busqueda.set($any($event.target).value)"
+                    (keyup.enter)="buscar()" />
+            </div>
+
+            <p-button label="Buscar" icon="pi pi-search" (onClick)="buscar()" />
+
+            <p-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+                (onClick)="limpiarFiltros()" />
+
+            <div class="field-group">
+                <label class="field-label" for="activoFiltro">
+                    Estado
+                </label>
+
+                <p-select inputId="activoFiltro" class="w-44" [options]="opcionesActivo" optionLabel="label"
+                    optionValue="value" placeholder="Todos" [showClear]="true"
+                    [overlayOptions]="{ mode: 'overlay' }"
+                    [ngModel]="activoFiltro()"
+                    (ngModelChange)="activoFiltro.set($event); buscar()" />
+            </div>
+        </div>
+    </section>
+
+    <section class="card-panel overflow-x-auto p-0">
+        <p-table [value]="usuarios()" [loading]="cargando()" [lazy]="true" [paginator]="true" [rows]="tamanio()"
+            [first]="pagina() * tamanio()" [totalRecords]="total()" [rowsPerPageOptions]="[5, 10, 20]"
+            [showCurrentPageReport]="true" currentPageReportTemplate="{first}–{last} de {totalRecords}" [tableStyle]="{
+        'min-width': '850px'
+      }" (onLazyLoad)="cambiarPagina($event)">
+            <ng-template #header>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Nombre completo</th>
+                    <th>Rol</th>
+                    <th>Estado</th>
+                    <th>Creación</th>
+                    <th class="text-right">
+                        Acciones
+                    </th>
+                </tr>
+            </ng-template>
+
+            <ng-template #body let-usuario>
+                <tr>
+                    <td>
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center
+                       justify-center rounded-full
+                       bg-slate-100 font-bold
+                       uppercase text-slate-600">
+                                {{
+                                usuario.nombreCompleto.charAt(0)
+                                }}
+                            </div>
+
+                            <div>
+                                <p class="font-semibold text-slate-800">
+                                    {{ usuario.username }}
+                                </p>
+
+                                <p class="text-xs text-slate-400">
+                                    ID {{ usuario.id }}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td class="text-slate-700">
+                        {{ usuario.nombreCompleto }}
+                    </td>
+
+                    <td>
+                        <p-tag [value]="nombreRol(usuario.rol)" [severity]="severidadRol(usuario.rol)" />
+                    </td>
+
+                    <td>
+                        <p-tag [value]="
+                usuario.activo
+                  ? 'Activo'
+                  : 'Inactivo'
+              " [severity]="
+                usuario.activo
+                  ? 'success'
+                  : 'danger'
+              " />
+                    </td>
+
+                    <td>
+                        <p class="text-sm text-slate-700">
+                            {{
+                            usuario.fechaCreacion
+                            | date: 'dd/MM/yyyy'
+                            }}
+                        </p>
+
+                        <p class="text-xs text-slate-400">
+                            {{
+                            usuario.fechaCreacion
+                            | date: 'HH:mm'
+                            }}
+                        </p>
+                    </td>
+
+                    <td>
+                        <div class="flex justify-end gap-2">
+                            <p-button icon="pi pi-pencil" severity="secondary" [outlined]="true" [rounded]="true"
+                                ariaLabel="Editar usuario" (onClick)="abrirEdicion(usuario)" />
+
+                            <p-button [icon]="
+                  usuario.activo
+                    ? 'pi pi-ban'
+                    : 'pi pi-check'
+                " [severity]="
+                  usuario.activo
+                    ? 'warn'
+                    : 'success'
+                " [outlined]="true" [rounded]="true" [ariaLabel]="
+                  usuario.activo
+                    ? 'Desactivar usuario'
+                    : 'Activar usuario'
+                " (onClick)="
+                  confirmarCambioEstado(usuario)
+                " />
+
+                            <p-button icon="pi pi-trash" severity="danger" [outlined]="true" [rounded]="true"
+                                ariaLabel="Eliminar usuario" (onClick)="confirmarEliminar(usuario)" />
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template #emptymessage>
+                <tr>
+                    <td colspan="6">
+                        <div class="py-14 text-center">
+                            <i class="pi pi-users text-3xl
+                       text-slate-300"></i>
+
+                            <p class="mt-3 font-medium
+                       text-slate-600">
+                                No existen usuarios registrados
+                            </p>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </section>
+</section>
+
+<p-dialog [visible]="dialogoVisible()" (visibleChange)="dialogoVisible.set($event)" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [blockScroll]="true" [closable]="!guardando()"
+    [closeOnEscape]="!guardando()" [dismissableMask]="!guardando()" [style]="{
+    width: 'min(94vw, 620px)'
+  }" [header]="
+    usuarioEditado()
+      ? 'Editar usuario'
+      : 'Registrar usuario'
+  " (onHide)="alOcultarDialogo()">
+    <form class="grid gap-5 sm:grid-cols-2" [formGroup]="formulario" (ngSubmit)="guardar()">
+        <div class="field-group sm:col-span-2">
+            <label class="field-label" for="username">
+                Nombre de usuario
+            </label>
+
+            <input id="username" pInputText class="w-full" maxlength="50" autocomplete="off" formControlName="username"
+                placeholder="Ejemplo: operador01" />
+
+            @if (
+            formulario.controls.username.touched &&
+            formulario.controls.username.invalid
+            ) {
+            <small class="field-error">
+                Ingresa un usuario válido.
+            </small>
+            }
+
+            @if (usuarioEditado()) {
+            <small class="text-xs text-slate-500">
+                El nombre de usuario no puede modificarse.
+            </small>
+            }
+        </div>
+
+        <div class="field-group sm:col-span-2">
+            <label class="field-label" for="nombreCompleto">
+                Nombre completo
+            </label>
+
+            <input id="nombreCompleto" pInputText class="w-full" maxlength="120" formControlName="nombreCompleto"
+                placeholder="Nombres y apellidos" />
+
+            @if (
+            formulario.controls.nombreCompleto.touched &&
+            formulario.controls.nombreCompleto.invalid
+            ) {
+            <small class="field-error">
+                El nombre completo es obligatorio.
+            </small>
+            }
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="rol">
+                Rol
+            </label>
+
+            <p-select inputId="rol" class="w-full" [overlayOptions]="{ mode: 'overlay' }" [options]="opcionesRol"
+                optionLabel="label" optionValue="value" formControlName="rol" placeholder="Selecciona un rol" />
+        </div>
+
+        <div class="field-group">
+            <label class="field-label" for="password">
+                {{
+                usuarioEditado()
+                ? 'Nueva contraseña'
+                : 'Contraseña'
+                }}
+            </label>
+
+            <p-password inputId="password" class="w-full" inputStyleClass="w-full" formControlName="password"
+                [feedback]="true" [toggleMask]="true" autocomplete="new-password" [placeholder]="
+          usuarioEditado()
+            ? 'Dejar vacío para conservar'
+            : 'Mínimo 8 caracteres'
+        " />
+
+            @if (
+            formulario.controls.password.touched &&
+            formulario.controls.password.invalid
+            ) {
+            <small class="field-error">
+                Debe tener entre 8 y 100 caracteres.
+            </small>
+            }
+        </div>
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:col-span-2 sm:flex-row
+             sm:justify-end">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" [disabled]="guardando()"
+                (onClick)="cerrarDialogo()" />
+
+            <p-button type="submit" icon="pi pi-save" [label]="
+          usuarioEditado()
+            ? 'Guardar cambios'
+            : 'Registrar usuario'
+        " [loading]="guardando()" />
+        </footer>
+    </form>
+</p-dialog>
