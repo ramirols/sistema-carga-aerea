@@ -1,0 +1,32 @@
+# Editores
+.vscode/
+.idea/
+.metadata/
+
+# Variables y credenciales
+.env
+.env.*
+!.env.example
+
+# Angular
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.kombai/
+frontend/coverage/
+
+# Maven
+backend/target/
+backend/bin/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

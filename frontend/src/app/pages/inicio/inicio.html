@@ -1,0 +1,874 @@
+<!-- 1. INICIO -->
+<section id="inicio" class="relative flex min-h-screen items-center
+         overflow-hidden bg-white pt-20
+         dark:bg-slate-950">
+    <div class="absolute -right-48 -top-48 h-[500px] w-[500px]
+           rounded-full bg-[#05BBFB]/15 blur-3xl"></div>
+
+    <div class="absolute -bottom-56 -left-48 h-[500px] w-[500px]
+           rounded-full bg-blue-500/10 blur-3xl"></div>
+
+    <div class="relative mx-auto grid max-w-7xl items-center
+           gap-14 px-5 py-20 sm:px-6
+           lg:grid-cols-2 lg:px-8 lg:py-28">
+        <div>
+            <div class="inline-flex items-center gap-2
+               rounded-full border border-[#05BBFB]/25
+               bg-[#05BBFB]/10 px-4 py-2
+               text-xs font-semibold text-[#0387bb]
+               dark:text-[#05BBFB]">
+                <span class="h-2 w-2 rounded-full bg-[#05BBFB]"></span>
+                Logística aérea inteligente
+            </div>
+
+            <h1 class="mt-7 max-w-2xl text-4xl font-black
+               leading-tight tracking-tight text-slate-950
+               sm:text-5xl lg:text-6xl
+               dark:text-white">
+                Gestiona tu carga aérea de forma
+                <span class="text-[#05BBFB]">rápida y segura</span>
+            </h1>
+
+            <p class="mt-6 max-w-xl text-base leading-8
+               text-slate-600 sm:text-lg
+               dark:text-slate-400">
+                Centraliza vuelos, encomiendas y operaciones logísticas
+                en una plataforma moderna diseñada para simplificar
+                cada etapa del transporte aéreo.
+            </p>
+
+            <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+                <a href="#rastreo" class="inline-flex items-center justify-center gap-2
+                 rounded-xl bg-[#05BBFB] px-6 py-3.5
+                 text-sm font-bold text-slate-950
+                 shadow-xl shadow-[#05BBFB]/20
+                 transition hover:-translate-y-0.5
+                 hover:bg-[#20c4fc]">
+                    Rastrear encomienda
+                    <i class="pi pi-arrow-right text-xs"></i>
+                </a>
+
+                <a href="#servicios" class="inline-flex items-center justify-center gap-2
+                 rounded-xl border border-slate-300
+                 bg-white px-6 py-3.5
+                 text-sm font-semibold text-slate-700
+                 transition hover:bg-slate-50
+                 dark:border-slate-700 dark:bg-slate-900
+                 dark:text-slate-200 dark:hover:bg-slate-800">
+                    Conocer servicios
+                </a>
+            </div>
+
+            <div class="mt-10 flex flex-wrap gap-x-8 gap-y-4">
+                <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i class="pi pi-check-circle text-[#05BBFB]"></i>
+                    Seguimiento centralizado
+                </div>
+
+                <div class="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                    <i class="pi pi-check-circle text-[#05BBFB]"></i>
+                    Información segura
+                </div>
+            </div>
+        </div>
+
+        <!-- Ilustración -->
+        <div class="relative mx-auto w-full max-w-xl">
+            <div class="rounded-[2rem] border border-slate-200
+               bg-white p-5 shadow-2xl shadow-slate-950/10
+               dark:border-slate-800 dark:bg-slate-900
+               dark:shadow-black/30">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                            Operaciones de vuelo
+                        </p>
+
+                        <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                            Resumen en tiempo real
+                        </p>
+                    </div>
+
+                    <div class="flex h-10 w-10 items-center justify-center
+                   rounded-xl bg-[#05BBFB]/10 text-[#0399D1]
+                   dark:text-[#05BBFB]">
+                        <i class="pi pi-chart-line"></i>
+                    </div>
+                </div>
+
+                <div class="mt-6 grid grid-cols-2 gap-3">
+                    <div class="rounded-2xl bg-slate-50 p-4 dark:bg-slate-800/70">
+                        <p class="text-xs text-slate-500 dark:text-slate-400">
+                            Vuelos activos
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
+                            12
+                        </p>
+                    </div>
+
+                    <div class="rounded-2xl bg-[#05BBFB]/10 p-4">
+                        <p class="text-xs text-[#0387bb] dark:text-[#05BBFB]">
+                            Encomiendas
+                        </p>
+
+                        <p class="mt-2 text-2xl font-bold text-slate-950 dark:text-white">
+                            248
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-4 space-y-3">
+                    @for (vuelo of [
+                    { codigo: 'CA-204', destino: 'Lima → Cusco', estado: 'En tránsito' },
+                    { codigo: 'CA-315', destino: 'Lima → Arequipa', estado: 'Programado' },
+                    { codigo: 'CA-428', destino: 'Lima → Piura', estado: 'Recibido' }
+                    ]; track vuelo.codigo) {
+                    <div class="flex items-center gap-3 rounded-2xl
+                     border border-slate-200 p-3
+                     dark:border-slate-800">
+                        <div class="flex h-10 w-10 items-center justify-center
+                       rounded-xl bg-slate-100 text-slate-600
+                       dark:bg-slate-800 dark:text-[#05BBFB]">
+                            <i class="pi pi-send text-sm"></i>
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white">
+                                {{ vuelo.codigo }}
+                            </p>
+
+                            <p class="truncate text-xs text-slate-500 dark:text-slate-400">
+                                {{ vuelo.destino }}
+                            </p>
+                        </div>
+
+                        <span class="rounded-full bg-emerald-500/10 px-2.5 py-1
+                       text-[10px] font-semibold text-emerald-600
+                       dark:text-emerald-400">
+                            {{ vuelo.estado }}
+                        </span>
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 2. SERVICIOS -->
+<section id="servicios" class="scroll-mt-20 bg-slate-50 py-24
+         dark:bg-slate-900/40">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+            <p class="text-sm font-bold uppercase tracking-widest text-[#0399D1] dark:text-[#05BBFB]">
+                Servicios
+            </p>
+
+            <h2 class="mt-3 text-3xl font-black text-slate-950 sm:text-4xl dark:text-white">
+                Todo lo necesario para gestionar tu carga
+            </h2>
+
+            <p class="mt-4 leading-7 text-slate-600 dark:text-slate-400">
+                Herramientas centralizadas para mantener el control de cada operación.
+            </p>
+        </div>
+
+        <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            @for (servicio of [
+            {
+            icono: 'pi-send',
+            titulo: 'Gestión de vuelos',
+            texto: 'Registra vuelos, destinos, fechas y capacidad disponible.'
+            },
+            {
+            icono: 'pi-box',
+            titulo: 'Control de encomiendas',
+            texto: 'Administra el ingreso, asignación y estado de cada encomienda.'
+            },
+            {
+            icono: 'pi-map-marker',
+            titulo: 'Seguimiento de carga',
+            texto: 'Consulta la situación y el vuelo asignado a cada envío.'
+            },
+            {
+            icono: 'pi-user-edit',
+            titulo: 'Gestión de peticiones',
+            texto: 'Organiza solicitudes y procesos internos de los operadores.'
+            },
+            {
+            icono: 'pi-users',
+            titulo: 'Administración de usuarios',
+            texto: 'Controla usuarios, roles y permisos de acceso al sistema.'
+            },
+            {
+            icono: 'pi-history',
+            titulo: 'Auditoría',
+            texto: 'Supervisa las acciones realizadas dentro de la plataforma.'
+            }
+            ]; track servicio.titulo) {
+            <article class="group rounded-3xl border border-slate-200
+                 bg-white p-7 transition duration-300
+                 hover:-translate-y-1 hover:border-[#05BBFB]/50
+                 hover:shadow-xl hover:shadow-slate-950/5
+                 dark:border-slate-800 dark:bg-slate-900
+                 dark:hover:border-[#05BBFB]/40">
+                <div class="flex h-12 w-12 items-center justify-center
+                   rounded-2xl bg-[#05BBFB]/10 text-[#0399D1]
+                   transition group-hover:bg-[#05BBFB]
+                   group-hover:text-slate-950
+                   dark:text-[#05BBFB]">
+                    <i class="pi {{ servicio.icono }}"></i>
+                </div>
+
+                <h3 class="mt-6 text-lg font-bold text-slate-950 dark:text-white">
+                    {{ servicio.titulo }}
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                    {{ servicio.texto }}
+                </p>
+            </article>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- 3. PROCESO -->
+<section id="proceso" class="scroll-mt-20 bg-white py-24 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-2xl text-center">
+            <p class="text-sm font-bold uppercase tracking-widest text-[#0399D1] dark:text-[#05BBFB]">
+                Proceso
+            </p>
+
+            <h2 class="mt-3 text-3xl font-black text-slate-950 sm:text-4xl dark:text-white">
+                Una gestión sencilla en cuatro pasos
+            </h2>
+        </div>
+
+        <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
+            @for (paso of [
+            {
+            numero: '01',
+            titulo: 'Registro',
+            texto: 'La encomienda ingresa al sistema con todos sus datos.'
+            },
+            {
+            numero: '02',
+            titulo: 'Asignación',
+            texto: 'La carga se asigna al vuelo que tenga capacidad disponible.'
+            },
+            {
+            numero: '03',
+            titulo: 'Transporte',
+            texto: 'El estado cambia durante el proceso de traslado aéreo.'
+            },
+            {
+            numero: '04',
+            titulo: 'Entrega',
+            texto: 'La encomienda se registra como entregada al destinatario.'
+            }
+            ]; track paso.numero) {
+            <article class="relative text-center">
+                <div class="mx-auto flex h-16 w-16 items-center justify-center
+                   rounded-2xl bg-[#05BBFB]
+                   text-lg font-black text-slate-950
+                   shadow-lg shadow-[#05BBFB]/20">
+                    {{ paso.numero }}
+                </div>
+
+                <h3 class="mt-6 text-lg font-bold text-slate-950 dark:text-white">
+                    {{ paso.titulo }}
+                </h3>
+
+                <p class="mt-3 text-sm leading-7 text-slate-600 dark:text-slate-400">
+                    {{ paso.texto }}
+                </p>
+            </article>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- 4. BENEFICIOS -->
+<section id="beneficios" class="scroll-mt-20 bg-slate-950 py-24
+         text-white dark:bg-slate-900">
+    <div class="mx-auto grid max-w-7xl items-center
+           gap-14 px-5 sm:px-6
+           lg:grid-cols-2 lg:px-8">
+        <div>
+            <p class="text-sm font-bold uppercase tracking-widest text-[#05BBFB]">
+                Beneficios
+            </p>
+
+            <h2 class="mt-3 text-3xl font-black sm:text-4xl">
+                Mayor control sobre cada operación logística
+            </h2>
+
+            <p class="mt-5 leading-8 text-slate-400">
+                Reduce tareas manuales, organiza la información y mejora
+                la toma de decisiones.
+            </p>
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+            @for (beneficio of [
+            { icono: 'pi-bolt', titulo: 'Mayor rapidez' },
+            { icono: 'pi-shield', titulo: 'Información segura' },
+            { icono: 'pi-chart-line', titulo: 'Mejor control' },
+            { icono: 'pi-check-circle', titulo: 'Menos errores' }
+            ]; track beneficio.titulo) {
+            <div class="flex items-center gap-4 rounded-2xl
+                 border border-white/10 bg-white/5 p-5">
+                <div class="flex h-11 w-11 items-center justify-center
+                   rounded-xl bg-[#05BBFB]/15 text-[#05BBFB]">
+                    <i class="pi {{ beneficio.icono }}"></i>
+                </div>
+
+                <p class="font-semibold">
+                    {{ beneficio.titulo }}
+                </p>
+            </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- 5. RASTREO -->
+<section id="rastreo" class="scroll-mt-20 bg-white py-24 dark:bg-slate-950">
+    <div class="mx-auto max-w-5xl px-5 sm:px-6">
+        <div class="relative overflow-hidden rounded-[2rem]
+             border border-[#05BBFB]/20
+             bg-[#05BBFB]/[0.06] px-6 py-12
+             text-center sm:px-12 sm:py-16
+             dark:bg-[#05BBFB]/[0.07]">
+            <!-- Decoración -->
+            <div class="pointer-events-none absolute -right-24 -top-24
+               h-64 w-64 rounded-full
+               bg-[#05BBFB]/15 blur-3xl"></div>
+
+            <div class="pointer-events-none absolute -bottom-32 -left-24
+               h-64 w-64 rounded-full
+               bg-blue-500/10 blur-3xl"></div>
+
+            <div class="relative">
+                <div class="mx-auto flex h-14 w-14 items-center
+                 justify-center rounded-2xl
+                 bg-[#05BBFB] text-slate-950
+                 shadow-lg shadow-[#05BBFB]/20">
+                    <i class="pi pi-search text-lg"></i>
+                </div>
+
+                <p class="mt-6 text-xs font-bold uppercase
+                 tracking-[0.18em] text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    Seguimiento en línea
+                </p>
+
+                <h2 class="mt-3 text-3xl font-black tracking-tight
+                 text-slate-950 sm:text-4xl dark:text-white">
+                    Rastrea tu encomienda
+                </h2>
+
+                <p class="mx-auto mt-4 max-w-xl leading-7
+                 text-slate-600 dark:text-slate-400">
+                    Ingresa el código asignado a tu envío y consulta
+                    su estado, vuelo y destino.
+                </p>
+
+                <form class="mx-auto mt-8 flex max-w-2xl
+                 flex-col gap-3 sm:flex-row" (ngSubmit)="buscarEncomienda()">
+                    <div class="relative min-w-0 flex-1">
+                        <i class="pi pi-box absolute left-4 top-1/2
+                     -translate-y-1/2 text-sm
+                     text-slate-400"></i>
+
+                        <input id="codigoRastreo" type="text" name="codigoRastreo" [(ngModel)]="codigoRastreo"
+                            placeholder="Ejemplo: EA-12345678" autocomplete="off" maxlength="20" class="h-13 w-full rounded-xl
+                     border border-slate-300 bg-white
+                     py-3 pl-11 pr-4 text-sm
+                     font-medium uppercase text-slate-900
+                     outline-none transition
+                     placeholder:font-normal
+                     placeholder:normal-case
+                     placeholder:text-slate-400
+                     focus:border-[#05BBFB]
+                     focus:ring-4 focus:ring-[#05BBFB]/10
+                     dark:border-slate-700
+                     dark:bg-slate-900 dark:text-white
+                     dark:placeholder:text-slate-500" />
+                    </div>
+
+                    <button type="submit" class="inline-flex h-13 items-center
+                   justify-center gap-2 rounded-xl cursor-pointer
+                   bg-[#05BBFB] px-7
+                   text-sm font-bold text-slate-950
+                   shadow-lg shadow-[#05BBFB]/20
+                   transition duration-200 cursor-pointer
+                   hover:-translate-y-0.5
+                   hover:bg-[#20c4fc]
+                   disabled:pointer-events-none
+                   disabled:opacity-60" [disabled]="buscando()">
+                        @if (buscando()) {
+                        <i class="pi pi-spin pi-spinner"></i>
+                        Buscando
+                        } @else {
+                        <i class="pi pi-search"></i>
+                        Consultar
+                        }
+                    </button>
+                </form>
+
+                <button type="button" class="mt-5 inline-flex items-center gap-2 cursor-pointer
+                 text-sm font-semibold text-slate-500
+                 transition hover:text-[#0399D1]
+                 dark:text-slate-400
+                 dark:hover:text-[#05BBFB]" (click)="abrirAsistente()">
+                    <i class="pi pi-comments"></i>
+                    También puedes consultar con Valeria
+                    <i class="pi pi-arrow-right text-[10px]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Popup de seguimiento -->
+<p-dialog [visible]="popupRastreoVisible()" (visibleChange)="popupRastreoVisible.set($event)" appendTo="body"
+    [modal]="true" [draggable]="false" [resizable]="false" [dismissableMask]="true" [closeOnEscape]="true"
+    [style]="{ width: 'min(94vw, 600px)' }" [contentStyle]="{ padding: '0' }">
+    <ng-template #header>
+        <div class="flex min-w-0 items-center gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center
+               justify-center rounded-xl
+               bg-[#05BBFB]/15 text-[#0399D1]
+               dark:text-[#05BBFB]">
+                <i class="pi pi-box"></i>
+            </div>
+
+            <div class="min-w-0">
+                <p class="truncate text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    Seguimiento de encomienda
+                </p>
+
+                <p class="truncate text-xs
+                 text-slate-500 dark:text-slate-400">
+                    Información actualizada del envío
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    <div class="bg-white p-5 sm:p-6 dark:bg-slate-900">
+        @if (buscando()) {
+        <div class="flex flex-col items-center justify-center py-14">
+            <div class="flex h-14 w-14 items-center justify-center
+                 rounded-2xl bg-[#05BBFB]/10
+                 text-[#0399D1] dark:text-[#05BBFB]">
+                <i class="pi pi-spin pi-spinner text-xl"></i>
+            </div>
+
+            <p class="mt-5 text-sm font-semibold
+                 text-slate-800 dark:text-slate-200">
+                Buscando tu encomienda...
+            </p>
+
+            <p class="mt-1 text-xs text-slate-500">
+                Esto tomará solo unos segundos.
+            </p>
+        </div>
+        } @else if (mensajeError()) {
+        <div class="flex flex-col items-center py-8 text-center">
+            <div class="flex h-14 w-14 items-center justify-center
+                 rounded-2xl bg-red-500/10 text-red-500">
+                <i class="pi pi-exclamation-circle text-xl"></i>
+            </div>
+
+            <h3 class="mt-5 text-lg font-bold
+                 text-slate-900 dark:text-white">
+                No pudimos encontrar el envío
+            </h3>
+
+            <p class="mt-2 max-w-md text-sm leading-6
+                 text-slate-500 dark:text-slate-400">
+                {{ mensajeError() }}
+            </p>
+
+            <button type="button" class="mt-6 rounded-xl bg-[#05BBFB] cursor-pointer
+                 px-5 py-2.5 text-sm font-bold
+                 text-slate-950 transition
+                 hover:bg-[#20c4fc]" (click)="buscarOtroCodigo()">
+                Intentar nuevamente
+            </button>
+        </div>
+        } @else if (resultado(); as encomienda) {
+        <!-- Cabecera del resultado -->
+        <div class="flex flex-col gap-4 rounded-2xl
+               bg-slate-50 p-4
+               sm:flex-row sm:items-center
+               sm:justify-between
+               dark:bg-slate-800/70">
+            <div>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Código de seguimiento
+                </p>
+
+                <p class="mt-1 text-lg font-black
+                   text-slate-950 dark:text-white">
+                    {{ encomienda.codigo }}
+                </p>
+            </div>
+
+            <span class="w-fit rounded-full px-3 py-1.5
+                 text-xs font-bold" [class]="claseEstado(encomienda.estado)">
+                {{ nombreEstado(encomienda.estado) }}
+            </span>
+        </div>
+
+        <!-- Información -->
+        <div class="mt-5 divide-y divide-slate-200
+               rounded-2xl border border-slate-200
+               px-4 dark:divide-slate-800
+               dark:border-slate-800">
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Contenido
+                </span>
+
+                <span class="text-right text-sm font-semibold
+                   text-slate-900 dark:text-slate-100">
+                    {{ encomienda.contenido }}
+                </span>
+            </div>
+
+            @if (encomienda.descripcion) {
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Descripción
+                </span>
+
+                <span class="max-w-[65%] text-right text-sm font-semibold
+                     text-slate-900 dark:text-slate-100">
+                    {{ encomienda.descripcion }}
+                </span>
+            </div>
+            }
+
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Peso cobrable
+                </span>
+
+                <span class="text-sm font-semibold
+                   text-slate-900 dark:text-slate-100">
+                    {{ encomienda.pesoCobrableKg | number: '1.2-2' }} kg
+                </span>
+            </div>
+
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Fecha de registro
+                </span>
+
+                <span class="text-sm font-semibold
+                   text-slate-900 dark:text-slate-100">
+                    {{ encomienda.fechaRegistro | date: 'dd/MM/yyyy' }}
+                </span>
+            </div>
+
+            @if (encomienda.codigoVuelo) {
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Vuelo asignado
+                </span>
+
+                <div class="text-right">
+                    <p class="text-sm font-semibold
+                       text-slate-900 dark:text-slate-100">
+                        {{ encomienda.codigoVuelo }}
+                    </p>
+
+                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        {{ encomienda.origenVuelo }}
+                        <i class="pi pi-arrow-right mx-1 text-[9px]"></i>
+                        {{ encomienda.destinoVuelo }}
+                    </p>
+                </div>
+            </div>
+
+            @if (encomienda.fechaLlegadaVuelo) {
+            <div class="flex justify-between gap-5 py-3.5">
+                <span class="text-sm text-slate-500 dark:text-slate-400">
+                    Llegada estimada
+                </span>
+
+                <span class="text-right text-sm font-semibold
+                       text-slate-900 dark:text-slate-100">
+                    {{ encomienda.fechaLlegadaVuelo | date: 'dd/MM/yyyy' }}
+
+                    @if (encomienda.horaLlegadaVuelo) {
+                    · {{ encomienda.horaLlegadaVuelo.substring(0, 5) }}
+                    }
+                </span>
+            </div>
+            }
+            } @else {
+            <div class="flex items-start gap-3 py-4">
+                <i class="pi pi-info-circle mt-0.5 text-amber-500"></i>
+
+                <p class="text-sm text-slate-600 dark:text-slate-400">
+                    Esta encomienda todavía no tiene un vuelo asignado.
+                </p>
+            </div>
+            }
+        </div>
+
+        @if (
+        encomienda.codigoVuelo &&
+        encomienda.codigoAeropuertoDestino
+        ) {
+        <div class="mt-5 flex items-start gap-3
+                 rounded-2xl bg-[#05BBFB]/10 p-4">
+            <i class="pi pi-map-marker mt-0.5 text-[#0399D1] dark:text-[#05BBFB]"></i>
+
+            <div>
+                <p class="text-sm font-bold
+                     text-slate-900 dark:text-white">
+                    Lugar de recojo
+                </p>
+
+                <p class="mt-1 text-sm leading-6
+                     text-slate-600 dark:text-slate-300">
+                    @if (encomienda.terminalCargaDestino) {
+                    {{ encomienda.terminalCargaDestino }}
+                    } @else {
+                    Terminal de carga
+                    }
+
+                    — Aeropuerto
+                    {{ encomienda.codigoAeropuertoDestino }}
+                    ({{ encomienda.destinoVuelo }})
+                </p>
+            </div>
+        </div>
+        }
+
+        <p class="mt-4 text-center text-xs
+               text-slate-400 dark:text-slate-500">
+            Última actualización:
+            {{ encomienda.fechaActualizacion | date: 'dd/MM/yyyy HH:mm' }}
+        </p>
+
+        <!-- Acciones -->
+        <div class="mt-6 flex flex-col-reverse gap-3
+               border-t border-slate-200 pt-5
+               sm:flex-row sm:justify-between
+               dark:border-slate-800">
+            <button type="button" class="rounded-xl border border-slate-300
+                 px-4 py-2.5 text-sm font-semibold cursor-pointer
+                 text-slate-700 transition
+                 hover:bg-slate-50
+                 dark:border-slate-700
+                 dark:text-slate-300
+                 dark:hover:bg-slate-800" (click)="buscarOtroCodigo()">
+                Buscar otro código
+            </button>
+
+            <button type="button" class="inline-flex items-center justify-center cursor-pointer
+                 gap-2 rounded-xl bg-[#05BBFB]
+                 px-4 py-2.5 text-sm font-bold
+                 text-slate-950 transition
+                 hover:bg-[#20c4fc]" (click)="irAConsignatario()">
+                Cambio de consignatario
+                <i class="pi pi-arrow-right text-[10px]"></i>
+            </button>
+        </div>
+        }
+    </div>
+</p-dialog>
+
+<!-- 6. NOSOTROS -->
+<section id="nosotros" class="scroll-mt-20 bg-slate-50 py-24
+         dark:bg-slate-900/40">
+    <div class="mx-auto grid max-w-7xl items-center gap-14
+           px-5 sm:px-6 lg:grid-cols-2 lg:px-8">
+        <div class="relative min-h-96 overflow-hidden rounded-[2rem]
+             bg-slate-950 p-8 text-white">
+            <div class="absolute -right-24 -top-24 h-64 w-64
+               rounded-full bg-[#05BBFB]/30 blur-3xl"></div>
+
+            <div class="relative flex h-full min-h-80 flex-col justify-between">
+                <div class="flex h-14 w-14 items-center justify-center
+                 rounded-2xl bg-[#05BBFB] text-slate-950">
+                    <i class="pi pi-globe text-xl"></i>
+                </div>
+
+                <div>
+                    <p class="text-5xl font-black text-[#05BBFB]">
+                        100%
+                    </p>
+
+                    <p class="mt-2 max-w-sm text-lg font-semibold">
+                        Comprometidos con una logística aérea eficiente y segura.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-sm font-bold uppercase tracking-widest text-[#0399D1] dark:text-[#05BBFB]">
+                Nosotros
+            </p>
+
+            <h2 class="mt-3 text-3xl font-black text-slate-950 sm:text-4xl dark:text-white">
+                Tecnología diseñada para mejorar la gestión
+            </h2>
+
+            <p class="mt-6 leading-8 text-slate-600 dark:text-slate-400">
+                Nuestra plataforma integra las operaciones principales de
+                carga aérea para que administradores y operadores trabajen
+                con información clara, organizada y actualizada.
+            </p>
+
+            <div class="mt-8 space-y-4">
+                <div class="flex items-start gap-3">
+                    <i class="pi pi-check-circle mt-1 text-[#05BBFB]"></i>
+
+                    <div>
+                        <p class="font-semibold text-slate-900 dark:text-white">
+                            Procesos centralizados
+                        </p>
+
+                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                            Toda la información disponible desde una sola plataforma.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <i class="pi pi-check-circle mt-1 text-[#05BBFB]"></i>
+
+                    <div>
+                        <p class="font-semibold text-slate-900 dark:text-white">
+                            Acceso según roles
+                        </p>
+
+                        <p class="mt-1 text-sm text-slate-600 dark:text-slate-400">
+                            Funcionalidades específicas para administradores y operadores.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- 7. CONTACTO -->
+<section id="contacto" class="scroll-mt-20 bg-white py-24 dark:bg-slate-950">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+        <div class="grid overflow-hidden rounded-[2rem]
+             border border-slate-200
+             bg-white shadow-xl shadow-slate-950/5
+             lg:grid-cols-2
+             dark:border-slate-800 dark:bg-slate-900">
+            <div class="bg-slate-950 p-8 text-white sm:p-12">
+                <p class="text-sm font-bold uppercase tracking-widest text-[#05BBFB]">
+                    Contacto
+                </p>
+
+                <h2 class="mt-3 text-3xl font-black">
+                    ¿Necesitas ayuda?
+                </h2>
+
+                <p class="mt-5 leading-8 text-slate-400">
+                    Comunícate con nosotros para resolver dudas relacionadas
+                    con la plataforma o el seguimiento de una encomienda.
+                </p>
+
+                <div class="mt-9 space-y-5">
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-11 w-11 items-center justify-center
+                     rounded-xl bg-white/10 text-[#05BBFB]">
+                            <i class="pi pi-envelope"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500">Correo</p>
+                            <p class="mt-1 text-sm font-semibold">
+                                soporte@cargaaerea.com
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <div class="flex h-11 w-11 items-center justify-center
+                     rounded-xl bg-white/10 text-[#05BBFB]">
+                            <i class="pi pi-phone"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-xs text-slate-500">Teléfono</p>
+                            <p class="mt-1 text-sm font-semibold">
+                                +51 997 676 432
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form class="p-8 sm:p-12">
+                <div class="grid gap-5 sm:grid-cols-2">
+                    <label class="block">
+                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Nombre
+                        </span>
+
+                        <input type="text" class="mt-2 h-12 w-full rounded-xl
+                     border border-slate-300 bg-white px-4
+                     text-sm outline-none
+                     focus:border-[#05BBFB]
+                     focus:ring-4 focus:ring-[#05BBFB]/10
+                     dark:border-slate-700 dark:bg-slate-950" />
+                    </label>
+
+                    <label class="block">
+                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                            Correo
+                        </span>
+
+                        <input type="email" class="mt-2 h-12 w-full rounded-xl
+                     border border-slate-300 bg-white px-4
+                     text-sm outline-none
+                     focus:border-[#05BBFB]
+                     focus:ring-4 focus:ring-[#05BBFB]/10
+                     dark:border-slate-700 dark:bg-slate-950" />
+                    </label>
+                </div>
+
+                <label class="mt-5 block">
+                    <span class="text-sm font-semibold text-slate-700 dark:text-slate-300">
+                        Mensaje
+                    </span>
+
+                    <textarea rows="5" class="mt-2 w-full resize-none rounded-xl
+                   border border-slate-300 bg-white p-4
+                   text-sm outline-none
+                   focus:border-[#05BBFB]
+                   focus:ring-4 focus:ring-[#05BBFB]/10
+                   dark:border-slate-700 dark:bg-slate-950"></textarea>
+                </label>
+
+                <button type="submit" class="mt-5 flex h-12 w-full items-center
+                 justify-center gap-2 rounded-xl
+                 bg-[#05BBFB] px-6 text-sm
+                 font-bold text-slate-950
+                 transition hover:bg-[#20c4fc]">
+                    <i class="pi pi-send"></i>
+                    Enviar mensaje
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,18 @@
+<div class="min-h-screen bg-slate-50 dark:bg-[#0b1120]">
+    <app-sidebar [abierto]="menuAbierto()" (cerrar)="menuAbierto.set(false)" />
+
+    <!-- Botón móvil para abrir el sidebar -->
+    <button type="button" class="fixed left-4 top-4 z-20 flex h-11 w-11
+           items-center justify-center rounded-xl bg-slate-950
+           text-white shadow-lg transition hover:bg-slate-800
+           lg:hidden" aria-label="Abrir menú" (click)="menuAbierto.set(true)">
+        <i class="pi pi-bars"></i>
+    </button>
+
+    <!-- En escritorio deja espacio permanente para el sidebar -->
+    <div class="min-h-screen lg:pl-72">
+        <main class="p-4 pt-20 sm:p-6 sm:pt-20 lg:p-8">
+            <router-outlet />
+        </main>
+    </div>
+</div>

@@ -1,0 +1,250 @@
+@if (abierto()) {
+<button type="button" class="fixed inset-0 z-30 bg-slate-950/50 backdrop-blur-[2px] lg:hidden" aria-label="Cerrar menú"
+    (click)="cerrarMenu()"></button>
+}
+
+<aside class="fixed inset-y-0 left-0 z-40 flex w-72 flex-col
+         border-r border-slate-200 bg-white text-slate-900
+         shadow-xl shadow-slate-950/5
+         transition-transform duration-300 ease-out
+         dark:border-slate-800 dark:bg-slate-950
+         dark:text-white dark:shadow-black/20" [class.translate-x-0]="abierto()" [class.-translate-x-full]="!abierto()"
+    [class.lg:translate-x-0]="true">
+    <div class="flex h-20 shrink-0 items-center gap-3
+           border-b border-slate-200 px-5
+           dark:border-slate-800">
+        <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-10 w-10 shrink-0 object-contain" />
+-
+        <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-bold tracking-tight
+               text-slate-900 dark:text-white">
+                Sistema de carga aérea
+            </p>
+
+            <p class="mt-0.5 truncate text-xs
+               text-slate-500 dark:text-slate-400">
+                Gestión logística
+            </p>
+        </div>
+
+        <button type="button" class="flex h-9 w-9 shrink-0 items-center justify-center
+             rounded-lg text-slate-400 transition
+             hover:bg-slate-100 hover:text-slate-700
+             lg:hidden
+             dark:text-slate-500 dark:hover:bg-slate-800
+             dark:hover:text-white" aria-label="Cerrar menú" (click)="cerrarMenu()">
+            <i class="pi pi-times text-sm"></i>
+        </button>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto px-3 py-5">
+        <div class="space-y-1">
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+               text-sm font-medium text-slate-600
+               transition-colors duration-200
+               hover:bg-slate-100 hover:text-slate-950
+               dark:text-slate-400 dark:hover:bg-slate-900
+               dark:hover:text-white" routerLink="/dashboard"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenu()">
+                <i class="pi pi-home w-5 text-center text-sm"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+               text-sm font-medium text-slate-600
+               transition-colors duration-200
+               hover:bg-slate-100 hover:text-slate-950
+               dark:text-slate-400 dark:hover:bg-slate-900
+               dark:hover:text-white" routerLink="/vuelos"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                (click)="cerrarMenu()">
+                <i class="pi pi-send w-5 text-center text-sm"></i>
+                <span>Vuelos</span>
+            </a>
+
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+               text-sm font-medium text-slate-600
+               transition-colors duration-200
+               hover:bg-slate-100 hover:text-slate-950
+               dark:text-slate-400 dark:hover:bg-slate-900
+               dark:hover:text-white" routerLink="/encomiendas"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                (click)="cerrarMenu()">
+                <i class="pi pi-box w-5 text-center text-sm"></i>
+                <span>Encomiendas</span>
+            </a>
+
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+               text-sm font-medium text-slate-600
+               transition-colors duration-200
+               hover:bg-slate-100 hover:text-slate-950
+               dark:text-slate-400 dark:hover:bg-slate-900
+               dark:hover:text-white" routerLink="/peticiones"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                (click)="cerrarMenu()">
+                <i class="pi pi-user-edit w-5 text-center text-sm"></i>
+                <span>Peticiones</span>
+            </a>
+        </div>
+
+        @if (esAdministrador()) {
+        <div class="mb-2 mt-7 px-3">
+            <p class="text-[10px] font-bold uppercase
+                 tracking-[0.16em] text-slate-400
+                 dark:text-slate-600">
+                Administración
+            </p>
+        </div>
+
+        <div class="space-y-1">
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+                 text-sm font-medium text-slate-600
+                 transition-colors duration-200
+                 hover:bg-slate-100 hover:text-slate-950
+                 dark:text-slate-400 dark:hover:bg-slate-900
+                 dark:hover:text-white" routerLink="/usuarios"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                (click)="cerrarMenu()">
+                <i class="pi pi-users w-5 text-center text-sm"></i>
+                <span>Usuarios</span>
+            </a>
+
+            <a class="flex items-center gap-3 rounded-xl px-3 py-2.5
+                 text-sm font-medium text-slate-600
+                 transition-colors duration-200
+                 hover:bg-slate-100 hover:text-slate-950
+                 dark:text-slate-400 dark:hover:bg-slate-900
+                 dark:hover:text-white" routerLink="/auditoria"
+                routerLinkActive="bg-[#05BBFB]/10 !text-[#0399D1] dark:bg-[#05BBFB]/15 dark:!text-[#05BBFB]"
+                (click)="cerrarMenu()">
+                <i class="pi pi-history w-5 text-center text-sm"></i>
+                <span>Auditoría</span>
+            </a>
+        </div>
+        }
+    </nav>
+
+    <div class="shrink-0 border-t border-slate-200 p-3
+           dark:border-slate-800">
+        <button type="button" class="mb-2 flex w-full items-center gap-3
+             rounded-xl px-3 py-2.5 text-left
+             text-sm font-medium text-slate-600
+             cursor-pointer
+             transition-colors duration-200
+             hover:bg-slate-100 hover:text-slate-950
+             dark:text-slate-400 dark:hover:bg-slate-900
+             dark:hover:text-white" aria-label="Cambiar modo claro u oscuro" (click)="alternarTema()">
+            <div class="flex h-8 w-8 shrink-0 items-center
+               justify-center rounded-lg
+               bg-slate-100 text-slate-600
+               dark:bg-slate-800 dark:text-[#05BBFB]">
+                <i class="pi text-sm" [class.pi-moon]="!themeService.oscuro()"
+                    [class.pi-sun]="themeService.oscuro()"></i>
+            </div>
+
+            <span class="flex-1">
+                {{ themeService.oscuro() ? 'Modo claro' : 'Modo oscuro' }}
+            </span>
+
+            <span class="relative h-5 w-9 shrink-0 rounded-full
+               bg-slate-300 transition-colors duration-200
+               dark:bg-[#05BBFB]">
+                <span class="absolute top-0.5 h-4 w-4 rounded-full
+                 bg-white shadow-sm transition-all duration-200" [class.left-0.5]="!themeService.oscuro()"
+                    [class.left-[18px]]="themeService.oscuro()"></span>
+            </span>
+        </button>
+
+        <div #perfilContenedor class="relative">
+            @if (perfilAbierto()) {
+            <div class="absolute bottom-[calc(100%+0.5rem)] left-0 right-0
+                 z-50 overflow-hidden rounded-2xl
+                 border border-slate-200 bg-white
+                 shadow-2xl shadow-slate-950/15
+                 dark:border-slate-700 dark:bg-slate-900
+                 dark:shadow-black/40">
+                <div class="p-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-11 w-11 shrink-0 items-center
+                       justify-center rounded-full
+                       bg-[#05BBFB]/15 font-bold text-[#0399D1]
+                       dark:text-[#05BBFB]">
+                            {{ inicial() }}
+                        </div>
+
+                        <div class="min-w-0 flex-1">
+                            <p class="truncate text-sm font-semibold
+                         text-slate-900 dark:text-white">
+                                {{ usuario()?.nombreCompleto }}
+                            </p>
+
+                            <p class="mt-0.5 truncate text-xs
+                         text-slate-500 dark:text-slate-400">
+                                {{ usuario()?.username }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex items-center gap-2
+                     rounded-xl bg-slate-100 px-3 py-2.5
+                     dark:bg-slate-800/80">
+                        <i class="pi pi-shield text-xs text-[#0399D1] dark:text-[#05BBFB]"></i>
+
+                        <span class="text-xs font-medium text-slate-600
+                       dark:text-slate-300">
+                            {{ nombreRol() }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="border-t border-slate-200 p-2
+                   dark:border-slate-800">
+                    <button type="button" class="flex w-full items-center gap-3
+                     rounded-xl px-3 py-2.5
+                     text-sm font-medium text-red-600
+                     transition-colors duration-200
+                     hover:bg-red-50
+                     cursor-pointer
+                     dark:text-red-400 dark:hover:bg-red-500/10" (click)="salir()">
+                        <i class="pi pi-sign-out w-5 text-center text-sm"></i>
+                        <span>Cerrar sesión</span>
+                    </button>
+                </div>
+            </div>
+            }
+
+            <button type="button" class="flex w-full items-center gap-3
+               rounded-2xl px-3 py-2.5 text-left
+               transition-colors duration-200
+               hover:bg-slate-100
+               dark:hover:bg-slate-900" [class.bg-slate-100]="perfilAbierto()"
+                [class.dark:bg-slate-900]="perfilAbierto()" [attr.aria-expanded]="perfilAbierto()"
+                aria-label="Mostrar opciones de la cuenta" (click)="alternarPerfil()">
+                <div class="flex h-10 w-10 shrink-0 items-center
+                 justify-center rounded-full bg-[#05BBFB]
+                 text-sm font-bold text-slate-950
+                 shadow-md shadow-[#05BBFB]/20">
+                    {{ inicial() }}
+                </div>
+
+                <div class="min-w-0 flex-1">
+                    <p class="truncate text-sm font-semibold
+                   text-slate-900 dark:text-slate-100">
+                        {{ usuario()?.nombreCompleto }}
+                    </p>
+
+                    <p class="mt-0.5 truncate text-xs
+                   text-slate-500 dark:text-slate-400">
+                        {{ nombreRol() }}
+                    </p>
+                </div>
+
+                <i class="pi text-[10px] text-slate-400
+                 transition-transform duration-200
+                 dark:text-slate-500" [class.pi-chevron-up]="perfilAbierto()"
+                    [class.pi-chevron-down]="!perfilAbierto()"></i>
+            </button>
+        </div>
+    </div>
+</aside>

@@ -1,0 +1,982 @@
+<section class="min-h-full">
+    <!-- Encabezado -->
+    <header class="mb-6 flex flex-col gap-5
+           xl:flex-row xl:items-center xl:justify-between">
+        <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center
+               justify-center rounded-2xl
+               bg-[#05BBFB]/10 text-[#0399D1]
+               dark:text-[#05BBFB]">
+                <i class="pi pi-send text-lg"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-bold uppercase tracking-[0.18em]
+                 text-[#0399D1] dark:text-[#05BBFB]">
+                    Operaciones
+                </p>
+
+                <h1 class="mt-1 text-2xl font-black tracking-tight
+                 text-slate-950 sm:text-3xl dark:text-white">
+                    Gestión de vuelos
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500
+                 dark:text-slate-400">
+                    Administra rutas, horarios y capacidad de carga.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex flex-wrap gap-2">
+            <p-button label="Excel" icon="pi pi-file-excel" severity="secondary" [outlined]="true"
+                [loading]="exportando()" styleClass="!rounded-xl" (onClick)="exportarExcel()" />
+
+            <p-button label="PDF" icon="pi pi-file-pdf" severity="secondary" [outlined]="true" [loading]="exportando()"
+                styleClass="!rounded-xl" (onClick)="exportarPdf()" />
+
+            <p-button label="Nuevo vuelo" icon="pi pi-plus" [loading]="guardando()"
+                styleClass="!rounded-xl !border-[#05BBFB] !bg-[#05BBFB] !font-bold !text-slate-950 hover:!border-[#20c4fc] hover:!bg-[#20c4fc]"
+                (onClick)="abrirNuevo()" />
+        </div>
+    </header>
+
+    <!-- Resumen -->
+    <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <article class="rounded-2xl border border-slate-200
+             bg-white p-5
+             dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500
+                   dark:text-slate-400">
+                        Vuelos encontrados
+                    </p>
+
+                    <p class="mt-2 text-2xl font-black
+                   text-slate-950 dark:text-white">
+                        {{ total() }}
+                    </p>
+                </div>
+
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-[#05BBFB]/10
+                 text-[#0399D1] dark:text-[#05BBFB]">
+                    <i class="pi pi-send"></i>
+                </div>
+            </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200
+             bg-white p-5
+             dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500
+                   dark:text-slate-400">
+                        Registros visibles
+                    </p>
+
+                    <p class="mt-2 text-2xl font-black
+                   text-slate-950 dark:text-white">
+                        {{ vuelos().length }}
+                    </p>
+                </div>
+
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-violet-500/10 text-violet-600
+                 dark:text-violet-400">
+                    <i class="pi pi-list"></i>
+                </div>
+            </div>
+        </article>
+
+        <article class="rounded-2xl border border-slate-200
+             bg-white p-5 sm:col-span-2
+             lg:col-span-1
+             dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-medium text-slate-500
+                   dark:text-slate-400">
+                        Tamaño de página
+                    </p>
+
+                    <p class="mt-2 text-2xl font-black
+                   text-slate-950 dark:text-white">
+                        {{ tamanio() }}
+                    </p>
+                </div>
+
+                <div class="flex h-11 w-11 items-center
+                 justify-center rounded-xl
+                 bg-emerald-500/10 text-emerald-600
+                 dark:text-emerald-400">
+                    <i class="pi pi-chart-bar"></i>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <!-- Filtros -->
+    <section class="mb-6 rounded-2xl border border-slate-200
+           bg-white p-4 sm:p-5
+           dark:border-slate-800 dark:bg-slate-900">
+        <div class="grid items-end gap-4
+             sm:grid-cols-2 xl:grid-cols-[minmax(260px,1fr)_170px_170px_180px_auto]">
+            <!-- Buscar -->
+            <div class="sm:col-span-2 xl:col-span-1">
+                <label for="busqueda" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Buscar vuelo
+                </label>
+
+                <div class="relative">
+                    <i class="pi pi-search pointer-events-none
+                   absolute left-4 top-1/2 z-10
+                   -translate-y-1/2 text-sm text-slate-400"></i>
+
+                    <input id="busqueda" pInputText type="search" placeholder="Código, origen o destino"
+                        class="h-11 w-full !rounded-xl !pl-11" [value]="busqueda()"
+                        (input)="busqueda.set($any($event.target).value)" (keyup.enter)="buscar()" />
+                </div>
+            </div>
+
+            <!-- Desde -->
+            <div>
+                <label for="desde" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Fecha desde
+                </label>
+
+                <input id="desde" pInputText type="date" class="h-11 w-full !rounded-xl" [value]="desde()" (change)="
+            desde.set($any($event.target).value || null);
+            buscar()
+          " />
+            </div>
+
+            <!-- Hasta -->
+            <div>
+                <label for="hasta" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Fecha hasta
+                </label>
+
+                <input id="hasta" pInputText type="date" class="h-11 w-full !rounded-xl" [value]="hasta()" (change)="
+            hasta.set($any($event.target).value || null);
+            buscar()
+          " />
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label for="estado" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Estado
+                </label>
+
+                <p-select inputId="estado" styleClass="h-11 w-full !rounded-xl" [options]="opcionesEstado"
+                    optionLabel="label" optionValue="value" placeholder="Todos los estados" [showClear]="true"
+                    appendTo="body" [ngModel]="estado()" (ngModelChange)="
+            estado.set($event);
+            buscar()
+          " />
+            </div>
+
+            <!-- Acciones -->
+            <div class="flex gap-2 sm:col-span-2 xl:col-span-1">
+                <p-button icon="pi pi-search" label="Buscar"
+                    styleClass="h-11 !rounded-xl !border-[#05BBFB] !bg-[#05BBFB] !font-bold !text-slate-950 hover:!bg-[#20c4fc]"
+                    (onClick)="buscar()" />
+
+                <p-button icon="pi pi-filter-slash" severity="secondary" [outlined]="true" ariaLabel="Limpiar filtros"
+                    title="Limpiar filtros" styleClass="h-11 !rounded-xl" (onClick)="limpiarFiltros()" />
+            </div>
+        </div>
+    </section>
+
+    <!-- Tabla -->
+    <section class="overflow-hidden rounded-2xl
+           border border-slate-200 bg-white
+           dark:border-slate-800 dark:bg-slate-900">
+        <div class="overflow-x-auto">
+            <p-table [value]="vuelos()" [loading]="cargando()" [lazy]="true" [paginator]="true" [rows]="tamanio()"
+                [totalRecords]="total()" [rowsPerPageOptions]="[5, 10, 20]" [paginatorDropdownAppendTo]="'body'"
+                [tableStyle]="{ 'min-width': '1100px' }" styleClass="p-datatable-sm"
+                (onLazyLoad)="cambiarPagina($event)">
+                <ng-template #header>
+                    <tr>
+                        <th class="!px-5 !py-4">Vuelo</th>
+                        <th class="!px-5 !py-4">Ruta</th>
+                        <th class="!px-5 !py-4">Salida</th>
+                        <th class="!px-5 !py-4">Llegada</th>
+                        <th class="!px-5 !py-4">Capacidad</th>
+                        <th class="!px-5 !py-4">Ocupación</th>
+                        <th class="!px-5 !py-4">Estado</th>
+                        <th class="!px-5 !py-4 text-right">Acciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-vuelo>
+                    <tr class="transition-colors
+                   hover:!bg-slate-50
+                   dark:hover:!bg-slate-800/40">
+                        <!-- Código -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-9 w-9 shrink-0
+                         items-center justify-center
+                         rounded-xl bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                                    <i class="pi pi-send text-xs"></i>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-slate-900
+                           dark:text-slate-100">
+                                        {{ vuelo.codigo }}
+                                    </p>
+
+                                    <p class="mt-0.5 text-[11px]
+                           text-slate-400">
+                                        Vuelo de carga
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Ruta -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex items-center gap-3">
+                                <div>
+                                    <p class="text-sm font-semibold
+                           text-slate-800
+                           dark:text-slate-200">
+                                        {{ vuelo.origen }}
+
+                                        <span class="ml-1 rounded-md
+                             bg-slate-100 px-1.5 py-0.5
+                             text-[10px] font-bold
+                             text-slate-500
+                             dark:bg-slate-800
+                             dark:text-slate-400">
+                                            {{ vuelo.codigoAeropuertoOrigen }}
+                                        </span>
+                                    </p>
+
+                                    <div class="my-1 flex items-center gap-2
+                           text-[10px] text-slate-400">
+                                        <span class="h-px w-4 bg-slate-300 dark:bg-slate-700"></span>
+                                        <i class="pi pi-arrow-down text-[8px]"></i>
+                                    </div>
+
+                                    <p class="text-sm font-semibold
+                           text-slate-800
+                           dark:text-slate-200">
+                                        {{ vuelo.destino }}
+
+                                        <span class="ml-1 rounded-md
+                             bg-slate-100 px-1.5 py-0.5
+                             text-[10px] font-bold
+                             text-slate-500
+                             dark:bg-slate-800
+                             dark:text-slate-400">
+                                            {{ vuelo.codigoAeropuertoDestino }}
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Salida -->
+                        <td class="!px-5 !py-4">
+                            <p class="text-sm font-semibold
+                       text-slate-800 dark:text-slate-200">
+                                {{ vuelo.fechaSalida | date: 'dd/MM/yyyy' }}
+                            </p>
+
+                            <p class="mt-1 flex items-center gap-1.5
+                       text-xs text-slate-500
+                       dark:text-slate-400">
+                                <i class="pi pi-clock text-[10px]"></i>
+                                {{ vuelo.horaSalida.substring(0, 5) }}
+                            </p>
+
+                            @if (estaAtrasado(vuelo)) {
+                            <div class="mt-2 flex w-fit items-center gap-1.5
+                         rounded-full bg-amber-500/10
+                         px-2 py-1 text-[10px]
+                         font-semibold text-amber-700
+                         dark:text-amber-400" title="Ya pasó la hora de salida y sigue programado">
+                                <i class="pi pi-exclamation-triangle text-[9px]"></i>
+                                Pendiente de despacho
+                            </div>
+                            }
+                        </td>
+
+                        <!-- Llegada -->
+                        <td class="!px-5 !py-4">
+                            <p class="text-sm font-semibold
+                       text-slate-800 dark:text-slate-200">
+                                {{ vuelo.fechaLlegada | date: 'dd/MM/yyyy' }}
+                            </p>
+
+                            <p class="mt-1 flex items-center gap-1.5
+                       text-xs text-slate-500
+                       dark:text-slate-400">
+                                <i class="pi pi-clock text-[10px]"></i>
+                                {{ vuelo.horaLlegada?.substring(0, 5) }}
+                            </p>
+                        </td>
+
+                        <!-- Capacidad -->
+                        <td class="!px-5 !py-4">
+                            <p class="text-sm font-bold
+                       text-slate-800 dark:text-slate-200">
+                                {{
+                                vuelo.capacidadMaximaKg
+                                | number: '1.0-2'
+                                }}
+                                kg
+                            </p>
+
+                            <p class="mt-1 text-[11px] text-slate-400">
+                                Capacidad máxima
+                            </p>
+                        </td>
+
+                        <!-- Ocupación -->
+                        <td class="min-w-56 !px-5 !py-4">
+                            <div class="mb-2 flex items-center
+                       justify-between gap-3">
+                                <span class="text-xs font-semibold
+                         text-slate-600
+                         dark:text-slate-300">
+                                    {{
+                                    vuelo.pesoOcupadoKg
+                                    | number: '1.0-2'
+                                    }}
+                                    kg
+                                </span>
+
+                                <div class="flex items-center gap-2">
+                                    @if (alertaOcupacion(vuelo) === 'lleno') {
+                                    <p-tag value="Lleno" severity="danger" [rounded]="true" />
+                                    } @else if (
+                                    alertaOcupacion(vuelo) === 'casi-lleno'
+                                    ) {
+                                    <p-tag value="Casi lleno" severity="warn" [rounded]="true" />
+                                    }
+
+                                    <span class="text-xs font-bold
+                           text-slate-500
+                           dark:text-slate-400">
+                                        {{
+                                        porcentaje(vuelo)
+                                        | number: '1.0-0'
+                                        }}%
+                                    </span>
+                                </div>
+                            </div>
+
+                            <p-progressbar [value]="porcentaje(vuelo)" [showValue]="false"
+                                [color]="colorOcupacion(vuelo)" styleClass="!h-2 !rounded-full" />
+                        </td>
+
+                        <!-- Estado -->
+                        <td class="!px-5 !py-4">
+                            <p-tag [value]="nombreEstado(vuelo.estado)" [severity]="severidad(vuelo.estado)"
+                                [rounded]="true" />
+                        </td>
+
+                        <!-- Acciones -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex justify-end gap-1">
+                                <p-button icon="pi pi-list" severity="info" [text]="true" [rounded]="true"
+                                    ariaLabel="Ver manifiesto" title="Ver manifiesto"
+                                    (onClick)="abrirManifiesto(vuelo)" />
+
+                                <p-button icon="pi pi-pencil" severity="secondary" [text]="true" [rounded]="true"
+                                    ariaLabel="Editar vuelo" title="Editar vuelo"
+                                    [disabled]="vuelo.estado !== 'PROGRAMADO'" (onClick)="abrirEdicion(vuelo)" />
+
+                                <p-button icon="pi pi-sync" severity="warn" [text]="true" [rounded]="true"
+                                    ariaLabel="Cambiar estado" title="Cambiar estado" [disabled]="
+                    vuelo.estado === 'CANCELADO' ||
+                    vuelo.estado === 'DESPACHADO'
+                  " (onClick)="abrirCambioEstado(vuelo)" />
+
+                                <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                                    ariaLabel="Eliminar vuelo" title="Eliminar vuelo"
+                                    [disabled]="vuelo.estado !== 'PROGRAMADO'" (onClick)="confirmarEliminar(vuelo)" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="8">
+                            <div class="flex flex-col items-center
+                       justify-center px-4 py-16
+                       text-center">
+                                <div class="flex h-14 w-14 items-center
+                         justify-center rounded-2xl
+                         bg-slate-100 text-slate-400
+                         dark:bg-slate-800">
+                                    <i class="pi pi-send text-lg"></i>
+                                </div>
+
+                                <p class="mt-4 text-sm font-semibold
+                         text-slate-700
+                         dark:text-slate-300">
+                                    No existen vuelos registrados
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500
+                         dark:text-slate-400">
+                                    Modifica los filtros o registra un nuevo vuelo.
+                                </p>
+
+                                <p-button label="Registrar vuelo" icon="pi pi-plus"
+                                    styleClass="mt-5 !rounded-xl !border-[#05BBFB] !bg-[#05BBFB] !text-slate-950"
+                                    (onClick)="abrirNuevo()" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </section>
+</section>
+
+<!-- =====================================================
+     REGISTRAR / EDITAR VUELO
+===================================================== -->
+<p-dialog [visible]="dialogoVisible()" (visibleChange)="dialogoVisible.set($event)" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [closable]="!guardando()" [closeOnEscape]="!guardando()"
+    [dismissableMask]="!guardando()" [style]="{ width: 'min(94vw, 760px)' }">
+    <ng-template #header>
+        <div class="flex min-w-0 items-center gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center
+               justify-center rounded-xl
+               bg-[#05BBFB]/10 text-[#0399D1]
+               dark:text-[#05BBFB]">
+                <i class="pi" [class.pi-plus]="!vueloEditado()" [class.pi-pencil]="vueloEditado()"></i>
+            </div>
+
+            <div class="min-w-0">
+                <p class="truncate text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    {{ vueloEditado() ? 'Editar vuelo' : 'Registrar vuelo' }}
+                </p>
+
+                <p class="mt-0.5 truncate text-xs
+                 text-slate-500 dark:text-slate-400">
+                    {{
+                    vueloEditado()
+                    ? 'Actualiza los datos del vuelo seleccionado'
+                    : 'Completa la información del nuevo vuelo'
+                    }}
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    <form class="grid gap-5 sm:grid-cols-2" [formGroup]="formulario" (ngSubmit)="guardar()">
+        <!-- Código -->
+        <div>
+            <label for="codigo" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Código
+            </label>
+
+            <input id="codigo" pInputText class="h-11 w-full !rounded-xl uppercase" formControlName="codigo"
+                maxlength="15" placeholder="Ejemplo: CA-204" />
+        </div>
+
+        <!-- Capacidad -->
+        <div>
+            <label for="capacidad" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Capacidad máxima
+            </label>
+
+            <p-inputnumber inputId="capacidad" styleClass="w-full" inputStyleClass="h-11 w-full !rounded-xl"
+                formControlName="capacidadMaximaKg" suffix=" kg" [min]="0.01" [minFractionDigits]="2"
+                [maxFractionDigits]="2" />
+        </div>
+
+        <!-- Origen -->
+        <div>
+            <label for="origen" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Origen
+            </label>
+
+            <div class="flex gap-2">
+                <input id="origen" pInputText class="h-11 min-w-0 flex-1 !rounded-xl" formControlName="origen"
+                    placeholder="Ciudad de origen" />
+
+                <input pInputText class="h-11 w-24 !rounded-xl text-center uppercase" maxlength="3" placeholder="LIM"
+                    title="Código de aeropuerto de origen" formControlName="codigoAeropuertoOrigen" />
+            </div>
+        </div>
+
+        <!-- Destino -->
+        <div>
+            <label for="destino" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Destino
+            </label>
+
+            <div class="flex gap-2">
+                <input id="destino" pInputText class="h-11 min-w-0 flex-1 !rounded-xl" formControlName="destino"
+                    placeholder="Ciudad de destino" />
+
+                <input pInputText class="h-11 w-24 !rounded-xl text-center uppercase" maxlength="3" placeholder="CUZ"
+                    title="Código de aeropuerto de destino" formControlName="codigoAeropuertoDestino" />
+            </div>
+        </div>
+
+        <!-- Terminal -->
+        <div class="sm:col-span-2">
+            <label for="terminalCargaDestino" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Terminal de carga en destino
+
+                <span class="font-normal text-slate-400">
+                    (opcional)
+                </span>
+            </label>
+
+            <input id="terminalCargaDestino" pInputText class="h-11 w-full !rounded-xl" maxlength="80"
+                placeholder="Ejemplo: Lima Cargo City" formControlName="terminalCargaDestino" />
+        </div>
+
+        <!-- Separador -->
+        <div class="border-t border-slate-200
+             pt-5 sm:col-span-2
+             dark:border-slate-800">
+            <p class="text-xs font-bold uppercase
+               tracking-wider text-slate-400">
+                Programación
+            </p>
+        </div>
+
+        <!-- Fecha salida -->
+        <div>
+            <label for="fecha" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Fecha de salida
+            </label>
+
+            <input id="fecha" pInputText class="h-11 w-full !rounded-xl" type="date" [min]="fechaMinima"
+                formControlName="fechaSalida" />
+        </div>
+
+        <!-- Hora salida -->
+        <div>
+            <label for="hora" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Hora de salida
+            </label>
+
+            <div class="flex gap-2">
+                <p-autocomplete inputId="hora" styleClass="min-w-0 flex-1" inputStyleClass="h-11 w-full !rounded-xl"
+                    [dropdown]="true" [suggestions]="sugerenciasHora()" (completeMethod)="
+            filtrarHora($event, 'horaSalidaValor')
+          " formControlName="horaSalidaValor" />
+
+                <p-select styleClass="h-11 w-24 !rounded-xl" [options]="opcionesPeriodo" optionLabel="label"
+                    optionValue="value" appendTo="body" formControlName="horaSalidaPeriodo" />
+            </div>
+
+            @if (
+            formulario.controls.horaSalidaValor.touched &&
+            formulario.controls.horaSalidaValor.invalid
+            ) {
+            <p class="mt-1.5 flex items-center gap-1.5
+                 text-xs font-medium text-red-500">
+                <i class="pi pi-exclamation-circle text-[10px]"></i>
+                Escribe una hora válida.
+            </p>
+            }
+        </div>
+
+        <!-- Fecha llegada -->
+        <div>
+            <label for="fechaLlegada" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Fecha estimada de llegada
+            </label>
+
+            <input id="fechaLlegada" pInputText class="h-11 w-full !rounded-xl" type="date" [min]="fechaMinima"
+                formControlName="fechaLlegada" />
+        </div>
+
+        <!-- Hora llegada -->
+        <div>
+            <label for="horaLlegada" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Hora estimada de llegada
+            </label>
+
+            <div class="flex gap-2">
+                <p-autocomplete inputId="horaLlegada" styleClass="min-w-0 flex-1"
+                    inputStyleClass="h-11 w-full !rounded-xl" [dropdown]="true" [suggestions]="sugerenciasHora()"
+                    (completeMethod)="
+            filtrarHora($event, 'horaLlegadaValor')
+          " formControlName="horaLlegadaValor" />
+
+                <p-select styleClass="h-11 w-24 !rounded-xl" [options]="opcionesPeriodo" optionLabel="label"
+                    optionValue="value" appendTo="body" formControlName="horaLlegadaPeriodo" />
+            </div>
+
+            @if (
+            formulario.controls.horaLlegadaValor.touched &&
+            formulario.controls.horaLlegadaValor.invalid
+            ) {
+            <p class="mt-1.5 flex items-center gap-1.5
+                 text-xs font-medium text-red-500">
+                <i class="pi pi-exclamation-circle text-[10px]"></i>
+                Escribe una hora válida.
+            </p>
+            }
+        </div>
+
+        @if (formulario.touched && formulario.invalid) {
+        <div class="flex items-start gap-3 rounded-xl
+               border border-red-200 bg-red-50
+               p-3.5 text-red-700 sm:col-span-2
+               dark:border-red-500/20
+               dark:bg-red-500/10
+               dark:text-red-400">
+            <i class="pi pi-exclamation-circle mt-0.5 text-sm"></i>
+
+            <p class="text-sm">
+                Completa correctamente todos los campos obligatorios.
+            </p>
+        </div>
+        }
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:col-span-2 sm:flex-row
+             sm:justify-end dark:border-slate-800">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true" [disabled]="guardando()"
+                styleClass="w-full !rounded-xl sm:w-auto" (onClick)="cerrarDialogo()" />
+
+            <p-button type="submit" [label]="
+          vueloEditado()
+            ? 'Guardar cambios'
+            : 'Registrar vuelo'
+        " icon="pi pi-save" [loading]="guardando()" [disabled]="guardando()"
+                styleClass="w-full !rounded-xl !border-[#05BBFB] !bg-[#05BBFB] !font-bold !text-slate-950 sm:w-auto" />
+        </footer>
+    </form>
+</p-dialog>
+
+<!-- =====================================================
+     MANIFIESTO
+===================================================== -->
+<p-dialog [visible]="manifiestoVisible()" (visibleChange)="manifiestoVisible.set($event)" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [blockScroll]="true" [style]="{ width: 'min(96vw, 950px)' }"
+    (onHide)="cerrarManifiesto()">
+    <ng-template #header>
+        <div class="flex min-w-0 items-center gap-3">
+            <div class="flex h-10 w-10 items-center
+               justify-center rounded-xl
+               bg-violet-500/10 text-violet-600
+               dark:text-violet-400">
+                <i class="pi pi-list"></i>
+            </div>
+
+            <div>
+                <p class="text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    Manifiesto de vuelo
+                </p>
+
+                <p class="mt-0.5 text-xs text-slate-500
+                 dark:text-slate-400">
+                    Encomiendas asignadas al vuelo
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    @if (vueloManifiesto(); as vuelo) {
+    <div class="mb-5 grid gap-5 rounded-2xl
+             border border-slate-200
+             bg-slate-50 p-5
+             md:grid-cols-[1fr_280px]
+             md:items-center
+             dark:border-slate-700
+             dark:bg-slate-800/60">
+        <div class="flex items-center gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center
+                 justify-center rounded-2xl
+                 bg-[#05BBFB]/10 text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                <i class="pi pi-send"></i>
+            </div>
+
+            <div>
+                <p class="text-lg font-black
+                   text-slate-950 dark:text-white">
+                    {{ vuelo.codigo }}
+                </p>
+
+                <p class="mt-1 text-sm text-slate-500
+                   dark:text-slate-400">
+                    {{ vuelo.origen }}
+                    <i class="pi pi-arrow-right mx-1 text-[9px]"></i>
+                    {{ vuelo.destino }}
+                </p>
+
+                <p class="mt-1 text-xs text-slate-400">
+                    {{ vuelo.fechaSalida | date: 'dd/MM/yyyy' }}
+                    · {{ vuelo.horaSalida.substring(0, 5) }}
+                </p>
+            </div>
+        </div>
+
+        <div>
+            <div class="mb-2 flex justify-between
+                 text-xs text-slate-500
+                 dark:text-slate-400">
+                <span>
+                    {{
+                    vuelo.pesoOcupadoKg
+                    | number: '1.0-2'
+                    }}
+                    /
+                    {{
+                    vuelo.capacidadMaximaKg
+                    | number: '1.0-2'
+                    }}
+                    kg
+                </span>
+
+                <span class="font-bold">
+                    {{
+                    porcentaje(vuelo)
+                    | number: '1.0-0'
+                    }}%
+                </span>
+            </div>
+
+            <p-progressbar [value]="porcentaje(vuelo)" [showValue]="false" styleClass="!h-2 !rounded-full" />
+        </div>
+    </div>
+    }
+
+    <div class="overflow-hidden rounded-2xl
+           border border-slate-200
+           dark:border-slate-800">
+        <div class="overflow-x-auto">
+            <p-table [value]="encomiendasManifiesto()" [loading]="cargandoManifiesto()"
+                [tableStyle]="{ 'min-width': '760px' }" styleClass="p-datatable-sm">
+                <ng-template #header>
+                    <tr>
+                        <th class="!px-4 !py-4">Código</th>
+                        <th class="!px-4 !py-4">Contenido</th>
+                        <th class="!px-4 !py-4">Participantes</th>
+                        <th class="!px-4 !py-4">Peso</th>
+                        <th class="!px-4 !py-4">Estado</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-encomienda>
+                    <tr>
+                        <td class="!px-4 !py-4">
+                            <strong class="text-slate-800
+                       dark:text-slate-100">
+                                {{ encomienda.codigo }}
+                            </strong>
+                        </td>
+
+                        <td class="!px-4 !py-4">
+                            <p class="max-w-56 truncate text-sm
+                       text-slate-700
+                       dark:text-slate-200" [title]="encomienda.contenido">
+                                {{ encomienda.contenido }}
+                            </p>
+                        </td>
+
+                        <td class="!px-4 !py-4">
+                            <p class="text-xs text-slate-700
+                       dark:text-slate-200">
+                                <span class="text-slate-400">
+                                    De:
+                                </span>
+
+                                {{ encomienda.remitente }}
+                            </p>
+
+                            <p class="mt-1.5 text-xs text-slate-700
+                       dark:text-slate-200">
+                                <span class="text-slate-400">
+                                    Para:
+                                </span>
+
+                                {{ encomienda.destinatario }}
+                            </p>
+                        </td>
+
+                        <td class="!px-4 !py-4">
+                            <strong class="text-sm text-slate-800
+                       dark:text-slate-100">
+                                {{
+                                encomienda.pesoCobrableKg
+                                | number: '1.0-2'
+                                }}
+                                kg
+                            </strong>
+                        </td>
+
+                        <td class="!px-4 !py-4">
+                            <p-tag [value]="
+                  nombreEstadoEncomienda(
+                    encomienda.estado
+                  )
+                " [severity]="
+                  severidadEncomienda(
+                    encomienda.estado
+                  )
+                " [rounded]="true" />
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="5">
+                            <div class="flex flex-col items-center
+                       py-12 text-center">
+                                <div class="flex h-12 w-12 items-center
+                         justify-center rounded-2xl
+                         bg-slate-100 text-slate-400
+                         dark:bg-slate-800">
+                                    <i class="pi pi-box"></i>
+                                </div>
+
+                                <p class="mt-4 text-sm font-semibold
+                         text-slate-700
+                         dark:text-slate-300">
+                                    No hay encomiendas asignadas
+                                </p>
+
+                                <p class="mt-1 text-xs text-slate-500
+                         dark:text-slate-400">
+                                    Este vuelo todavía no tiene carga registrada.
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <footer class="mt-5 flex justify-end
+           border-t border-slate-200 pt-5
+           dark:border-slate-800">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" styleClass="!rounded-xl"
+            (onClick)="cerrarManifiesto()" />
+    </footer>
+</p-dialog>
+
+<!-- =====================================================
+     CAMBIAR ESTADO
+===================================================== -->
+<p-dialog [visible]="dialogoEstadoVisible()" (visibleChange)="dialogoEstadoVisible.set($event)" appendTo="body"
+    [modal]="true" [draggable]="false" [resizable]="false" [blockScroll]="true" [style]="{ width: 'min(94vw, 520px)' }"
+    (onHide)="cerrarEstado()">
+    <ng-template #header>
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center
+               justify-center rounded-xl
+               bg-amber-500/10 text-amber-600
+               dark:text-amber-400">
+                <i class="pi pi-sync"></i>
+            </div>
+
+            <div>
+                <p class="text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    Cambiar estado
+                </p>
+
+                <p class="mt-0.5 text-xs text-slate-500
+                 dark:text-slate-400">
+                    Actualiza la situación operativa del vuelo
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    <form class="space-y-5" [formGroup]="formularioEstado" (ngSubmit)="cambiarEstado()">
+        @if (vueloSeleccionado(); as vuelo) {
+        <div class="flex items-center gap-3 rounded-2xl
+               border border-slate-200
+               bg-slate-50 p-4
+               dark:border-slate-700
+               dark:bg-slate-800/60">
+            <div class="flex h-10 w-10 shrink-0
+                 items-center justify-center
+                 rounded-xl bg-[#05BBFB]/10
+                 text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                <i class="pi pi-send text-sm"></i>
+            </div>
+
+            <div class="min-w-0">
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    Vuelo seleccionado
+                </p>
+
+                <p class="mt-1 truncate text-sm font-bold
+                   text-slate-900 dark:text-white">
+                    {{ vuelo.codigo }}
+                </p>
+
+                <p class="mt-0.5 truncate text-xs
+                   text-slate-500 dark:text-slate-400">
+                    {{ vuelo.origen }}
+                    <i class="pi pi-arrow-right mx-1 text-[8px]"></i>
+                    {{ vuelo.destino }}
+                </p>
+            </div>
+        </div>
+        }
+
+        <div>
+            <label for="estadoVuelo" class="mb-2 block text-sm font-semibold
+               text-slate-700 dark:text-slate-300">
+                Nuevo estado
+            </label>
+
+            <p-select inputId="estadoVuelo" styleClass="h-11 w-full !rounded-xl" appendTo="body"
+                [options]="opcionesEstadoDisponibles()" optionLabel="label" optionValue="value"
+                placeholder="Selecciona el estado" formControlName="estado" />
+        </div>
+
+        <footer class="flex flex-col-reverse gap-3
+             border-t border-slate-200 pt-5
+             sm:flex-row sm:justify-end
+             dark:border-slate-800">
+            <p-button type="button" label="Cancelar" severity="secondary" [outlined]="true"
+                [disabled]="cambiandoEstado()" styleClass="w-full !rounded-xl sm:w-auto" (onClick)="cerrarEstado()" />
+
+            <p-button type="submit" label="Guardar estado" icon="pi pi-save" [loading]="cambiandoEstado()" [disabled]="
+          cambiandoEstado() ||
+          formularioEstado.invalid
+        " styleClass="w-full !rounded-xl !border-[#05BBFB] !bg-[#05BBFB] !font-bold !text-slate-950 sm:w-auto" />
+        </footer>
+    </form>
+</p-dialog>

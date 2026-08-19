@@ -1,0 +1,401 @@
+<main class="relative flex min-h-screen items-center
+         justify-center overflow-hidden
+         bg-[url('/images/fondo-login.jpg')]
+         bg-cover bg-center bg-no-repeat
+         p-4 pt-20
+         sm:p-6 sm:pt-20">
+    <!-- Decoraciones suaves -->
+    <div class="pointer-events-none absolute -left-32 -top-32
+           h-80 w-80 rounded-full
+           bg-[#05BBFB]/10 blur-3xl
+           dark:bg-[#05BBFB]/5"></div>
+
+    <div class="pointer-events-none absolute -bottom-40 -right-32
+           h-96 w-96 rounded-full
+           bg-blue-500/[0.07] blur-3xl
+           dark:bg-blue-500/5"></div>
+
+    <!-- Regresar al inicio -->
+    <a routerLink="/" class="absolute left-4 top-4 z-20
+           inline-flex h-10 items-center gap-2 cursor-pointer
+           rounded-xl border border-slate-200
+           bg-white px-4 text-xs font-semibold
+           text-slate-600 shadow-sm
+           transition duration-200
+           hover:border-[#05BBFB]/40
+           hover:text-[#0399D1]
+           sm:left-6 sm:top-6
+           dark:border-slate-800
+           dark:bg-slate-900
+           dark:text-slate-300
+           dark:hover:border-[#05BBFB]/40
+           dark:hover:text-[#05BBFB]">
+        <i class="pi pi-arrow-left text-[10px]"></i>
+        Volver al inicio
+    </a>
+
+    <!-- Contenedor principal -->
+    <section class="relative z-10 grid w-full max-w-5xl
+           overflow-hidden rounded-[2rem]
+           border border-slate-200
+           bg-white shadow-2xl shadow-slate-950/[0.08]
+           lg:grid-cols-[1.05fr_0.95fr]
+           dark:border-slate-800
+           dark:bg-slate-900
+           dark:shadow-black/20">
+        <!-- Panel informativo -->
+        <div class="relative hidden min-h-[620px]
+             flex-col justify-between overflow-hidden
+             border-r border-slate-200
+             bg-slate-50 p-12
+             lg:flex
+             dark:border-slate-800
+             dark:bg-slate-950">
+            <!-- Decoraciones -->
+            <div class="pointer-events-none absolute -right-32 -top-32
+               h-80 w-80 rounded-full
+               bg-[#05BBFB]/15 blur-3xl
+               dark:bg-[#05BBFB]/10"></div>
+
+            <div class="pointer-events-none absolute bottom-20 left-10
+               h-40 w-40 rounded-full
+               bg-blue-500/[0.07] blur-3xl"></div>
+
+            <!-- Logo -->
+            <div class="relative">
+                <a routerLink="/" class="inline-flex items-center gap-3">
+                    <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-12 w-12 object-contain" />
+
+                    <div>
+                        <p class="text-sm font-bold
+                     text-slate-950 dark:text-white">
+                            Sistema de carga aérea
+                        </p>
+
+                        <p class="mt-0.5 text-xs
+                     text-slate-500 dark:text-slate-400">
+                            Gestión logística
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Información -->
+            <div class="relative">
+                <div class="inline-flex items-center gap-2
+                 rounded-full border border-[#05BBFB]/20
+                 bg-[#05BBFB]/10 px-4 py-2
+                 text-xs font-bold text-[#0387bb]
+                 dark:text-[#05BBFB]">
+                    <span class="h-2 w-2 rounded-full
+                   bg-[#05BBFB]"></span>
+
+                    Plataforma logística
+                </div>
+
+                <h1 class="mt-7 max-w-md text-4xl
+                 font-black leading-tight tracking-tight
+                 text-slate-950 dark:text-white">
+                    Control total de tus operaciones de
+                    <span class="text-[#0399D1] dark:text-[#05BBFB]">
+                        carga aérea
+                    </span>
+                </h1>
+
+                <p class="mt-5 max-w-md leading-8
+                 text-slate-600 dark:text-slate-400">
+                    Administra vuelos, encomiendas y capacidad de carga
+                    desde una plataforma centralizada, rápida y segura.
+                </p>
+
+                <!-- Beneficios -->
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-9 w-9 items-center
+                     justify-center rounded-xl
+                     bg-[#05BBFB]/10 text-[#0399D1]
+                     dark:text-[#05BBFB]">
+                            <i class="pi pi-shield text-sm"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-semibold
+                       text-slate-800 dark:text-slate-200">
+                                Acceso seguro
+                            </p>
+
+                            <p class="mt-0.5 text-xs
+                       text-slate-500 dark:text-slate-400">
+                                Información protegida según el rol del usuario.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-9 w-9 items-center
+                     justify-center rounded-xl
+                     bg-[#05BBFB]/10 text-[#0399D1]
+                     dark:text-[#05BBFB]">
+                            <i class="pi pi-chart-line text-sm"></i>
+                        </div>
+
+                        <div>
+                            <p class="text-sm font-semibold
+                       text-slate-800 dark:text-slate-200">
+                                Gestión centralizada
+                            </p>
+
+                            <p class="mt-0.5 text-xs
+                       text-slate-500 dark:text-slate-400">
+                                Controla todas las operaciones desde un solo lugar.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Texto inferior -->
+            <div class="relative flex items-center gap-2
+               border-t border-slate-200 pt-6
+               text-xs text-slate-500
+               dark:border-slate-800
+               dark:text-slate-400">
+                <i class="pi pi-lock text-[#0399D1] dark:text-[#05BBFB]"></i>
+                Inicio de sesión protegido
+            </div>
+        </div>
+
+        <!-- Panel del formulario -->
+        <div class="flex min-h-[600px] items-center
+             bg-white p-7 sm:p-12
+             dark:bg-slate-900">
+            <div class="mx-auto w-full max-w-sm">
+                <!-- Logo móvil -->
+                <div class="mb-9 flex justify-center lg:hidden">
+                    <a routerLink="/" class="flex items-center gap-3">
+                        <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-12 w-12 object-contain" />
+
+                        <div>
+                            <p class="text-sm font-bold
+                       text-slate-950 dark:text-white">
+                                Carga Aérea
+                            </p>
+
+                            <p class="text-xs text-slate-500
+                       dark:text-slate-400">
+                                Gestión logística
+                            </p>
+                        </div>
+                    </a>
+                </div>
+
+                <!-- Encabezado -->
+                <div class="mb-6 flex h-12 w-12 items-center
+                 justify-center rounded-2xl
+                 bg-[#05BBFB]/10
+                 text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    <i class="pi pi-user text-lg"></i>
+                </div>
+
+                <p class="text-xs font-bold uppercase
+                 tracking-[0.16em] text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    Acceso al sistema
+                </p>
+
+                <h2 class="mt-3 text-3xl font-black
+                 tracking-tight text-slate-950
+                 dark:text-white">
+                    Iniciar sesión
+                </h2>
+
+                <p class="mt-2 text-sm leading-6
+                 text-slate-500 dark:text-slate-400">
+                    Ingresa tus credenciales para acceder a tu cuenta.
+                </p>
+
+                <!-- Error general -->
+                @if (mensajeError()) {
+                <div role="alert" class="mt-6 flex items-start gap-3
+                   rounded-xl border border-red-200
+                   bg-red-50 p-3.5 text-red-700
+                   dark:border-red-500/20
+                   dark:bg-red-500/10
+                   dark:text-red-400">
+                    <i class="pi pi-exclamation-circle
+                     mt-0.5 text-sm"></i>
+
+                    <p class="text-sm leading-5">
+                        {{ mensajeError() }}
+                    </p>
+                </div>
+                }
+
+                <!-- Formulario -->
+                <form class="mt-7 space-y-5" [formGroup]="formulario" (ngSubmit)="ingresar()">
+                    <!-- Usuario -->
+                    <div>
+                        <label for="username" class="mb-2 block text-sm font-semibold
+                     text-slate-700 dark:text-slate-300">
+                            Usuario
+                        </label>
+
+                        <div class="relative">
+                            <i class="pi pi-user pointer-events-none
+                       absolute left-4 top-1/2
+                       -translate-y-1/2 text-sm
+                       text-slate-400"></i>
+
+                            <input id="username" type="text" formControlName="username" autocomplete="username"
+                                placeholder="Ingresa tu usuario" class="h-12 w-full rounded-xl border
+                       bg-white py-3 pl-11 pr-4
+                       text-sm text-slate-900
+                       outline-none transition
+                       placeholder:text-slate-400
+                       focus:border-[#05BBFB]
+                       focus:ring-4
+                       focus:ring-[#05BBFB]/10
+                       dark:bg-slate-950
+                       dark:text-white
+                       dark:placeholder:text-slate-600" [class.border-red-400]="
+                  formulario.controls.username.touched &&
+                  formulario.controls.username.invalid
+                " [class.border-slate-300]="!(
+                  formulario.controls.username.touched &&
+                  formulario.controls.username.invalid
+                )" [class.dark:border-slate-700]="!(
+                  formulario.controls.username.touched &&
+                  formulario.controls.username.invalid
+                )" />
+                        </div>
+
+                        @if (
+                        formulario.controls.username.touched &&
+                        formulario.controls.username.invalid
+                        ) {
+                        <p class="mt-1.5 flex items-center
+                       gap-1.5 text-xs font-medium
+                       text-red-500">
+                            <i class="pi pi-exclamation-circle
+                         text-[10px]"></i>
+
+                            El usuario es obligatorio.
+                        </p>
+                        }
+                    </div>
+
+                    <!-- Contraseña -->
+                    <div>
+                        <label for="password" class="mb-2 block text-sm font-semibold
+                     text-slate-700 dark:text-slate-300">
+                            Contraseña
+                        </label>
+
+                        <div class="relative">
+                            <i class="pi pi-lock pointer-events-none
+                       absolute left-4 top-1/2
+                       -translate-y-1/2 text-sm
+                       text-slate-400"></i>
+
+                            <input id="password" [type]="mostrarPassword() ? 'text' : 'password'"
+                                formControlName="password" autocomplete="current-password"
+                                placeholder="Ingresa tu contraseña" class="h-12 w-full rounded-xl border
+                       bg-white py-3 pl-11 pr-12
+                       text-sm text-slate-900
+                       outline-none transition
+                       placeholder:text-slate-400
+                       focus:border-[#05BBFB]
+                       focus:ring-4
+                       focus:ring-[#05BBFB]/10
+                       dark:bg-slate-950
+                       dark:text-white
+                       dark:placeholder:text-slate-600" [class.border-red-400]="
+                  formulario.controls.password.touched &&
+                  formulario.controls.password.invalid
+                " [class.border-slate-300]="!(
+                  formulario.controls.password.touched &&
+                  formulario.controls.password.invalid
+                )" [class.dark:border-slate-700]="!(
+                  formulario.controls.password.touched &&
+                  formulario.controls.password.invalid
+                )" />
+
+                            <button type="button" class="absolute right-2 top-1/2
+                       flex h-9 w-9 -translate-y-1/2 cursor-pointer
+                       items-center justify-center
+                       rounded-lg text-slate-400
+                       transition
+                       hover:bg-slate-100
+                       hover:text-slate-700
+                       dark:hover:bg-slate-800
+                       dark:hover:text-white" [attr.aria-label]="
+                  mostrarPassword()
+                    ? 'Ocultar contraseña'
+                    : 'Mostrar contraseña'
+                " (click)="alternarPassword()">
+                                <i class="pi text-sm" [class.pi-eye]="!mostrarPassword()"
+                                    [class.pi-eye-slash]="mostrarPassword()"></i>
+                            </button>
+                        </div>
+
+                        @if (
+                        formulario.controls.password.touched &&
+                        formulario.controls.password.invalid
+                        ) {
+                        <p class="mt-1.5 flex items-center
+                       gap-1.5 text-xs font-medium
+                       text-red-500">
+                            <i class="pi pi-exclamation-circle
+                         text-[10px]"></i>
+
+                            La contraseña es obligatoria.
+                        </p>
+                        }
+                    </div>
+
+                    <!-- Iniciar sesión -->
+                    <button type="submit" class="flex h-12 w-full items-center
+                   justify-center gap-2 rounded-xl cursor-pointer
+                   bg-[#05BBFB] px-5
+                   text-sm font-bold text-slate-950
+                   shadow-lg shadow-[#05BBFB]/20
+                   transition duration-200
+                   hover:-translate-y-0.5
+                   hover:bg-[#20c4fc]
+                   focus:outline-none
+                   focus:ring-4
+                   focus:ring-[#05BBFB]/20
+                   disabled:pointer-events-none
+                   disabled:translate-y-0
+                   disabled:opacity-60" [disabled]="cargando()">
+                        @if (cargando()) {
+                        <i class="pi pi-spin pi-spinner"></i>
+                        Ingresando...
+                        } @else {
+                        <i class="pi pi-sign-in"></i>
+                        Ingresar al sistema
+                        }
+                    </button>
+                </form>
+
+                <!-- Rastreo -->
+                <div class="mt-7 border-t border-slate-200
+                 pt-6 text-center
+                 dark:border-slate-800">
+                    <p class="text-sm text-slate-500
+                   dark:text-slate-400">
+                        ¿Buscas el estado de tu envío?
+
+                        <a routerLink="/rastreo" class="ml-1 font-bold text-[#0399D1]
+                     transition hover:text-[#0279a8]
+                     dark:text-[#05BBFB]
+                     dark:hover:text-[#20c4fc]">
+                            Rastréalo aquí
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

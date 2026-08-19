@@ -1,0 +1,93 @@
+<footer class="border-t border-slate-200 bg-slate-50
+         dark:border-slate-800 dark:bg-slate-950">
+    <div class="mx-auto grid max-w-7xl gap-10
+           px-5 py-12 sm:px-6
+           md:grid-cols-2 lg:grid-cols-4 lg:px-8">
+        <div class="lg:col-span-2">
+            <div class="flex items-center gap-3">
+                <div class="flex h-10 w-10 items-center justify-center
+                 rounded-xl bg-[#05BBFB] text-slate-950">
+                    <i class="pi pi-send"></i>
+                </div>
+
+                <div>
+                    <p class="font-bold text-slate-950 dark:text-white">
+                        Sistema de carga aérea
+                    </p>
+
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Gestión logística eficiente
+                    </p>
+                </div>
+            </div>
+
+            <p class="mt-5 max-w-md text-sm leading-7
+               text-slate-600 dark:text-slate-400">
+                Plataforma para gestionar vuelos, encomiendas, peticiones,
+                usuarios y seguimiento de carga aérea de forma segura.
+            </p>
+        </div>
+
+        <div>
+            <p class="text-sm font-bold text-slate-950 dark:text-white">
+                Navegación
+            </p>
+
+            <div class="mt-4 flex flex-col gap-3
+               text-sm text-slate-600 dark:text-slate-400">
+                <a href="#inicio" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Inicio
+                </a>
+
+                <a href="#servicios" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Servicios
+                </a>
+
+                <a href="#nosotros" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Nosotros
+                </a>
+
+                <a href="#contacto" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Contacto
+                </a>
+            </div>
+        </div>
+
+        <div>
+            <p class="text-sm font-bold text-slate-950 dark:text-white">
+                Plataforma
+            </p>
+
+            <div class="mt-4 flex flex-col gap-3
+               text-sm text-slate-600 dark:text-slate-400">
+                <a routerLink="/login" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Iniciar sesión
+                </a>
+
+                <a href="#rastreo" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Rastrear encomienda
+                </a>
+
+                <a href="mailto:soporte@cargaaerea.com" class="hover:text-[#0399D1] dark:hover:text-[#05BBFB]">
+                    Soporte
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="border-t border-slate-200 dark:border-slate-800">
+        <div class="mx-auto flex max-w-7xl flex-col gap-3
+             px-5 py-6 text-center text-xs text-slate-500
+             sm:flex-row sm:items-center sm:justify-between
+             sm:px-6 sm:text-left lg:px-8">
+            <p>
+                © {{ anioActual }} Sistema de Carga Aérea.
+                Todos los derechos reservados.
+            </p>
+
+            <p>
+                Desarrollado para una gestión logística segura.
+            </p>
+        </div>
+    </div>
+</footer>

@@ -1,0 +1,576 @@
+<section class="min-h-full">
+    <!-- Encabezado -->
+    <header class="mb-6 flex flex-col gap-4
+           sm:flex-row sm:items-center
+           sm:justify-between">
+        <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0
+               items-center justify-center
+               rounded-2xl bg-[#05BBFB]/10
+               text-[#0399D1]
+               dark:text-[#05BBFB]">
+                <i class="pi pi-chart-line text-lg"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-bold uppercase
+                 tracking-[0.18em] text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    Panel principal
+                </p>
+
+                <h1 class="mt-1 text-2xl font-black
+                 tracking-tight text-slate-950
+                 sm:text-3xl dark:text-white">
+                    Dashboard
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500
+                 dark:text-slate-400">
+                    Resumen general de la operación logística.
+                </p>
+            </div>
+        </div>
+
+        <div class="flex w-fit items-center gap-2
+             rounded-xl border border-emerald-200
+             bg-emerald-50 px-3 py-2
+             text-xs font-semibold text-emerald-700
+             dark:border-emerald-500/20
+             dark:bg-emerald-500/10
+             dark:text-emerald-400">
+            <span class="h-2 w-2 animate-pulse
+               rounded-full bg-emerald-500"></span>
+
+            Operación activa
+        </div>
+    </header>
+
+    @if (cargando()) {
+    <!-- Carga de indicadores -->
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        @for (item of [1, 2, 3, 4]; track item) {
+        <article class="rounded-2xl border
+                 border-slate-200 bg-white p-5
+                 dark:border-slate-800
+                 dark:bg-slate-900">
+            <div class="flex items-center justify-between">
+                <p-skeleton shape="circle" size="2.75rem" />
+
+                <p-skeleton width="4rem" height="1.25rem" borderRadius="1rem" />
+            </div>
+
+            <p-skeleton width="9rem" height="0.75rem" styleClass="mt-6" />
+
+            <p-skeleton width="4rem" height="2.25rem" styleClass="mt-3" />
+        </article>
+        }
+    </div>
+
+    <!-- Carga de gráficos -->
+    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        @for (item of [1, 2]; track item) {
+        <article class="rounded-2xl border
+                 border-slate-200 bg-white p-5
+                 dark:border-slate-800
+                 dark:bg-slate-900">
+            <p-skeleton width="11rem" height="1.25rem" />
+
+            <p-skeleton width="15rem" height="0.75rem" styleClass="mt-3" />
+
+            <p-skeleton width="100%" height="17rem" styleClass="mt-6" />
+        </article>
+        }
+    </div>
+    } @else {
+    <!-- Indicadores -->
+    <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <!-- Vuelos programados -->
+        <article class="group relative overflow-hidden
+               rounded-2xl border border-slate-200
+               bg-white p-5 transition duration-200
+               hover:-translate-y-0.5
+               hover:border-[#05BBFB]/40
+               hover:shadow-lg
+               hover:shadow-slate-950/[0.04]
+               dark:border-slate-800
+               dark:bg-slate-900
+               dark:hover:border-[#05BBFB]/30">
+            <div class="absolute -right-8 -top-8
+                 h-24 w-24 rounded-full
+                 bg-[#05BBFB]/10 blur-2xl"></div>
+
+            <div class="relative flex items-start justify-between">
+                <div class="flex h-11 w-11 items-center
+                   justify-center rounded-xl
+                   bg-[#05BBFB]/10 text-[#0399D1]
+                   transition group-hover:bg-[#05BBFB]
+                   group-hover:text-slate-950
+                   dark:text-[#05BBFB]">
+                    <i class="pi pi-send"></i>
+                </div>
+
+                <span class="rounded-full bg-blue-500/10
+                   px-2.5 py-1 text-[10px]
+                   font-bold text-blue-700
+                   dark:text-blue-400">
+                    Programados
+                </span>
+            </div>
+
+            <p class="relative mt-6 text-xs font-medium
+                 text-slate-500 dark:text-slate-400">
+                Vuelos programados
+            </p>
+
+            <p class="relative mt-2 text-3xl font-black
+                 tracking-tight text-slate-950
+                 dark:text-white">
+                {{ contarVuelos('PROGRAMADO') }}
+            </p>
+        </article>
+
+        <!-- Vuelos despachados -->
+        <article class="group relative overflow-hidden
+               rounded-2xl border border-slate-200
+               bg-white p-5 transition duration-200
+               hover:-translate-y-0.5
+               hover:border-emerald-500/30
+               hover:shadow-lg
+               hover:shadow-slate-950/[0.04]
+               dark:border-slate-800
+               dark:bg-slate-900">
+            <div class="absolute -right-8 -top-8
+                 h-24 w-24 rounded-full
+                 bg-emerald-500/10 blur-2xl"></div>
+
+            <div class="relative flex items-start justify-between">
+                <div class="flex h-11 w-11 items-center
+                   justify-center rounded-xl
+                   bg-emerald-500/10
+                   text-emerald-600 transition
+                   group-hover:bg-emerald-500
+                   group-hover:text-white
+                   dark:text-emerald-400">
+                    <i class="pi pi-check-circle"></i>
+                </div>
+
+                <span class="rounded-full bg-emerald-500/10
+                   px-2.5 py-1 text-[10px]
+                   font-bold text-emerald-700
+                   dark:text-emerald-400">
+                    Completados
+                </span>
+            </div>
+
+            <p class="relative mt-6 text-xs font-medium
+                 text-slate-500 dark:text-slate-400">
+                Vuelos despachados
+            </p>
+
+            <p class="relative mt-2 text-3xl font-black
+                 tracking-tight text-slate-950
+                 dark:text-white">
+                {{ contarVuelos('DESPACHADO') }}
+            </p>
+        </article>
+
+        <!-- En almacén -->
+        <article class="group relative overflow-hidden
+               rounded-2xl border border-slate-200
+               bg-white p-5 transition duration-200
+               hover:-translate-y-0.5
+               hover:border-amber-500/30
+               hover:shadow-lg
+               hover:shadow-slate-950/[0.04]
+               dark:border-slate-800
+               dark:bg-slate-900">
+            <div class="absolute -right-8 -top-8
+                 h-24 w-24 rounded-full
+                 bg-amber-500/10 blur-2xl"></div>
+
+            <div class="relative flex items-start justify-between">
+                <div class="flex h-11 w-11 items-center
+                   justify-center rounded-xl
+                   bg-amber-500/10
+                   text-amber-600 transition
+                   group-hover:bg-amber-500
+                   group-hover:text-white
+                   dark:text-amber-400">
+                    <i class="pi pi-box"></i>
+                </div>
+
+                <span class="rounded-full bg-amber-500/10
+                   px-2.5 py-1 text-[10px]
+                   font-bold text-amber-700
+                   dark:text-amber-400">
+                    Pendientes
+                </span>
+            </div>
+
+            <p class="relative mt-6 text-xs font-medium
+                 text-slate-500 dark:text-slate-400">
+                Encomiendas en almacén
+            </p>
+
+            <p class="relative mt-2 text-3xl font-black
+                 tracking-tight text-slate-950
+                 dark:text-white">
+                {{ contarEncomiendas('EN_ALMACEN') }}
+            </p>
+        </article>
+
+        <!-- Embarcadas -->
+        <article class="group relative overflow-hidden
+               rounded-2xl border border-slate-200
+               bg-white p-5 transition duration-200
+               hover:-translate-y-0.5
+               hover:border-violet-500/30
+               hover:shadow-lg
+               hover:shadow-slate-950/[0.04]
+               dark:border-slate-800
+               dark:bg-slate-900">
+            <div class="absolute -right-8 -top-8
+                 h-24 w-24 rounded-full
+                 bg-violet-500/10 blur-2xl"></div>
+
+            <div class="relative flex items-start justify-between">
+                <div class="flex h-11 w-11 items-center
+                   justify-center rounded-xl
+                   bg-violet-500/10
+                   text-violet-600 transition
+                   group-hover:bg-violet-500
+                   group-hover:text-white
+                   dark:text-violet-400">
+                    <i class="pi pi-truck"></i>
+                </div>
+
+                <span class="rounded-full bg-violet-500/10
+                   px-2.5 py-1 text-[10px]
+                   font-bold text-violet-700
+                   dark:text-violet-400">
+                    En tránsito
+                </span>
+            </div>
+
+            <p class="relative mt-6 text-xs font-medium
+                 text-slate-500 dark:text-slate-400">
+                Encomiendas embarcadas
+            </p>
+
+            <p class="relative mt-2 text-3xl font-black
+                 tracking-tight text-slate-950
+                 dark:text-white">
+                {{ contarEncomiendas('EMBARCADA') }}
+            </p>
+        </article>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="mt-4 grid gap-4 lg:grid-cols-2">
+        <!-- Encomiendas por estado -->
+        <section class="rounded-2xl border border-slate-200
+               bg-white p-5 sm:p-6
+               dark:border-slate-800
+               dark:bg-slate-900">
+            <header class="flex flex-wrap items-start
+                 justify-between gap-3">
+                <div class="flex items-start gap-3">
+                    <div class="flex h-10 w-10 shrink-0
+                     items-center justify-center
+                     rounded-xl bg-amber-500/10
+                     text-amber-600
+                     dark:text-amber-400">
+                        <i class="pi pi-chart-pie text-sm"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-base font-bold
+                       text-slate-900 dark:text-white">
+                            Encomiendas por estado
+                        </h2>
+
+                        <p class="mt-1 text-xs text-slate-500
+                       dark:text-slate-400">
+                            Distribución del total registrado.
+                        </p>
+                    </div>
+                </div>
+
+                <span class="rounded-full bg-slate-100
+                   px-3 py-1.5 text-xs font-bold
+                   text-slate-600 dark:bg-slate-800
+                   dark:text-slate-300">
+                    {{ totalEncomiendas() }} en total
+                </span>
+            </header>
+
+            @if (totalEncomiendas() > 0) {
+            <div class="relative mx-auto mt-6
+                   h-72 max-w-md">
+                <p-chart type="doughnut" height="288" [data]="datosEncomiendas()" [options]="opcionesEncomiendas()" />
+            </div>
+            } @else {
+            <div class="flex h-72 flex-col
+                   items-center justify-center
+                   text-center">
+                <div class="flex h-12 w-12 items-center
+                     justify-center rounded-2xl
+                     bg-slate-100 text-slate-400
+                     dark:bg-slate-800">
+                    <i class="pi pi-chart-pie"></i>
+                </div>
+
+                <p class="mt-4 text-sm font-semibold
+                     text-slate-700 dark:text-slate-300">
+                    Sin información
+                </p>
+
+                <p class="mt-1 text-xs text-slate-500
+                     dark:text-slate-400">
+                    Todavía no existen encomiendas registradas.
+                </p>
+            </div>
+            }
+        </section>
+
+        <!-- Vuelos por estado -->
+        <section class="rounded-2xl border border-slate-200
+               bg-white p-5 sm:p-6
+               dark:border-slate-800
+               dark:bg-slate-900">
+            <header class="flex flex-wrap items-start
+                 justify-between gap-3">
+                <div class="flex items-start gap-3">
+                    <div class="flex h-10 w-10 shrink-0
+                     items-center justify-center
+                     rounded-xl bg-blue-500/10
+                     text-blue-600 dark:text-blue-400">
+                        <i class="pi pi-chart-bar text-sm"></i>
+                    </div>
+
+                    <div>
+                        <h2 class="text-base font-bold
+                       text-slate-900 dark:text-white">
+                            Vuelos por estado
+                        </h2>
+
+                        <p class="mt-1 text-xs text-slate-500
+                       dark:text-slate-400">
+                            Distribución del total registrado.
+                        </p>
+                    </div>
+                </div>
+
+                <span class="rounded-full bg-slate-100
+                   px-3 py-1.5 text-xs font-bold
+                   text-slate-600 dark:bg-slate-800
+                   dark:text-slate-300">
+                    {{ totalVuelos() }} en total
+                </span>
+            </header>
+
+            @if (totalVuelos() > 0) {
+            <div class="relative mt-6 h-72">
+                <p-chart type="bar" height="288" [data]="datosVuelos()" [options]="opcionesVuelos()" />
+            </div>
+            } @else {
+            <div class="flex h-72 flex-col
+                   items-center justify-center
+                   text-center">
+                <div class="flex h-12 w-12 items-center
+                     justify-center rounded-2xl
+                     bg-slate-100 text-slate-400
+                     dark:bg-slate-800">
+                    <i class="pi pi-chart-bar"></i>
+                </div>
+
+                <p class="mt-4 text-sm font-semibold
+                     text-slate-700 dark:text-slate-300">
+                    Sin información
+                </p>
+
+                <p class="mt-1 text-xs text-slate-500
+                     dark:text-slate-400">
+                    Todavía no existen vuelos registrados.
+                </p>
+            </div>
+            }
+        </section>
+    </div>
+
+    <!-- Ocupación -->
+    <section class="mt-4 rounded-2xl
+             border border-slate-200
+             bg-white p-5 sm:p-6
+             dark:border-slate-800
+             dark:bg-slate-900">
+        <header class="flex flex-col gap-3
+               sm:flex-row sm:items-start
+               sm:justify-between">
+            <div class="flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0
+                   items-center justify-center
+                   rounded-xl bg-[#05BBFB]/10
+                   text-[#0399D1]
+                   dark:text-[#05BBFB]">
+                    <i class="pi pi-gauge text-sm"></i>
+                </div>
+
+                <div>
+                    <h2 class="text-base font-bold
+                     text-slate-900 dark:text-white">
+                        Ocupación de vuelos programados
+                    </h2>
+
+                    <p class="mt-1 text-xs text-slate-500
+                     dark:text-slate-400">
+                        Capacidad de carga utilizada actualmente.
+                    </p>
+                </div>
+            </div>
+
+            <span class="w-fit rounded-full
+                 bg-[#05BBFB]/10
+                 px-3 py-1.5 text-xs font-bold
+                 text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                {{ ultimosVuelosProgramados().length }}
+                {{
+                ultimosVuelosProgramados().length === 1
+                ? 'vuelo'
+                : 'vuelos'
+                }}
+            </span>
+        </header>
+
+        <div class="mt-6 space-y-4">
+            @for (
+            vuelo of ultimosVuelosProgramados();
+            track vuelo.id
+            ) {
+            <article class="rounded-2xl border
+                   border-slate-200 p-4
+                   transition hover:border-[#05BBFB]/30
+                   dark:border-slate-800">
+                <div class="flex flex-col gap-3
+                     sm:flex-row sm:items-center
+                     sm:justify-between">
+                    <!-- Vuelo -->
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 shrink-0
+                         items-center justify-center
+                         rounded-xl bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                            <i class="pi pi-send text-xs"></i>
+                        </div>
+
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <p class="text-sm font-bold
+                             text-slate-900
+                             dark:text-white">
+                                    {{ vuelo.codigo }}
+                                </p>
+
+                                <span class="rounded-full bg-blue-500/10
+                             px-2 py-0.5
+                             text-[9px] font-bold
+                             text-blue-700
+                             dark:text-blue-400">
+                                    Programado
+                                </span>
+                            </div>
+
+                            <p class="mt-1 flex items-center
+                           gap-1.5 text-xs
+                           text-slate-500
+                           dark:text-slate-400">
+                                {{ vuelo.origen }}
+
+                                <i class="pi pi-arrow-right
+                             text-[8px]"></i>
+
+                                {{ vuelo.destino }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Peso -->
+                    <div class="sm:text-right">
+                        <p class="text-sm font-bold
+                         text-slate-800
+                         dark:text-slate-200">
+                            {{
+                            vuelo.pesoOcupadoKg
+                            | number: '1.0-2'
+                            }}
+                            /
+                            {{
+                            vuelo.capacidadMaximaKg
+                            | number: '1.0-2'
+                            }}
+                            kg
+                        </p>
+
+                        <p class="mt-1 text-xs
+                         text-slate-400">
+                            {{
+                            porcentaje(vuelo)
+                            | number: '1.0-0'
+                            }}%
+                            ocupado
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Barra -->
+                <div class="mt-4">
+                    <p-progressbar [value]="porcentaje(vuelo)" [showValue]="false"
+                        styleClass="!h-2 !overflow-hidden !rounded-full" />
+
+                    <div class="mt-2 flex items-center
+                       justify-between text-[10px]
+                       text-slate-400">
+                        <span>0 kg</span>
+
+                        <span>
+                            {{
+                            vuelo.capacidadMaximaKg
+                            | number: '1.0-2'
+                            }}
+                            kg
+                        </span>
+                    </div>
+                </div>
+            </article>
+            } @empty {
+            <div class="flex flex-col items-center
+                   justify-center py-12 text-center">
+                <div class="flex h-14 w-14
+                     items-center justify-center
+                     rounded-2xl bg-slate-100
+                     text-slate-400
+                     dark:bg-slate-800">
+                    <i class="pi pi-send text-lg"></i>
+                </div>
+
+                <p class="mt-4 text-sm font-semibold
+                     text-slate-700
+                     dark:text-slate-300">
+                    No hay vuelos programados
+                </p>
+
+                <p class="mt-1 max-w-sm text-xs
+                     leading-5 text-slate-500
+                     dark:text-slate-400">
+                    Cuando existan vuelos programados, su ocupación
+                    aparecerá en esta sección.
+                </p>
+            </div>
+            }
+        </div>
+    </section>
+    }
+</section>

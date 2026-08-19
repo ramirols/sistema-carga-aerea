@@ -1,0 +1,1034 @@
+<section class="min-h-full">
+    <!-- Encabezado -->
+    <header class="mb-6 flex flex-col gap-5
+           xl:flex-row xl:items-center xl:justify-between">
+        <div class="flex items-start gap-4">
+            <div class="flex h-12 w-12 shrink-0 items-center
+               justify-center rounded-2xl
+               bg-[#05BBFB]/10 text-[#0399D1]
+               dark:text-[#05BBFB]">
+                <i class="pi pi-user-edit text-lg"></i>
+            </div>
+
+            <div>
+                <p class="text-xs font-bold uppercase
+                 tracking-[0.18em] text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    Autorizaciones
+                </p>
+
+                <h1 class="mt-1 text-2xl font-black tracking-tight
+                 text-slate-950 sm:text-3xl dark:text-white">
+                    Peticiones
+                </h1>
+
+                <p class="mt-1 text-sm text-slate-500
+                 dark:text-slate-400">
+                    Encomiendas con cambio de consignatario autorizado.
+                </p>
+            </div>
+        </div>
+
+        <!-- Resumen -->
+        <div class="flex w-fit items-center gap-3 rounded-2xl
+             border border-slate-200 bg-white
+             px-4 py-3 dark:border-slate-800
+             dark:bg-slate-900">
+            <div class="flex h-9 w-9 items-center justify-center
+               rounded-xl bg-[#05BBFB]/10
+               text-[#0399D1] dark:text-[#05BBFB]">
+                <i class="pi pi-list text-sm"></i>
+            </div>
+
+            <div>
+                <p class="text-[10px] font-semibold uppercase
+                 tracking-wider text-slate-400">
+                    Resultados
+                </p>
+
+                <p class="mt-0.5 text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    {{ peticiones().length }}
+                    {{
+                    peticiones().length === 1
+                    ? 'petición'
+                    : 'peticiones'
+                    }}
+                </p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Información -->
+    <div class="mb-6 flex items-start gap-3
+           rounded-2xl border border-[#05BBFB]/20
+           bg-[#05BBFB]/5 p-4">
+        <div class="flex h-9 w-9 shrink-0 items-center
+             justify-center rounded-xl
+             bg-[#05BBFB]/10 text-[#0399D1]
+             dark:text-[#05BBFB]">
+            <i class="pi pi-info-circle text-sm"></i>
+        </div>
+
+        <div>
+            <p class="text-sm font-semibold text-slate-800
+               dark:text-slate-200">
+                Cambios de consignatario
+            </p>
+
+            <p class="mt-1 text-xs leading-5 text-slate-500
+               dark:text-slate-400">
+                Aquí se muestran las encomiendas que cuentan con una persona
+                autorizada para realizar el recojo en lugar del destinatario
+                original.
+            </p>
+        </div>
+    </div>
+
+    <!-- Filtros -->
+    <section class="mb-6 rounded-2xl border border-slate-200
+           bg-white p-4 sm:p-5
+           dark:border-slate-800 dark:bg-slate-900">
+        <div class="mb-4">
+            <p class="text-xs font-bold uppercase
+               tracking-wider text-slate-400">
+                Filtros
+            </p>
+        </div>
+
+        <div class="grid items-end gap-4
+             sm:grid-cols-[minmax(180px,1fr)_160px_auto_auto]">
+            <!-- Búsqueda -->
+            <div>
+                <label for="busqueda" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Buscar petición
+                </label>
+
+                <div class="relative">
+                    <i class="pi pi-search pointer-events-none
+                   absolute left-4 top-1/2 z-10
+                   -translate-y-1/2 text-sm text-slate-400"></i>
+
+                    <input id="busqueda" pInputText class="h-11 w-full !rounded-xl !pl-11" type="search"
+                        autocomplete="off" placeholder="Código, remitente, autorizado..."
+                        [value]="busqueda()" (input)="busqueda.set($any($event.target).value)" />
+                </div>
+            </div>
+
+            <!-- Estado -->
+            <div>
+                <label for="estadoFiltro" class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Estado
+                </label>
+
+                <p-select inputId="estadoFiltro" styleClass="h-11 w-full !rounded-xl" [options]="opcionesEstado"
+                    optionLabel="label" optionValue="value" placeholder="Todos los estados" [showClear]="true"
+                    appendTo="body" [ngModel]="estadoFiltro()" (ngModelChange)="estadoFiltro.set($event)" />
+            </div>
+
+            <!-- Vista -->
+            <div>
+                <label class="mb-2 block text-xs font-semibold
+                 text-slate-600 dark:text-slate-300">
+                    Vista
+                </label>
+
+                <div class="inline-flex h-11 gap-1 rounded-xl
+                     border border-slate-200 p-1
+                     dark:border-slate-700">
+                    <button type="button" class="flex items-center gap-2
+                     rounded-lg px-3 text-xs
+                     font-semibold transition" [class]="
+                    vista() === 'lista'
+                      ? 'bg-[#05BBFB] text-slate-950'
+                      : 'text-slate-500 dark:text-slate-400'
+                  " (click)="vista.set('lista')">
+                        <i class="pi pi-list text-[11px]"></i>
+                        Lista
+                    </button>
+
+                    <button type="button" class="flex items-center gap-2
+                     rounded-lg px-3 text-xs
+                     font-semibold transition" [class]="
+                    vista() === 'tarjetas'
+                      ? 'bg-[#05BBFB] text-slate-950'
+                      : 'text-slate-500 dark:text-slate-400'
+                  " (click)="vista.set('tarjetas')">
+                        <i class="pi pi-th-large text-[11px]"></i>
+                        Tarjetas
+                    </button>
+                </div>
+            </div>
+
+            <!-- Limpiar -->
+            <div>
+                <p-button label="Limpiar" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+                    styleClass="h-11 w-full !rounded-xl sm:w-auto" (onClick)="limpiarFiltros()" />
+            </div>
+        </div>
+
+        <!-- Verificar código -->
+        <div class="mt-4 border-t border-slate-200
+             pt-4 dark:border-slate-800">
+            <label for="busquedaCodigo" class="mb-2 block text-xs font-semibold
+               text-slate-600 dark:text-slate-300">
+                Verificar código de seguimiento
+            </label>
+
+            <div class="relative max-w-sm">
+                <i class="pi pi-verified pointer-events-none
+                 absolute left-4 top-1/2 z-10
+                 -translate-y-1/2 text-sm text-slate-400"></i>
+
+                <input id="busquedaCodigo" pInputText class="h-11 w-full !rounded-xl !pl-11" type="search"
+                    autocomplete="off" placeholder="Ejemplo: EA-XXXXXXXX" [value]="busquedaCodigo()"
+                    (input)="buscarPorCodigo($any($event.target).value)" />
+            </div>
+
+            <p class="mt-1.5 text-xs text-slate-400">
+                Si el código que buscas aparece en los resultados, es porque
+                esa encomienda tuvo un cambio de consignatario.
+            </p>
+        </div>
+    </section>
+
+    @if (vista() === 'lista') {
+    <!-- Tabla -->
+    <section class="overflow-hidden rounded-2xl
+           border border-slate-200 bg-white
+           dark:border-slate-800 dark:bg-slate-900">
+        <div class="overflow-x-auto">
+            <p-table [value]="peticiones()" [loading]="cargando()" [paginator]="true" [rows]="10"
+                [rowsPerPageOptions]="[10, 20, 50]" [paginatorDropdownAppendTo]="'body'" [showCurrentPageReport]="true"
+                currentPageReportTemplate="{first}–{last} de {totalRecords}" [tableStyle]="{ 'min-width': '1100px' }"
+                styleClass="p-datatable-sm">
+                <ng-template #header>
+                    <tr>
+                        <th class="!px-5 !py-4">Encomienda</th>
+                        <th class="!px-5 !py-4">Contenido</th>
+                        <th class="!px-5 !py-4">Participantes</th>
+                        <th class="!px-5 !py-4">Persona autorizada</th>
+                        <th class="!px-5 !py-4">Estado</th>
+                        <th class="!px-5 !py-4">Registro</th>
+                        <th class="!px-5 !py-4 text-right">Acciones</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template #body let-encomienda>
+                    <tr class="transition-colors
+                   hover:!bg-slate-50
+                   dark:hover:!bg-slate-800/40">
+                        <!-- Código -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-9 w-9 shrink-0
+                         items-center justify-center
+                         rounded-xl bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                                    <i class="pi pi-box text-xs"></i>
+                                </div>
+
+                                <div>
+                                    <p class="font-bold text-slate-900
+                           dark:text-slate-100">
+                                        {{ encomienda.codigo }}
+                                    </p>
+
+                                    <p class="mt-0.5 text-[11px]
+                           text-slate-400">
+                                        Código de seguimiento
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Contenido -->
+                        <td class="!px-5 !py-4">
+                            <div class="max-w-56">
+                                <p class="truncate text-sm font-semibold
+                         text-slate-800
+                         dark:text-slate-200" [title]="encomienda.contenido">
+                                    {{ encomienda.contenido }}
+                                </p>
+
+                                <p class="mt-1 text-[11px]
+                         text-slate-400">
+                                    Contenido declarado
+                                </p>
+                            </div>
+                        </td>
+
+                        <!-- Remitente y destinatario -->
+                        <td class="!px-5 !py-4">
+                            <div class="space-y-2">
+                                <div class="flex items-start gap-2">
+                                    <div class="flex h-6 w-6 shrink-0
+                           items-center justify-center
+                           rounded-lg bg-slate-100
+                           text-slate-400
+                           dark:bg-slate-800">
+                                        <i class="pi pi-user text-[9px]"></i>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-[10px] font-medium
+                             uppercase tracking-wide
+                             text-slate-400">
+                                            Remitente
+                                        </p>
+
+                                        <p class="mt-0.5 max-w-48 truncate
+                             text-xs font-medium
+                             text-slate-700
+                             dark:text-slate-200" [title]="encomienda.remitente">
+                                            {{ encomienda.remitente }}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-start gap-2">
+                                    <div class="flex h-6 w-6 shrink-0
+                           items-center justify-center
+                           rounded-lg bg-slate-100
+                           text-slate-400
+                           dark:bg-slate-800">
+                                        <i class="pi pi-map-marker text-[9px]"></i>
+                                    </div>
+
+                                    <div>
+                                        <p class="text-[10px] font-medium
+                             uppercase tracking-wide
+                             text-slate-400">
+                                            Destinatario
+                                        </p>
+
+                                        <p class="mt-0.5 max-w-48 truncate
+                             text-xs font-medium
+                             text-slate-700
+                             dark:text-slate-200" [title]="encomienda.destinatario">
+                                            {{ encomienda.destinatario }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Persona autorizada -->
+                        <td class="!px-5 !py-4">
+                            <div class="min-w-56 rounded-xl
+                       border border-amber-200
+                       bg-amber-50/70 p-3
+                       dark:border-amber-500/20
+                       dark:bg-amber-500/10">
+                                <div class="flex items-start gap-2.5">
+                                    <div class="flex h-8 w-8 shrink-0
+                           items-center justify-center
+                           rounded-lg bg-amber-500/15
+                           text-amber-600
+                           dark:text-amber-400">
+                                        <i class="pi pi-id-card text-xs"></i>
+                                    </div>
+
+                                    <div class="min-w-0 flex-1">
+                                        <p class="truncate text-xs font-bold
+                             text-amber-800
+                             dark:text-amber-300" [title]="
+                        encomienda.personaAutorizadaNombre
+                      ">
+                                            {{ encomienda.personaAutorizadaNombre }}
+                                        </p>
+
+                                        @if (encomienda.personaAutorizadaDni) {
+                                        <p class="mt-1 text-[11px]
+                               text-amber-700/80
+                               dark:text-amber-400/80">
+                                            {{
+                                            encomienda.tipoPersonaAutorizada === 'EMPRESA'
+                                            ? 'RUC'
+                                            : 'DNI'
+                                            }}:
+                                            {{ encomienda.personaAutorizadaDni }}
+                                        </p>
+                                        }
+
+                                        @if (encomienda.tipoPersonaAutorizada === 'EMPRESA') {
+                                        <p class="mt-1 text-[11px]
+                               text-amber-700/80
+                               dark:text-amber-400/80">
+                                            Empresa
+                                        </p>
+                                        }
+
+                                        @if (encomienda.motivoCambio) {
+                                        <p class="mt-1 text-[11px] italic
+                               text-amber-700/80
+                               dark:text-amber-400/80" [title]="encomienda.motivoCambio">
+                                            "{{ encomienda.motivoCambio }}"
+                                        </p>
+                                        }
+
+                                        @if (encomienda.personaAutorizadaContacto) {
+                                        <p class="mt-1 flex items-center gap-1
+                               text-[11px]
+                               text-amber-700/80
+                               dark:text-amber-400/80">
+                                            <i class="pi pi-phone text-[10px]"></i>
+                                            {{ encomienda.personaAutorizadaContacto }}
+                                        </p>
+                                        }
+
+                                        @if (encomienda.estadoAutorizacion) {
+                                        <p-tag class="mt-2 inline-block" [value]="
+                            nombreEstadoAutorizacion(
+                              encomienda.estadoAutorizacion
+                            )
+                          " [severity]="
+                            severidadEstadoAutorizacion(
+                              encomienda.estadoAutorizacion
+                            )
+                          " [rounded]="true" />
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="mt-3 border-t border-amber-200
+                         pt-2.5
+                         dark:border-amber-500/20">
+                                    @if (encomienda.cartaPoderUrl) {
+                                    <button type="button" class="inline-flex items-center gap-1.5
+                             text-xs font-semibold
+                             text-amber-700 transition
+                             hover:text-amber-900
+                             dark:text-amber-400
+                             dark:hover:text-amber-300" (click)="
+                        verDocumento(
+                          encomienda.cartaPoderUrl
+                        )
+                      ">
+                                        <i class="pi pi-file text-[10px]"></i>
+                                        Ver carta poder
+                                        <i class="pi pi-external-link
+                               text-[8px]"></i>
+                                    </button>
+                                    } @else {
+                                    <span class="inline-flex items-center
+                             gap-1.5 text-xs font-medium
+                             text-amber-700
+                             dark:text-amber-400">
+                                        <i class="pi pi-exclamation-triangle
+                               text-[10px]"></i>
+                                        Sin carta poder
+                                    </span>
+                                    }
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Estado -->
+                        <td class="!px-5 !py-4">
+                            <p-tag [value]="nombreEstado(encomienda.estado)" [severity]="
+                  severidadEstado(encomienda.estado)
+                " [rounded]="true" />
+                        </td>
+
+                        <!-- Fecha -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex items-start gap-2">
+                                <i class="pi pi-calendar mt-0.5
+                         text-xs text-slate-400"></i>
+
+                                <div>
+                                    <p class="text-xs font-semibold
+                           text-slate-700
+                           dark:text-slate-200">
+                                        {{
+                                        encomienda.fechaRegistro
+                                        | date: 'dd/MM/yyyy'
+                                        }}
+                                    </p>
+
+                                    <p class="mt-1 flex items-center
+                           gap-1 text-[11px]
+                           text-slate-400">
+                                        <i class="pi pi-clock text-[9px]"></i>
+
+                                        {{
+                                        encomienda.fechaRegistro
+                                        | date: 'HH:mm'
+                                        }}
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <!-- Acciones -->
+                        <td class="!px-5 !py-4">
+                            <div class="flex justify-end gap-1">
+                                @if (encomienda.estadoAutorizacion === 'PENDIENTE') {
+                                <p-button icon="pi pi-check" severity="success" [text]="true" [rounded]="true"
+                                    ariaLabel="Aprobar petición" title="Aprobar petición" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " (onClick)="confirmarAprobar(encomienda)" />
+
+                                <p-button icon="pi pi-times" severity="danger" [text]="true" [rounded]="true"
+                                    ariaLabel="Rechazar petición" title="Rechazar petición" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " (onClick)="confirmarRechazar(encomienda)" />
+                                }
+
+                                <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
+                                    ariaLabel="Eliminar petición" title="Eliminar petición" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " (onClick)="confirmarEliminar(encomienda)" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <!-- Sin resultados -->
+                <ng-template #emptymessage>
+                    <tr>
+                        <td colspan="7">
+                            <div class="flex flex-col items-center
+                       justify-center px-4 py-16
+                       text-center">
+                                <div class="flex h-14 w-14 items-center
+                         justify-center rounded-2xl
+                         bg-slate-100 text-slate-400
+                         dark:bg-slate-800">
+                                    <i class="pi pi-user-edit text-lg"></i>
+                                </div>
+
+                                <p class="mt-4 text-sm font-semibold
+                         text-slate-700
+                         dark:text-slate-300">
+                                    No hay peticiones registradas
+                                </p>
+
+                                <p class="mt-1 max-w-sm text-xs
+                         leading-5 text-slate-500
+                         dark:text-slate-400">
+                                    No se encontraron encomiendas con cambios de
+                                    consignatario que coincidan con los filtros.
+                                </p>
+
+                                <p-button label="Limpiar filtros" icon="pi pi-filter-slash" severity="secondary"
+                                    [outlined]="true" styleClass="mt-5 !rounded-xl" (onClick)="limpiarFiltros()" />
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </section>
+    }
+
+    @if (vista() === 'tarjetas') {
+    <!-- Tarjetas -->
+    <section class="space-y-5">
+        @for (encomienda of peticiones(); track encomienda.id) {
+        @let original = registroOriginalDe(encomienda.id);
+
+        <div class="grid gap-5 lg:grid-cols-2">
+            <!-- Tarjeta 1: Encomienda original -->
+            <article class="overflow-hidden rounded-2xl
+                 border border-slate-200 bg-white
+                 shadow-sm dark:border-slate-800
+                 dark:bg-slate-900">
+                <header class="flex items-center gap-3
+                   border-b border-slate-200 p-5
+                   dark:border-slate-800">
+                    <div class="flex h-10 w-10 shrink-0
+                     items-center justify-center
+                     rounded-xl bg-[#05BBFB]/10
+                     text-[#0399D1] dark:text-[#05BBFB]">
+                        <i class="pi pi-box text-sm"></i>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-[11px] font-bold uppercase
+                       tracking-wider text-slate-400">
+                            Encomienda — Registro original
+                        </p>
+
+                        <p class="mt-0.5 truncate font-bold
+                       text-slate-900 dark:text-slate-100">
+                            {{ encomienda.codigo }}
+                        </p>
+                    </div>
+
+                    <p-tag [value]="nombreEstado(encomienda.estado)" [severity]="
+                  severidadEstado(encomienda.estado)
+                " [rounded]="true" />
+                </header>
+
+                <div class="p-5">
+                    @if (original === undefined) {
+                    <div class="flex items-center gap-2
+                       py-6 text-sm text-slate-400">
+                        <i class="pi pi-spin pi-spinner"></i>
+                        Cargando historial original...
+                    </div>
+                    } @else {
+                    <dl class="space-y-3 text-sm">
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Contenido</dt>
+                            <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                {{
+                                original
+                                ? original.contenido
+                                : encomienda.contenido
+                                }}
+                            </dd>
+                        </div>
+
+                        @if ((original ?? encomienda).descripcion) {
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Descripción</dt>
+                            <dd class="mt-0.5 text-slate-700 dark:text-slate-300">
+                                {{
+                                (original ?? encomienda).descripcion
+                                }}
+                            </dd>
+                        </div>
+                        }
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <dt class="text-[11px] text-slate-400">Peso real</dt>
+                                <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                    {{
+                                    (original
+                                    ? original.pesoKg
+                                    : encomienda.pesoKg)
+                                    | number: '1.2-2'
+                                    }}
+                                    kg
+                                </dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-[11px] text-slate-400">Peso cobrable</dt>
+                                <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                    {{
+                                    (original
+                                    ? original.pesoCobrableKg
+                                    : encomienda.pesoCobrableKg)
+                                    | number: '1.2-2'
+                                    }}
+                                    kg
+                                </dd>
+                            </div>
+                        </div>
+
+                        @if ((original ?? encomienda).largoCm && (original ?? encomienda).anchoCm && (original ?? encomienda).altoCm) {
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Dimensiones</dt>
+                            <dd class="mt-0.5 text-slate-700 dark:text-slate-300">
+                                {{ (original ?? encomienda).largoCm }} x
+                                {{ (original ?? encomienda).anchoCm }} x
+                                {{ (original ?? encomienda).altoCm }} cm
+                            </dd>
+                        </div>
+                        }
+
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Remitente</dt>
+                            <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                {{
+                                original
+                                ? original.remitente
+                                : encomienda.remitente
+                                }}
+                            </dd>
+                            @if ((original ?? encomienda).remitenteDni) {
+                            <dd class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                                DNI: {{ (original ?? encomienda).remitenteDni }}
+                            </dd>
+                            }
+                            @if ((original ?? encomienda).remitenteTelefono) {
+                            <dd class="mt-0.5 flex items-center gap-1.5
+                             text-xs text-slate-500
+                             dark:text-slate-400">
+                                <i class="pi pi-phone text-[9px]"></i>
+                                {{ (original ?? encomienda).remitenteTelefono }}
+                            </dd>
+                            }
+                            @if ((original ?? encomienda).remitenteCorreo) {
+                            <dd class="mt-0.5 flex items-center gap-1.5
+                             text-xs text-slate-500
+                             dark:text-slate-400">
+                                <i class="pi pi-envelope text-[9px]"></i>
+                                {{ (original ?? encomienda).remitenteCorreo }}
+                            </dd>
+                            }
+                        </div>
+
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Destinatario registrado</dt>
+                            <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                {{
+                                original
+                                ? original.destinatario
+                                : encomienda.destinatario
+                                }}
+                            </dd>
+                            <dd class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                                DNI:
+                                {{
+                                original
+                                ? original.destinatarioDni
+                                : encomienda.destinatarioDni
+                                }}
+                            </dd>
+                        </div>
+
+                        @if (encomienda.codigoVuelo) {
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Vuelo asignado</dt>
+                            <dd class="mt-0.5 flex items-center gap-2
+                             font-medium text-slate-800
+                             dark:text-slate-200">
+                                {{ encomienda.codigoVuelo }}
+
+                                @if (encomienda.vueloEstado) {
+                                <span class="rounded-full bg-slate-100
+                               px-2 py-0.5 text-[10px]
+                               font-semibold text-slate-500
+                               dark:bg-slate-800
+                               dark:text-slate-400">
+                                    {{ encomienda.vueloEstado === 'DESPACHADO' ? 'Despachado' : 'Programado' }}
+                                </span>
+                                }
+                            </dd>
+                        </div>
+                        }
+
+                        <div class="border-t border-slate-200
+                         pt-3 dark:border-slate-800">
+                            <dt class="text-[11px] text-slate-400">
+                                {{
+                                original
+                                ? 'Fecha de registro'
+                                : 'Última actualización conocida'
+                                }}
+                            </dt>
+                            <dd class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                                {{
+                                (original ? original.fecha : encomienda.fechaRegistro)
+                                | date: 'dd/MM/yyyy HH:mm'
+                                }}
+                            </dd>
+                        </div>
+
+                        @if (original === null) {
+                        <p class="flex items-center gap-1.5
+                       text-[11px] text-amber-600
+                       dark:text-amber-400">
+                            <i class="pi pi-info-circle text-[10px]"></i>
+                            No se encontró historial; se muestran los datos actuales.
+                        </p>
+                        }
+                    </dl>
+                    }
+                </div>
+            </article>
+
+            <!-- Tarjeta 2: Solicitud de cambio de consignatario -->
+            <article class="flex h-full flex-col
+                 overflow-hidden rounded-2xl
+                 border border-amber-200 bg-amber-50/30
+                 shadow-sm dark:border-amber-500/20
+                 dark:bg-amber-500/5">
+                <header class="flex items-center gap-3
+                   border-b border-amber-200 p-5
+                   dark:border-amber-500/20">
+                    <div class="flex h-10 w-10 shrink-0
+                     items-center justify-center
+                     rounded-xl bg-amber-500/15
+                     text-amber-600 dark:text-amber-400">
+                        <i class="pi pi-user-edit text-sm"></i>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="text-[11px] font-bold uppercase
+                       tracking-wider text-amber-600
+                       dark:text-amber-400">
+                            Solicitud de cambio de consignatario
+                        </p>
+
+                        <p class="mt-0.5 truncate font-bold
+                       text-slate-900 dark:text-slate-100">
+                            {{ encomienda.codigo }}
+                        </p>
+                    </div>
+
+                    @if (encomienda.estadoAutorizacion) {
+                    <p-tag [value]="
+                    nombreEstadoAutorizacion(
+                      encomienda.estadoAutorizacion
+                    )
+                  " [severity]="
+                    severidadEstadoAutorizacion(
+                      encomienda.estadoAutorizacion
+                    )
+                  " [rounded]="true" />
+                    }
+                </header>
+
+                <div class="flex-1 p-5">
+                    <dl class="space-y-3 text-sm">
+                        <div>
+                            <dt class="text-[11px] text-slate-400">
+                                {{
+                                encomienda.tipoPersonaAutorizada === 'EMPRESA'
+                                ? 'Empresa autorizada'
+                                : 'Persona autorizada'
+                                }}
+                            </dt>
+                            <dd class="mt-0.5 font-bold text-amber-800 dark:text-amber-300">
+                                {{ encomienda.personaAutorizadaNombre }}
+                            </dd>
+                            @if (encomienda.personaAutorizadaDni) {
+                            <dd class="mt-0.5 text-xs text-amber-700/80 dark:text-amber-400/80">
+                                {{
+                                encomienda.tipoPersonaAutorizada === 'EMPRESA'
+                                ? 'RUC'
+                                : 'DNI'
+                                }}:
+                                {{ encomienda.personaAutorizadaDni }}
+                            </dd>
+                            }
+                        </div>
+
+                        @if (encomienda.motivoCambio) {
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Motivo del cambio</dt>
+                            <dd class="mt-0.5 italic text-slate-700 dark:text-slate-300">
+                                "{{ encomienda.motivoCambio }}"
+                            </dd>
+                        </div>
+                        }
+
+                        @if (encomienda.personaAutorizadaContacto) {
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Contacto del solicitante</dt>
+                            <dd class="mt-0.5 text-slate-700 dark:text-slate-300">
+                                {{ encomienda.personaAutorizadaContacto }}
+                            </dd>
+                        </div>
+                        }
+
+                        <div>
+                            <dt class="text-[11px] text-slate-400">Carta poder</dt>
+                            <dd class="mt-1">
+                                @if (encomienda.cartaPoderUrl) {
+                                <button type="button" class="inline-flex items-center gap-1.5
+                             text-xs font-semibold
+                             text-amber-700 transition
+                             hover:text-amber-900
+                             dark:text-amber-400
+                             dark:hover:text-amber-300" (click)="
+                          verDocumento(
+                            encomienda.cartaPoderUrl
+                          )
+                        ">
+                                    <i class="pi pi-file text-[10px]"></i>
+                                    Ver carta poder
+                                    <i class="pi pi-external-link text-[8px]"></i>
+                                </button>
+                                } @else {
+                                <span class="inline-flex items-center
+                             gap-1.5 text-xs font-medium
+                             text-amber-700
+                             dark:text-amber-400">
+                                    <i class="pi pi-exclamation-triangle text-[10px]"></i>
+                                    Sin carta poder
+                                </span>
+                                }
+                            </dd>
+                        </div>
+
+                        @if (encomienda.recibidoPorNombre) {
+                        <div class="border-t border-amber-200
+                         pt-3 dark:border-amber-500/20">
+                            <dt class="text-[11px] text-slate-400">Recibido finalmente por</dt>
+                            <dd class="mt-0.5 font-medium text-slate-800 dark:text-slate-200">
+                                {{ encomienda.recibidoPorNombre }}
+                            </dd>
+                            @if (encomienda.recibidoPorDni) {
+                            <dd class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                                DNI: {{ encomienda.recibidoPorDni }}
+
+                                @if (encomienda.recibidoPorDni === encomienda.personaAutorizadaDni) {
+                                <span class="ml-1 text-emerald-600 dark:text-emerald-400">
+                                    (coincide con el autorizado)
+                                </span>
+                                }
+                            </dd>
+                            }
+                        </div>
+                        }
+                    </dl>
+                </div>
+
+                <!-- Última actualización + Acciones -->
+                <footer class="flex flex-wrap items-center
+                     justify-between gap-3
+                     border-t border-amber-200
+                     p-4 dark:border-amber-500/20">
+                    <div>
+                        <dt class="text-[11px] text-slate-400">Última actualización</dt>
+                        <dd class="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                            {{
+                            encomienda.fechaActualizacion
+                            | date: 'dd/MM/yyyy HH:mm'
+                            }}
+                        </dd>
+                    </div>
+
+                    <div class="flex flex-wrap justify-end gap-2">
+                        @if (encomienda.estadoAutorizacion === 'PENDIENTE') {
+                        <p-button label="Aprobar" icon="pi pi-check" severity="success" [outlined]="true" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " styleClass="!rounded-xl" (onClick)="confirmarAprobar(encomienda)" />
+
+                        <p-button label="Rechazar" icon="pi pi-times" severity="danger" [outlined]="true" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " styleClass="!rounded-xl" (onClick)="confirmarRechazar(encomienda)" />
+                        }
+
+                        <p-button label="Eliminar" icon="pi pi-trash" severity="danger" [text]="true" [disabled]="
+                    encomienda.estado !== 'EN_ALMACEN'
+                  " styleClass="!rounded-xl" (onClick)="confirmarEliminar(encomienda)" />
+                    </div>
+                </footer>
+            </article>
+        </div>
+        } @empty {
+        <div class="flex flex-col items-center
+               justify-center rounded-2xl border
+               border-slate-200 bg-white
+               px-4 py-16 text-center
+               dark:border-slate-800 dark:bg-slate-900">
+            <div class="flex h-14 w-14 items-center
+                   justify-center rounded-2xl
+                   bg-slate-100 text-slate-400
+                   dark:bg-slate-800">
+                <i class="pi pi-user-edit text-lg"></i>
+            </div>
+
+            <p class="mt-4 text-sm font-semibold
+                   text-slate-700 dark:text-slate-300">
+                No hay peticiones registradas
+            </p>
+
+            <p class="mt-1 max-w-sm text-xs
+                   leading-5 text-slate-500
+                   dark:text-slate-400">
+                No se encontraron encomiendas con cambios de
+                consignatario que coincidan con los filtros.
+            </p>
+
+            <p-button label="Limpiar filtros" icon="pi pi-filter-slash" severity="secondary" [outlined]="true"
+                styleClass="mt-5 !rounded-xl" (onClick)="limpiarFiltros()" />
+        </div>
+        }
+    </section>
+    }
+</section>
+
+<!-- =====================================================
+     CARTA PODER
+===================================================== -->
+<p-dialog [visible]="documentoPrevio() !== null" (visibleChange)="cerrarDocumento()" appendTo="body" [modal]="true"
+    [draggable]="false" [resizable]="false" [closable]="true" [dismissableMask]="true" [blockScroll]="true"
+    [style]="{ width: 'min(94vw, 760px)' }">
+    <ng-template #header>
+        <div class="flex min-w-0 items-center gap-3">
+            <div class="flex h-10 w-10 shrink-0
+               items-center justify-center
+               rounded-xl bg-violet-500/10
+               text-violet-600
+               dark:text-violet-400">
+                <i class="pi pi-file"></i>
+            </div>
+
+            <div class="min-w-0">
+                <p class="truncate text-sm font-bold
+                 text-slate-900 dark:text-white">
+                    Carta poder
+                </p>
+
+                <p class="mt-0.5 truncate text-xs
+                 text-slate-500 dark:text-slate-400">
+                    Documento de autorización para el recojo
+                </p>
+            </div>
+        </div>
+    </ng-template>
+
+    @if (documentoPrevio(); as url) {
+    @if (!documentoNoVisible()) {
+    <div class="flex min-h-80 items-center
+               justify-center overflow-hidden
+               rounded-2xl bg-slate-100 p-3
+               dark:bg-slate-950">
+        <img [src]="url" alt="Carta poder" class="mx-auto max-h-[70vh]
+                 max-w-full rounded-xl
+                 object-contain shadow-lg" (error)="documentoNoVisible.set(true)" />
+    </div>
+
+    <div class="mt-4 flex flex-col-reverse gap-3
+               border-t border-slate-200 pt-4
+               sm:flex-row sm:justify-end
+               dark:border-slate-800">
+        <p-button label="Cerrar" severity="secondary" [outlined]="true" styleClass="w-full !rounded-xl sm:w-auto"
+            (onClick)="cerrarDocumento()" />
+
+        <a [href]="url" target="_blank" rel="noopener" class="inline-flex h-10 items-center
+                 justify-center gap-2 rounded-xl
+                 bg-[#05BBFB] px-4 text-sm
+                 font-bold text-slate-950
+                 transition hover:bg-[#20c4fc]">
+            <i class="pi pi-external-link text-xs"></i>
+            Abrir original
+        </a>
+    </div>
+    } @else {
+    <div class="flex flex-col items-center
+               justify-center py-12 text-center">
+        <div class="flex h-14 w-14 items-center
+                 justify-center rounded-2xl
+                 bg-slate-100 text-slate-400
+                 dark:bg-slate-800">
+            <i class="pi pi-file text-xl"></i>
+        </div>
+
+        <p class="mt-4 text-sm font-semibold
+                 text-slate-700 dark:text-slate-300">
+            Vista previa no disponible
+        </p>
+
+        <p class="mt-1 max-w-sm text-xs
+                 leading-5 text-slate-500
+                 dark:text-slate-400">
+            Este tipo de archivo no puede mostrarse dentro del
+            sistema. Puedes abrirlo en una pestaña nueva.
+        </p>
+
+        <a [href]="url" target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-2
+                 rounded-xl bg-[#05BBFB]
+                 px-5 py-2.5 text-sm font-bold
+                 text-slate-950 transition
+                 hover:bg-[#20c4fc]">
+            <i class="pi pi-external-link text-xs"></i>
+            Abrir documento
+        </a>
+    </div>
+    }
+    }
+</p-dialog>

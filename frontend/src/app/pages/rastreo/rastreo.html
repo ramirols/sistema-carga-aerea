@@ -1,0 +1,573 @@
+<div class="flex min-h-screen flex-col
+         bg-slate-50 text-slate-900
+         dark:bg-slate-950 dark:text-white">
+    <!-- Header -->
+    <header class="shrink-0 border-b border-slate-200
+           bg-white/90 backdrop-blur-xl
+           dark:border-slate-800 dark:bg-slate-950/90">
+        <div class="mx-auto flex h-20 max-w-7xl
+             items-center justify-between
+             px-4 sm:px-6 lg:px-8">
+            <a routerLink="/" class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-10 w-10 object-contain" />
+
+                <div class="hidden sm:block">
+                    <p class="text-sm font-bold text-slate-950 dark:text-white">
+                        Carga Aérea
+                    </p>
+
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Seguimiento de encomiendas
+                    </p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-2">
+                <button type="button" class="hidden h-10 items-center gap-2 rounded-xl
+                 border border-slate-200 px-4
+                 text-xs font-semibold text-slate-600
+                 transition hover:border-[#05BBFB]/40
+                 hover:text-[#0399D1]
+                 sm:flex dark:border-slate-800
+                 dark:text-slate-300 dark:hover:text-[#05BBFB]" (click)="abrirInfoRecojo()">
+                    <i class="pi pi-info-circle"></i>
+                    ¿Cómo recoger?
+                </button>
+
+                <button type="button" class="flex h-10 items-center gap-2
+                 rounded-xl bg-[#05BBFB]
+                 px-4 text-xs font-bold text-slate-950
+                 transition hover:bg-[#20c4fc]" (click)="irAConsignatario()">
+                    <span class="hidden sm:inline">
+                        Cambio de consignatario
+                    </span>
+
+                    <span class="sm:hidden">
+                        Consignatario
+                    </span>
+
+                    <i class="pi pi-arrow-right text-[9px]"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Contenido -->
+    <main class="relative flex flex-1 items-center
+           justify-center overflow-hidden
+           bg-[url('/images/fondo-rastreo.png')]
+           bg-cover bg-center bg-no-repeat
+           px-4 py-8 sm:px-6">
+        <div class="pointer-events-none absolute -left-40 top-10
+             h-96 w-96 rounded-full
+             bg-[#05BBFB]/10 blur-3xl
+             dark:bg-[#05BBFB]/5"></div>
+
+        <div class="pointer-events-none absolute -bottom-40 -right-40
+             h-96 w-96 rounded-full
+             bg-blue-500/[0.07] blur-3xl"></div>
+
+        <div class="relative w-full max-w-2xl">
+            <!-- Título -->
+            <div class="mb-6 text-center">
+                <h1 class="text-2xl font-black
+                 tracking-tight text-slate-950
+                 sm:text-3xl dark:text-white">
+                    Consulta tu encomienda
+                </h1>
+            </div>
+
+            <!-- Chat -->
+            <section class="flex h-[min(650px,calc(100vh-15rem))]
+               min-h-[500px] w-full flex-col
+               overflow-hidden rounded-[1.75rem]
+               border border-slate-200
+               bg-white shadow-2xl
+               shadow-slate-950/[0.08]
+               dark:border-slate-800
+               dark:bg-slate-900 dark:shadow-black/20">
+                <!-- Cabecera del chat -->
+                <header class="flex items-center gap-3
+                 border-b border-slate-200
+                 px-5 py-4
+                 dark:border-slate-800">
+                    <div class="relative">
+                        <div class="flex h-11 w-11 items-center
+                     justify-center rounded-full
+                     bg-[#05BBFB]
+                     font-bold text-slate-950">
+                            V
+                        </div>
+
+                        <span class="absolute bottom-0 right-0
+                     h-3 w-3 rounded-full
+                     border-2 border-white
+                     bg-emerald-500
+                     dark:border-slate-900"></span>
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-bold
+                     text-slate-900 dark:text-white">
+                            Valeria
+                        </p>
+
+                        <p class="mt-0.5 text-xs leading-5
+                     text-slate-500
+                     dark:text-slate-400">
+                            Valeria te ayudará a consultar el estado y destino de tu envío.
+                        </p>
+
+                        <p class="mt-1 flex items-center gap-1.5
+                     text-xs text-slate-500
+                     dark:text-slate-400">
+                            <span class="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                            Asistente virtual
+                        </p>
+                    </div>
+
+                    <button type="button" class="flex h-9 w-9 items-center
+                   justify-center rounded-xl
+                   text-slate-400 transition
+                   hover:bg-slate-100
+                   dark:hover:bg-slate-800" aria-label="Información para el recojo" (click)="abrirInfoRecojo()">
+                        <i class="pi pi-info-circle"></i>
+                    </button>
+                </header>
+
+                <!-- Mensajes -->
+                <div class="flex-1 space-y-5 overflow-y-auto
+                 bg-slate-50/70 p-4 sm:p-5
+                 dark:bg-slate-950/40">
+                    @for (
+                    mensaje of mensajes();
+                    track $index;
+                    let esUltimo = $last
+                    ) {
+                    <div class="flex gap-2.5" [class.justify-end]="mensaje.autor === 'usuario'">
+                        @if (mensaje.autor === 'bot') {
+                        <div class="flex h-8 w-8 shrink-0 items-center
+                         justify-center rounded-full
+                         bg-[#05BBFB] text-xs
+                         font-bold text-slate-950">
+                            V
+                        </div>
+                        }
+
+                        <div class="max-w-[85%]" [class.order-first]="mensaje.autor === 'usuario'">
+                            @if (mensaje.resultado; as resultado) {
+                            <div class="overflow-hidden rounded-2xl
+                           rounded-tl-md border
+                           border-slate-200 bg-white
+                           shadow-sm
+                           dark:border-slate-800
+                           dark:bg-slate-900">
+                                <div class="flex items-center justify-between
+                             gap-4 border-b border-slate-200
+                             px-4 py-3
+                             dark:border-slate-800">
+                                    <div>
+                                        <p class="text-[10px] font-semibold uppercase
+                                 tracking-wider text-slate-400">
+                                            Encomienda encontrada
+                                        </p>
+
+                                        <p class="mt-1 text-sm font-bold
+                                 text-slate-950 dark:text-white">
+                                            {{ resultado.codigo }}
+                                        </p>
+                                    </div>
+
+                                    <span class="rounded-full px-2.5 py-1
+                               text-[10px] font-bold" [class]="claseEstado(resultado.estado)">
+                                        {{ nombreEstado(resultado.estado) }}
+                                    </span>
+                                </div>
+
+                                <div class="divide-y divide-slate-100 px-4
+                             dark:divide-slate-800">
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Contenido
+                                        </span>
+
+                                        <span class="text-right text-xs font-semibold
+                                 text-slate-800 dark:text-slate-200">
+                                            {{ resultado.contenido }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Remitente
+                                        </span>
+
+                                        <span class="text-right text-xs font-semibold
+                                 text-slate-800 dark:text-slate-200">
+                                            {{ resultado.remitente }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Destinatario
+                                        </span>
+
+                                        <span class="text-right text-xs font-semibold
+                                 text-slate-800 dark:text-slate-200">
+                                            {{ resultado.destinatario }}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Peso
+                                        </span>
+
+                                        <span class="text-xs font-semibold
+                                 text-slate-800 dark:text-slate-200">
+                                            {{
+                                            resultado.pesoCobrableKg
+                                            | number: '1.2-2'
+                                            }}
+                                            kg
+                                        </span>
+                                    </div>
+
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Registro
+                                        </span>
+
+                                        <span class="text-xs font-semibold
+                                 text-slate-800 dark:text-slate-200">
+                                            {{
+                                            resultado.fechaRegistro
+                                            | date: 'dd/MM/yyyy'
+                                            }}
+                                        </span>
+                                    </div>
+
+                                    @if (resultado.codigoVuelo) {
+                                    <div class="flex justify-between gap-4 py-3">
+                                        <span class="text-xs text-slate-500">
+                                            Vuelo
+                                        </span>
+
+                                        <div class="text-right">
+                                            <p class="flex items-center justify-end
+                                     gap-1.5 text-xs font-semibold
+                                     text-slate-800
+                                     dark:text-slate-200">
+                                                {{ resultado.codigoVuelo }}
+
+                                                <span class="rounded-full px-2 py-0.5
+                                   text-[9px] font-bold" [class]="
+                                    resultado.vueloEstado === 'DESPACHADO'
+                                      ? 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400'
+                                      : 'bg-amber-500/10 text-amber-700 dark:text-amber-400'
+                                  ">
+                                                    {{
+                                                    resultado.vueloEstado === 'DESPACHADO'
+                                                    ? 'Despachado'
+                                                    : 'Programado'
+                                                    }}
+                                                </span>
+                                            </p>
+
+                                            <p class="mt-1 text-[10px] text-slate-400">
+                                                {{ resultado.origenVuelo }}
+                                                <i class="pi pi-arrow-right mx-1 text-[8px]"></i>
+                                                {{ resultado.destinoVuelo }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    } @else if (resultado.estado === 'ABANDONADA') {
+                                    <div class="flex gap-2 py-3">
+                                        <i class="pi pi-exclamation-triangle
+                                   text-xs text-red-500"></i>
+
+                                        <span class="text-xs text-slate-500">
+                                            Esta encomienda fue declarada en abandono por no
+                                            haberse recogido dentro del plazo. Comunícate con
+                                            la aerolínea para más información.
+                                        </span>
+                                    </div>
+                                    } @else {
+                                    <div class="flex gap-2 py-3">
+                                        <i class="pi pi-info-circle
+                                   text-xs text-amber-500"></i>
+
+                                        <span class="text-xs text-slate-500">
+                                            Todavía no tiene un vuelo asignado.
+                                        </span>
+                                    </div>
+                                    }
+                                </div>
+
+                                @if (
+                                resultado.codigoVuelo &&
+                                resultado.codigoAeropuertoDestino
+                                ) {
+                                <div class="m-3 flex items-start gap-2
+                               rounded-xl bg-[#05BBFB]/10 p-3">
+                                    <i class="pi pi-map-marker mt-0.5
+                                 text-xs text-[#0399D1]
+                                 dark:text-[#05BBFB]"></i>
+
+                                    <p class="text-xs leading-5
+                                 text-slate-600
+                                 dark:text-slate-300">
+                                        Recógelo en
+                                        {{
+                                        resultado.terminalCargaDestino ||
+                                        'el terminal de carga'
+                                        }}
+                                        — Aeropuerto
+                                        {{ resultado.codigoAeropuertoDestino }}
+                                        ({{ resultado.destinoVuelo }}).
+                                    </p>
+                                </div>
+                                }
+
+                                @if (resultado.personaAutorizadaNombre) {
+                                <div class="m-3 flex items-start gap-2
+                               rounded-xl p-3" [class]="
+                          claseAutorizacion(resultado)
+                        ">
+                                    <i class="pi mt-0.5 text-xs" [class]="
+                            iconoAutorizacion(resultado)
+                          "></i>
+
+                                    <p class="text-xs leading-5">
+                                        {{ mensajeAutorizacion(resultado) }}
+                                    </p>
+                                </div>
+                                }
+                            </div>
+
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <button type="button" class="rounded-full border
+                             border-slate-300 bg-white
+                             px-3 py-1.5 text-xs
+                             font-semibold text-slate-600
+                             transition hover:border-[#05BBFB]
+                             hover:text-[#0399D1]
+                             dark:border-slate-700
+                             dark:bg-slate-900
+                             dark:text-slate-300
+                             dark:hover:text-[#05BBFB]" (click)="abrirInfoRecojo()">
+                                    ¿Cómo lo recojo?
+                                </button>
+
+                                <button type="button" class="rounded-full border
+                             border-[#05BBFB]/40
+                             bg-[#05BBFB]/10
+                             px-3 py-1.5 text-xs
+                             font-semibold text-[#0387bb]
+                             transition hover:bg-[#05BBFB]/15
+                             dark:text-[#05BBFB]" (click)="irAConsignatario()">
+                                    Cambio de consignatario
+                                </button>
+                            </div>
+                            } @else {
+                            <div class="rounded-2xl px-4 py-3
+                           text-sm leading-6 shadow-sm" [class.rounded-tl-md]="mensaje.autor === 'bot'"
+                                [class.border]="mensaje.autor === 'bot'"
+                                [class.border-slate-200]="mensaje.autor === 'bot'"
+                                [class.bg-white]="mensaje.autor === 'bot'"
+                                [class.text-slate-700]="mensaje.autor === 'bot'"
+                                [class.dark:border-slate-800]="mensaje.autor === 'bot'"
+                                [class.dark:bg-slate-900]="mensaje.autor === 'bot'"
+                                [class.dark:text-slate-300]="mensaje.autor === 'bot'"
+                                [class.rounded-tr-md]="mensaje.autor === 'usuario'"
+                                [class.bg-[#05BBFB]]="mensaje.autor === 'usuario'"
+                                [class.text-slate-950]="mensaje.autor === 'usuario'">
+                                {{ mensaje.texto }}
+                            </div>
+                            }
+
+                            @if (
+                            esUltimo &&
+                            mensaje.autor === 'bot' &&
+                            mensaje.opciones?.length
+                            ) {
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                @for (
+                                opcion of mensaje.opciones;
+                                track opcion
+                                ) {
+                                <button type="button" class="rounded-full border
+                               border-[#05BBFB]/40
+                               bg-white px-3 py-1.5
+                               text-xs font-semibold
+                               text-[#0387bb] transition
+                               hover:bg-[#05BBFB]/10
+                               dark:bg-slate-900
+                               dark:text-[#05BBFB]" (click)="elegirOpcion(opcion)">
+                                    {{ opcion }}
+                                </button>
+                                }
+                            </div>
+                            }
+                        </div>
+                    </div>
+                    }
+
+                    @if (buscando()) {
+                    <div class="flex items-center gap-2.5">
+                        <div class="flex h-8 w-8 items-center
+                       justify-center rounded-full
+                       bg-[#05BBFB] text-xs
+                       font-bold text-slate-950">
+                            V
+                        </div>
+
+                        <div class="flex items-center gap-1
+                       rounded-2xl rounded-tl-md
+                       border border-slate-200
+                       bg-white px-4 py-3
+                       dark:border-slate-800
+                       dark:bg-slate-900">
+                            <span class="h-1.5 w-1.5 animate-bounce rounded-full bg-slate-400"></span>
+
+                            <span class="h-1.5 w-1.5 animate-bounce
+                         rounded-full bg-slate-400
+                         [animation-delay:150ms]"></span>
+
+                            <span class="h-1.5 w-1.5 animate-bounce
+                         rounded-full bg-slate-400
+                         [animation-delay:300ms]"></span>
+                        </div>
+                    </div>
+                    }
+                </div>
+
+                <!-- Enviar mensaje -->
+                <form class="flex items-center gap-3
+                 border-t border-slate-200
+                 bg-white p-3
+                 dark:border-slate-800
+                 dark:bg-slate-900" (ngSubmit)="enviar()">
+                    <input class="h-12 min-w-0 flex-1 rounded-xl
+                   border border-slate-200
+                   bg-slate-50 px-4
+                   text-sm text-slate-900
+                   outline-none transition
+                   placeholder:text-slate-400
+                   focus:border-[#05BBFB]
+                   focus:ring-4 focus:ring-[#05BBFB]/10
+                   dark:border-slate-700
+                   dark:bg-slate-950 dark:text-white" placeholder="Escribe tu código de seguimiento" autocomplete="off"
+                        name="mensaje" [ngModel]="texto()" (ngModelChange)="texto.set($event)"
+                        [disabled]="buscando()" />
+
+                    <button type="submit" class="flex h-12 w-12 shrink-0
+                   items-center justify-center
+                   rounded-xl bg-[#05BBFB]
+                   text-slate-950 shadow-md
+                   shadow-[#05BBFB]/20
+                   transition hover:bg-[#20c4fc]
+                   disabled:opacity-50" aria-label="Enviar mensaje" [disabled]="buscando() || !texto().trim()">
+                        <i class="pi pi-send text-sm"></i>
+                    </button>
+                </form>
+            </section>
+
+            <a routerLink="/" class="mx-auto mt-5 flex w-fit
+               items-center gap-2 text-sm
+               font-semibold text-white
+               transition hover:text-[#05BBFB]">
+                <i class="pi pi-arrow-left text-[10px]"></i>
+                Volver al inicio
+            </a>
+        </div>
+    </main>
+
+    <!-- Dialog de recojo -->
+    <p-dialog [visible]="infoRecojoVisible()" (visibleChange)="infoRecojoVisible.set($event)" appendTo="body"
+        [modal]="true" [draggable]="false" [resizable]="false" [dismissableMask]="true"
+        [style]="{ width: 'min(94vw, 560px)' }" header="¿Cómo recojo mi encomienda?">
+        <div class="space-y-6 text-sm leading-6
+             text-slate-600 dark:text-slate-300">
+            <div class="flex items-start gap-3
+               rounded-xl bg-[#05BBFB]/10 p-4">
+                <i class="pi pi-info-circle mt-1
+                 text-[#0399D1] dark:text-[#05BBFB]"></i>
+
+                <p>
+                    La encomienda debe recogerse en el
+                    <strong>terminal de carga</strong> del aeropuerto,
+                    no en la zona de pasajeros.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-slate-900
+                 dark:text-white">
+                    Requisitos indispensables
+                </h3>
+
+                <ul class="mt-3 space-y-3">
+                    <li class="flex gap-3">
+                        <i class="pi pi-id-card mt-1 text-[#05BBFB]"></i>
+                        DNI o carné de extranjería original.
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="pi pi-box mt-1 text-[#05BBFB]"></i>
+                        Código de seguimiento de la encomienda.
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="pi pi-wallet mt-1 text-[#05BBFB]"></i>
+                        Pagos de almacenaje o manipuleo al día.
+                    </li>
+                </ul>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-slate-900
+                 dark:text-white">
+                    Pasos para el recojo
+                </h3>
+
+                <ol class="mt-3 space-y-3">
+                    @for (
+                    paso of [
+                    'Espera unas horas después del aterrizaje.',
+                    'Dirígete al almacén de carga del aeropuerto.',
+                    'Presenta tu documento y código en ventanilla.',
+                    'Recoge el paquete en la zona de despacho.'
+                    ];
+                    track paso;
+                    let numero = $index
+                    ) {
+                    <li class="flex gap-3">
+                        <span class="flex h-6 w-6 shrink-0 items-center
+                       justify-center rounded-full
+                       bg-[#05BBFB]/15 text-[10px]
+                       font-bold text-[#0399D1]
+                       dark:text-[#05BBFB]">
+                            {{ numero + 1 }}
+                        </span>
+
+                        {{ paso }}
+                    </li>
+                    }
+                </ol>
+            </div>
+
+            <div class="flex justify-end
+               border-t border-slate-200 pt-5
+               dark:border-slate-800">
+                <button type="button" class="rounded-xl bg-[#05BBFB]
+                 px-5 py-2.5 text-sm
+                 font-bold text-slate-950
+                 transition hover:bg-[#20c4fc]" (click)="cerrarInfoRecojo()">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

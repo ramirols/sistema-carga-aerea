@@ -1,0 +1,704 @@
+<div class="flex min-h-screen flex-col
+         bg-slate-50 dark:bg-slate-950">
+    <!-- Header -->
+    <header class="sticky top-0 z-40
+           border-b border-slate-200
+           bg-white/90 backdrop-blur-xl
+           dark:border-slate-800
+           dark:bg-slate-950/90">
+        <div class="mx-auto flex h-20 max-w-7xl
+             items-center justify-between
+             px-4 sm:px-6 lg:px-8">
+            <a routerLink="/" class="flex items-center gap-3">
+                <img src="/images/logo.png" alt="Logo Carga Aérea" class="h-10 w-10 object-contain" />
+
+                <div class="hidden sm:block">
+                    <p class="text-sm font-bold
+                   text-slate-950 dark:text-white">
+                        Carga Aérea
+                    </p>
+
+                    <p class="text-xs text-slate-500
+                   dark:text-slate-400">
+                        Trámites en línea
+                    </p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-2">
+                <button type="button" class="hidden h-10 items-center gap-2
+                 rounded-xl border border-slate-200
+                 px-4 text-xs font-semibold
+                 text-slate-600 transition
+                 hover:border-[#05BBFB]/40
+                 hover:text-[#0399D1]
+                 sm:flex dark:border-slate-800
+                 dark:text-slate-300
+                 dark:hover:text-[#05BBFB]" (click)="abrirInfoModificar()">
+                    <i class="pi pi-question-circle"></i>
+                    ¿Cambiar solicitud?
+                </button>
+
+                <a routerLink="/rastreo" class="inline-flex h-10 items-center gap-2
+                 rounded-xl border border-slate-200
+                 px-4 text-xs font-semibold
+                 text-slate-600 transition
+                 hover:border-[#05BBFB]/40
+                 hover:text-[#0399D1]
+                 dark:border-slate-800
+                 dark:text-slate-300
+                 dark:hover:text-[#05BBFB]">
+                    <i class="pi pi-arrow-left text-[9px]"></i>
+
+                    <span class="hidden sm:inline">
+                        Volver al rastreo
+                    </span>
+
+                    <span class="sm:hidden">
+                        Volver
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 bg-[url('/images/fondo-consignatario.jpg')]
+           bg-cover bg-center bg-no-repeat
+           px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-5xl">
+            <!-- Encabezado -->
+            <div class="mx-auto max-w-2xl text-center">
+                <p class="text-xs font-bold uppercase
+                 tracking-[0.18em] text-[#0399D1]
+                 dark:text-[#05BBFB]">
+                    Trámite en línea
+                </p>
+
+                <h1 class="mt-3 text-3xl font-black
+                 tracking-tight text-slate-950
+                 sm:text-4xl dark:text-white">
+                    Cambio de consignatario
+                </h1>
+
+                <p class="mt-4 leading-7 text-white/90">
+                    Autoriza a otra persona o empresa para recoger tu
+                    encomienda en el terminal de carga.
+                </p>
+            </div>
+
+            <!-- Formulario -->
+            <section class="mt-10 overflow-hidden rounded-[2rem]
+               border border-slate-200
+               bg-white shadow-xl
+               shadow-slate-950/[0.06]
+               dark:border-slate-800
+               dark:bg-slate-900
+               dark:shadow-black/20">
+                @if (!enviado()) {
+                <form class="p-6 sm:p-8 lg:p-10" (ngSubmit)="enviar()">
+                    <!-- Información del envío -->
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center
+                         justify-center rounded-xl
+                         bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                                <i class="pi pi-box"></i>
+                            </div>
+
+                            <div>
+                                <h2 class="text-base font-bold
+                           text-slate-900 dark:text-white">
+                                    Información de la encomienda
+                                </h2>
+
+                                <p class="mt-0.5 text-xs
+                           text-slate-500 dark:text-slate-400">
+                                    Verifica los datos del envío.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid gap-5
+                       md:grid-cols-2">
+                            <div>
+                                <label for="codigo" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Código de seguimiento
+                                </label>
+
+                                <div class="relative">
+                                    <i class="pi pi-box absolute left-4
+                             top-1/2 -translate-y-1/2
+                             text-sm text-slate-400"></i>
+
+                                    <input id="codigo" class="h-12 w-full rounded-xl
+                             border border-slate-300
+                             bg-white py-3 pl-11 pr-4
+                             text-sm font-medium uppercase
+                             text-slate-900 outline-none
+                             transition
+                             placeholder:normal-case
+                             placeholder:text-slate-400
+                             focus:border-[#05BBFB]
+                             focus:ring-4
+                             focus:ring-[#05BBFB]/10
+                             dark:border-slate-700
+                             dark:bg-slate-950
+                             dark:text-white" [ngModel]="codigo()" name="codigo" (ngModelChange)="codigo.set($event)"
+                                        [disabled]="enviando()" maxlength="20" placeholder="Ejemplo: EA-XXXXXXXX" />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="dniDestinatarioOriginal" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    DNI del destinatario original
+                                </label>
+
+                                <div class="relative">
+                                    <i class="pi pi-id-card absolute left-4
+                             top-1/2 -translate-y-1/2
+                             text-sm text-slate-400"></i>
+
+                                    <input id="dniDestinatarioOriginal" class="h-12 w-full rounded-xl
+                             border border-slate-300
+                             bg-white py-3 pl-11 pr-4
+                             text-sm text-slate-900
+                             outline-none transition
+                             placeholder:text-slate-400
+                             focus:border-[#05BBFB]
+                             focus:ring-4
+                             focus:ring-[#05BBFB]/10
+                             dark:border-slate-700
+                             dark:bg-slate-950
+                             dark:text-white" [ngModel]="dniDestinatarioOriginal()" name="dniDestinatarioOriginal"
+                                        (ngModelChange)="
+                        dniDestinatarioOriginal.set($event)
+                      " [disabled]="enviando()" maxlength="15" placeholder="Como figura al registrar el envío" />
+                                </div>
+
+                                <p class="mt-1.5 text-xs text-slate-400">
+                                    Debe coincidir con el DNI del destinatario registrado en la encomienda.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-8 border-t border-slate-200
+                     dark:border-slate-800"></div>
+
+                    <!-- Persona autorizada -->
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center
+                         justify-center rounded-xl
+                         bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                                <i class="pi pi-user"></i>
+                            </div>
+
+                            <div>
+                                <h2 class="text-base font-bold
+                           text-slate-900 dark:text-white">
+                                    Persona o empresa autorizada
+                                </h2>
+
+                                <p class="mt-0.5 text-xs
+                           text-slate-500 dark:text-slate-400">
+                                    Ingresa los datos de quien recogerá la carga.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid gap-5
+                       md:grid-cols-2">
+                            <!-- Nombre -->
+                            <div>
+                                <label for="nombre" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Nombre completo o razón social
+                                </label>
+
+                                <input id="nombre" class="h-12 w-full rounded-xl
+                           border border-slate-300
+                           bg-white px-4 text-sm
+                           text-slate-900 outline-none
+                           transition
+                           placeholder:text-slate-400
+                           focus:border-[#05BBFB]
+                           focus:ring-4
+                           focus:ring-[#05BBFB]/10
+                           dark:border-slate-700
+                           dark:bg-slate-950
+                           dark:text-white" [ngModel]="nombre()" name="nombre" (ngModelChange)="nombre.set($event)"
+                                    [disabled]="enviando()" placeholder="Nombre y apellido o razón social" />
+                            </div>
+
+                            <!-- Tipo -->
+                            <fieldset>
+                                <legend class="mb-2 text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Tipo de autorizado
+                                </legend>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <label class="flex h-12 cursor-pointer
+                             items-center justify-center gap-2
+                             rounded-xl border text-sm
+                             font-semibold transition" [class.border-[#05BBFB]]="
+                        tipoAutorizado() === 'persona'
+                      " [class.bg-[#05BBFB]/10]="
+                        tipoAutorizado() === 'persona'
+                      " [class.text-[#0387bb]]="
+                        tipoAutorizado() === 'persona'
+                      " [class.border-slate-300]="
+                        tipoAutorizado() !== 'persona'
+                      " [class.text-slate-600]="
+                        tipoAutorizado() !== 'persona'
+                      ">
+                                        <input type="radio" name="tipoAutorizado" class="sr-only"
+                                            [checked]="tipoAutorizado() === 'persona'"
+                                            (change)="tipoAutorizado.set('persona')" [disabled]="enviando()" />
+
+                                        <i class="pi pi-user"></i>
+                                        Persona
+                                    </label>
+
+                                    <label class="flex h-12 cursor-pointer
+                             items-center justify-center gap-2
+                             rounded-xl border text-sm
+                             font-semibold transition" [class.border-[#05BBFB]]="
+                        tipoAutorizado() === 'empresa'
+                      " [class.bg-[#05BBFB]/10]="
+                        tipoAutorizado() === 'empresa'
+                      " [class.text-[#0387bb]]="
+                        tipoAutorizado() === 'empresa'
+                      " [class.border-slate-300]="
+                        tipoAutorizado() !== 'empresa'
+                      " [class.text-slate-600]="
+                        tipoAutorizado() !== 'empresa'
+                      ">
+                                        <input type="radio" name="tipoAutorizado" class="sr-only"
+                                            [checked]="tipoAutorizado() === 'empresa'"
+                                            (change)="tipoAutorizado.set('empresa')" [disabled]="enviando()" />
+
+                                        <i class="pi pi-building"></i>
+                                        Empresa
+                                    </label>
+                                </div>
+                            </fieldset>
+
+                            <!-- DNI o RUC -->
+                            @if (tipoAutorizado() === 'persona') {
+                            <div>
+                                <label for="dni" class="mb-2 block text-sm font-semibold
+                             text-slate-700 dark:text-slate-300">
+                                    DNI de la persona autorizada
+                                </label>
+
+                                <input id="dni" class="h-12 w-full rounded-xl
+                             border border-slate-300
+                             bg-white px-4 text-sm
+                             text-slate-900 outline-none
+                             transition
+                             focus:border-[#05BBFB]
+                             focus:ring-4
+                             focus:ring-[#05BBFB]/10
+                             dark:border-slate-700
+                             dark:bg-slate-950
+                             dark:text-white" [ngModel]="dni()" name="dni" (ngModelChange)="dni.set($event)"
+                                    [disabled]="enviando()" maxlength="15" placeholder="Número de DNI" />
+                            </div>
+                            } @else {
+                            <div>
+                                <label for="ruc" class="mb-2 block text-sm font-semibold
+                             text-slate-700 dark:text-slate-300">
+                                    RUC de la empresa
+                                </label>
+
+                                <input id="ruc" class="h-12 w-full rounded-xl
+                             border border-slate-300
+                             bg-white px-4 text-sm
+                             text-slate-900 outline-none
+                             transition
+                             focus:border-[#05BBFB]
+                             focus:ring-4
+                             focus:ring-[#05BBFB]/10
+                             dark:border-slate-700
+                             dark:bg-slate-950
+                             dark:text-white" [ngModel]="ruc()" name="ruc" (ngModelChange)="ruc.set($event)"
+                                    [disabled]="enviando()" maxlength="15" placeholder="Número de RUC" />
+                            </div>
+                            }
+
+                            <!-- Motivo -->
+                            <div>
+                                <label for="motivo" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Motivo del cambio
+                                    <span class="font-normal text-slate-400">
+                                        (opcional)
+                                    </span>
+                                </label>
+
+                                <input id="motivo" class="h-12 w-full rounded-xl
+                           border border-slate-300
+                           bg-white px-4 text-sm
+                           text-slate-900 outline-none
+                           transition
+                           focus:border-[#05BBFB]
+                           focus:ring-4
+                           focus:ring-[#05BBFB]/10
+                           dark:border-slate-700
+                           dark:bg-slate-950
+                           dark:text-white" [ngModel]="motivo()" name="motivo" (ngModelChange)="motivo.set($event)"
+                                    [disabled]="enviando()" placeholder="Ejemplo: viaje o motivos de salud" />
+                            </div>
+
+                            <!-- Contacto -->
+                            <div class="md:col-span-2">
+                                <label for="contacto" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Correo o teléfono de contacto
+                                    <span class="font-normal text-slate-400">
+                                        (opcional)
+                                    </span>
+                                </label>
+
+                                <input id="contacto" class="h-12 w-full rounded-xl
+                           border border-slate-300
+                           bg-white px-4 text-sm
+                           text-slate-900 outline-none
+                           transition
+                           focus:border-[#05BBFB]
+                           focus:ring-4
+                           focus:ring-[#05BBFB]/10
+                           dark:border-slate-700
+                           dark:bg-slate-950
+                           dark:text-white" [ngModel]="contacto()" name="contacto"
+                                    (ngModelChange)="contacto.set($event)" [disabled]="enviando()"
+                                    placeholder="Para avisarte si tu solicitud fue aprobada o rechazada" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="my-8 border-t border-slate-200
+                     dark:border-slate-800"></div>
+
+                    <!-- Documentos -->
+                    <div>
+                        <div class="flex items-center gap-3">
+                            <div class="flex h-10 w-10 items-center
+                         justify-center rounded-xl
+                         bg-[#05BBFB]/10
+                         text-[#0399D1]
+                         dark:text-[#05BBFB]">
+                                <i class="pi pi-file"></i>
+                            </div>
+
+                            <div>
+                                <h2 class="text-base font-bold
+                           text-slate-900 dark:text-white">
+                                    Documentación
+                                </h2>
+
+                                <p class="mt-0.5 text-xs
+                           text-slate-500 dark:text-slate-400">
+                                    Adjunta la carta poder firmada.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 grid items-start gap-5
+                       md:grid-cols-2">
+                            <!-- Archivo -->
+                            <div>
+                                <label for="cartaPoder" class="mb-2 block text-sm font-semibold
+                           text-slate-700 dark:text-slate-300">
+                                    Carta poder
+                                </label>
+
+                                <input #cartaPoderInput id="cartaPoder" type="file" accept="image/*,application/pdf"
+                                    class="hidden" (change)="seleccionarArchivo($event)" [disabled]="enviando()" />
+
+                                <button type="button" class="flex min-h-24 w-full
+                           items-center gap-4 rounded-xl
+                           border border-dashed
+                           border-slate-300 p-4
+                           text-left transition
+                           hover:border-[#05BBFB]
+                           hover:bg-[#05BBFB]/5
+                           dark:border-slate-700
+                           dark:hover:border-[#05BBFB]" [disabled]="enviando()" (click)="cartaPoderInput.click()">
+                                    <div class="flex h-10 w-10 shrink-0
+                             items-center justify-center
+                             rounded-xl bg-slate-100
+                             text-slate-500
+                             dark:bg-slate-800
+                             dark:text-slate-300">
+                                        <i class="pi" [class.pi-upload]="!cartaPoderArchivo()"
+                                            [class.pi-file-check]="cartaPoderArchivo()"></i>
+                                    </div>
+
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-semibold
+                               text-slate-700
+                               dark:text-slate-200">
+                                            {{
+                                            cartaPoderArchivo()?.name ??
+                                            'Seleccionar archivo'
+                                            }}
+                                        </p>
+
+                                        <p class="mt-1 text-xs text-slate-500
+                               dark:text-slate-400">
+                                            Imagen o PDF, máximo 5 MB
+                                        </p>
+                                    </div>
+                                </button>
+                            </div>
+
+                            <!-- Información -->
+                            <div class="min-h-24 rounded-xl
+                         bg-slate-50 p-4
+                         dark:bg-slate-950/60">
+                                <div class="flex gap-3">
+                                    <i class="pi pi-info-circle mt-0.5
+                             text-[#0399D1]
+                             dark:text-[#05BBFB]"></i>
+
+                                    <p class="text-xs leading-6
+                             text-slate-600
+                             dark:text-slate-400">
+                                        La persona autorizada debe presentar su
+                                        documento, el código de seguimiento y la
+                                        carta poder en el terminal de carga.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Términos -->
+                    <div class="mt-8 rounded-2xl
+                     border border-slate-200 p-4
+                     dark:border-slate-800">
+                        <details class="group">
+                            <summary class="flex cursor-pointer
+                         list-none items-center
+                         justify-between gap-4
+                         text-sm font-semibold
+                         text-slate-700
+                         dark:text-slate-300">
+                                Términos y condiciones
+
+                                <i class="pi pi-chevron-down
+                           text-[10px] transition
+                           group-open:rotate-180"></i>
+                            </summary>
+
+                            <p class="mt-4 text-xs leading-6
+                         text-slate-500
+                         dark:text-slate-400">
+                                Declaro que la información proporcionada es
+                                veraz y que la carta poder cuenta con la firma
+                                del destinatario original. El recojo puede ser
+                                rechazado si la información no coincide.
+                            </p>
+                        </details>
+
+                        <label class="mt-4 flex cursor-pointer
+                       items-start gap-3 border-t
+                       border-slate-200 pt-4
+                       dark:border-slate-800">
+                            <input type="checkbox" class="mt-0.5 h-4 w-4 rounded
+                         accent-[#05BBFB]" [ngModel]="aceptaTerminos()" name="aceptaTerminos"
+                                (ngModelChange)="aceptaTerminos.set($event)" [disabled]="enviando()" />
+
+                            <span class="text-sm leading-6
+                         text-slate-600
+                         dark:text-slate-400">
+                                He leído y acepto los términos y condiciones.
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Error -->
+                    @if (error()) {
+                    <div class="mt-6 flex items-start gap-3
+                       rounded-xl border border-red-200
+                       bg-red-50 p-4 text-red-700
+                       dark:border-red-500/20
+                       dark:bg-red-500/10
+                       dark:text-red-400">
+                        <i class="pi pi-exclamation-circle
+                         mt-0.5"></i>
+
+                        <p class="text-sm leading-6">
+                            {{ error() }}
+                        </p>
+                    </div>
+                    }
+
+                    <!-- Enviar -->
+                    <div class="mt-8 flex flex-col-reverse
+                     gap-3 border-t
+                     border-slate-200 pt-6
+                     sm:flex-row sm:items-center
+                     sm:justify-end
+                     dark:border-slate-800">
+                        <a routerLink="/rastreo" class="flex h-12 items-center
+                       justify-center rounded-xl
+                       border border-slate-300
+                       px-5 text-sm font-semibold
+                       text-slate-600 transition
+                       hover:bg-slate-50
+                       dark:border-slate-700
+                       dark:text-slate-300
+                       dark:hover:bg-slate-800">
+                            Cancelar
+                        </a>
+
+                        <button type="submit" class="flex h-12 items-center
+                       justify-center gap-2 rounded-xl
+                       bg-[#05BBFB] px-6
+                       text-sm font-bold text-slate-950
+                       shadow-lg shadow-[#05BBFB]/20
+                       transition hover:bg-[#20c4fc]
+                       disabled:pointer-events-none
+                       disabled:opacity-50" [disabled]="!formularioValido || enviando()">
+                            @if (enviando()) {
+                            <i class="pi pi-spin pi-spinner"></i>
+                            Procesando...
+                            } @else {
+                            <i class="pi pi-check"></i>
+                            Confirmar cambio
+                            }
+                        </button>
+                    </div>
+                </form>
+                } @else {
+                <!-- Estado exitoso -->
+                <div class="flex min-h-[500px]
+                   flex-col items-center
+                   justify-center p-8 text-center">
+                    <div class="flex h-16 w-16
+                     items-center justify-center
+                     rounded-full bg-emerald-500/10
+                     text-emerald-600
+                     dark:text-emerald-400">
+                        <i class="pi pi-check text-2xl"></i>
+                    </div>
+
+                    <p class="mt-6 text-xs font-bold
+                     uppercase tracking-wider
+                     text-emerald-600
+                     dark:text-emerald-400">
+                        Solicitud completada
+                    </p>
+
+                    <h2 class="mt-3 text-2xl font-black
+                     text-slate-950 dark:text-white">
+                        Solicitud enviada
+                    </h2>
+
+                    <p class="mt-4 max-w-lg leading-7
+                     text-slate-600 dark:text-slate-400">
+                        Registramos la autorización de
+                        <strong>{{ nombre() }}</strong>
+                        para recoger la encomienda
+                        <strong>{{ codigo() }}</strong>.
+                        Nuestro equipo revisará la carta poder antes de
+                        habilitar el recojo.
+                    </p>
+
+                    <div class="mt-8 flex flex-col gap-3
+                     sm:flex-row">
+                        <button type="button" class="h-11 rounded-xl
+                       border border-slate-300
+                       px-5 text-sm font-semibold
+                       text-slate-600 transition
+                       hover:bg-slate-50
+                       dark:border-slate-700
+                       dark:text-slate-300
+                       dark:hover:bg-slate-800" (click)="nuevaSolicitud()">
+                            Hacer otra solicitud
+                        </button>
+
+                        <a routerLink="/rastreo" class="flex h-11 items-center
+                       justify-center rounded-xl
+                       bg-[#05BBFB] px-5
+                       text-sm font-bold text-slate-950
+                       transition hover:bg-[#20c4fc]">
+                            Volver al rastreo
+                        </a>
+                    </div>
+                </div>
+                }
+            </section>
+        </div>
+    </main>
+
+    <!-- Dialog: modificar solicitud existente -->
+    <p-dialog [visible]="infoModificarVisible()" (visibleChange)="infoModificarVisible.set($event)" appendTo="body"
+        [modal]="true" [draggable]="false" [resizable]="false" [dismissableMask]="true"
+        [style]="{ width: 'min(94vw, 560px)' }" header="¿Ya tienes una solicitud aprobada?">
+        <div class="space-y-6 text-sm leading-6
+             text-slate-600 dark:text-slate-300">
+            <div class="flex items-start gap-3
+               rounded-xl bg-[#05BBFB]/10 p-4">
+                <i class="pi pi-info-circle mt-1
+                 text-[#0399D1] dark:text-[#05BBFB]"></i>
+
+                <p>
+                    Por seguridad, una autorización ya <strong>aprobada</strong> o
+                    <strong>pendiente de revisión</strong> no se puede reemplazar
+                    llenando este formulario otra vez. El código de seguimiento y
+                    el DNI no son datos suficientemente secretos para permitir un
+                    cambio así de fácil.
+                </p>
+            </div>
+
+            <div>
+                <h3 class="font-bold text-slate-900
+                 dark:text-white">
+                    ¿Cómo modificarla entonces?
+                </h3>
+
+                <ul class="mt-3 space-y-3">
+                    <li class="flex gap-3">
+                        <i class="pi pi-phone mt-1 text-[#05BBFB]"></i>
+                        Llama al número de contacto que quedó registrado con la
+                        encomienda — verificamos que sea el mismo teléfono.
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="pi pi-envelope mt-1 text-[#05BBFB]"></i>
+                        Te enviamos un código por SMS o correo al destinatario
+                        original, y debe escribirlo para confirmar que es él.
+                    </li>
+
+                    <li class="flex gap-3">
+                        <i class="pi pi-map-marker mt-1 text-[#05BBFB]"></i>
+                        O comunícate con soporte, o acércate en persona con tu
+                        DNI físico al terminal de carga.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="flex justify-end
+               border-t border-slate-200 pt-5
+               dark:border-slate-800">
+                <button type="button" class="rounded-xl bg-[#05BBFB]
+                 px-5 py-2.5 text-sm
+                 font-bold text-slate-950
+                 transition hover:bg-[#20c4fc]" (click)="cerrarInfoModificar()">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
