@@ -24,12 +24,22 @@ public interface EncomiendaRepository extends JpaRepository<Encomienda, Long> {
 
 	@Query("""
 			SELECT e FROM Encomienda e
-			WHERE e.estado = pe.edu.cibertec.cargaaerea.enums.EstadoEncomienda.EMBARCADA
+			WHERE e.estado = pe.edu.cibertec.cargaaerea.enums.EstadoEncomienda.ARRIBADA
 			AND e.vuelo IS NOT NULL
-			AND e.vuelo.estado = pe.edu.cibertec.cargaaerea.enums.EstadoVuelo.DESPACHADO
 			AND e.vuelo.fechaLlegada <= :fechaLimite
 			""")
 	List<Encomienda> buscarVencidasParaAbandono(@Param("fechaLimite") java.time.LocalDate fechaLimite);
+
+	@Query("""
+			SELECT e FROM Encomienda e
+			WHERE e.estado = pe.edu.cibertec.cargaaerea.enums.EstadoEncomienda.EMBARCADA
+			AND e.vuelo IS NOT NULL
+			AND e.vuelo.estado = pe.edu.cibertec.cargaaerea.enums.EstadoVuelo.DESPACHADO
+			AND (e.vuelo.fechaLlegada < :hoy
+				OR (e.vuelo.fechaLlegada = :hoy AND e.vuelo.horaLlegada <= :horaActual))
+			""")
+	List<Encomienda> buscarEmbarcadasParaArribar(@Param("hoy") java.time.LocalDate hoy,
+			@Param("horaActual") java.time.LocalTime horaActual);
 
 	@Query("""
 			SELECT e FROM Encomienda e

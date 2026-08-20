@@ -807,6 +807,7 @@ export class Vuelos implements OnInit {
     const nombres: Record<string, string> = {
       EN_ALMACEN: 'En almacén',
       EMBARCADA: 'Embarcada',
+      ARRIBADA: 'Arribada',
       ENTREGADA: 'Entregada',
       CANCELADA: 'Cancelada',
       ABANDONADA: 'Abandonada',
@@ -830,6 +831,8 @@ export class Vuelos implements OnInit {
         return 'danger';
       case 'EMBARCADA':
         return 'info';
+      case 'ARRIBADA':
+        return 'warn';
       case 'ABANDONADA':
         return 'secondary';
       default:

@@ -469,14 +469,12 @@
                             <div class="flex justify-end gap-1">
                                 @if (encomienda.estadoAutorizacion === 'PENDIENTE') {
                                 <p-button icon="pi pi-check" severity="success" [text]="true" [rounded]="true"
-                                    ariaLabel="Aprobar petición" title="Aprobar petición" [disabled]="
-                    encomienda.estado !== 'EN_ALMACEN'
-                  " (onClick)="confirmarAprobar(encomienda)" />
+                                    ariaLabel="Aprobar petición" title="Aprobar petición"
+                                    [disabled]="!puedeRevisar(encomienda)" (onClick)="confirmarAprobar(encomienda)" />
 
                                 <p-button icon="pi pi-times" severity="danger" [text]="true" [rounded]="true"
-                                    ariaLabel="Rechazar petición" title="Rechazar petición" [disabled]="
-                    encomienda.estado !== 'EN_ALMACEN'
-                  " (onClick)="confirmarRechazar(encomienda)" />
+                                    ariaLabel="Rechazar petición" title="Rechazar petición"
+                                    [disabled]="!puedeRevisar(encomienda)" (onClick)="confirmarRechazar(encomienda)" />
                                 }
 
                                 <p-button icon="pi pi-trash" severity="danger" [text]="true" [rounded]="true"
@@ -781,6 +779,22 @@
 
                 <div class="flex-1 p-5">
                     <dl class="space-y-3 text-sm">
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <dt class="text-[11px] text-slate-400">Código de seguimiento</dt>
+                                <dd class="mt-0.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                                    {{ encomienda.codigo }}
+                                </dd>
+                            </div>
+
+                            <div>
+                                <dt class="text-[11px] text-slate-400">DNI destinatario original</dt>
+                                <dd class="mt-0.5 font-mono font-bold text-slate-800 dark:text-slate-200">
+                                    {{ encomienda.destinatarioDni }}
+                                </dd>
+                            </div>
+                        </div>
+
                         <div>
                             <dt class="text-[11px] text-slate-400">
                                 {{
@@ -892,13 +906,13 @@
 
                     <div class="flex flex-wrap justify-end gap-2">
                         @if (encomienda.estadoAutorizacion === 'PENDIENTE') {
-                        <p-button label="Aprobar" icon="pi pi-check" severity="success" [outlined]="true" [disabled]="
-                    encomienda.estado !== 'EN_ALMACEN'
-                  " styleClass="!rounded-xl" (onClick)="confirmarAprobar(encomienda)" />
+                        <p-button label="Aprobar" icon="pi pi-check" severity="success" [outlined]="true"
+                            [disabled]="!puedeRevisar(encomienda)" styleClass="!rounded-xl"
+                            (onClick)="confirmarAprobar(encomienda)" />
 
-                        <p-button label="Rechazar" icon="pi pi-times" severity="danger" [outlined]="true" [disabled]="
-                    encomienda.estado !== 'EN_ALMACEN'
-                  " styleClass="!rounded-xl" (onClick)="confirmarRechazar(encomienda)" />
+                        <p-button label="Rechazar" icon="pi pi-times" severity="danger" [outlined]="true"
+                            [disabled]="!puedeRevisar(encomienda)" styleClass="!rounded-xl"
+                            (onClick)="confirmarRechazar(encomienda)" />
                         }
 
                         <p-button label="Eliminar" icon="pi pi-trash" severity="danger" [text]="true" [disabled]="

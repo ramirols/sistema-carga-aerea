@@ -170,6 +170,10 @@ export class Encomiendas implements OnInit {
         value: 'EMBARCADA',
       },
       {
+        label: 'Arribada',
+        value: 'ARRIBADA',
+      },
+      {
         label: 'Entregada',
         value: 'ENTREGADA',
       },
@@ -832,6 +836,7 @@ export class Encomiendas implements OnInit {
     > = {
       EN_ALMACEN: 'En almacén',
       EMBARCADA: 'Embarcada',
+      ARRIBADA: 'Arribada',
       ENTREGADA: 'Entregada',
       CANCELADA: 'Cancelada',
       ABANDONADA: 'Abandonada',
@@ -846,6 +851,8 @@ export class Encomiendas implements OnInit {
     switch (estado) {
       case 'EMBARCADA':
         return 'info';
+      case 'ARRIBADA':
+        return 'warn';
       case 'ENTREGADA':
         return 'success';
       case 'CANCELADA':

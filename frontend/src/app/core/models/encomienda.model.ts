@@ -3,6 +3,7 @@ import { EstadoVuelo } from './vuelo.model';
 export type EstadoEncomienda =
     | 'EN_ALMACEN'
     | 'EMBARCADA'
+    | 'ARRIBADA'
     | 'ENTREGADA'
     | 'CANCELADA'
     | 'ABANDONADA';

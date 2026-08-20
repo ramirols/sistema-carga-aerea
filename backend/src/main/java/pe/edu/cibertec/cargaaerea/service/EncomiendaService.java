@@ -25,7 +25,8 @@ import java.util.Set;
 public class EncomiendaService {
 	private static final Map<EstadoEncomienda, Set<EstadoEncomienda>> TRANSICIONES_VALIDAS = Map.of(
 			EstadoEncomienda.EN_ALMACEN, Set.of(EstadoEncomienda.EMBARCADA, EstadoEncomienda.CANCELADA),
-			EstadoEncomienda.EMBARCADA, Set.of(EstadoEncomienda.ENTREGADA, EstadoEncomienda.CANCELADA),
+			EstadoEncomienda.EMBARCADA, Set.of(EstadoEncomienda.ARRIBADA, EstadoEncomienda.CANCELADA),
+			EstadoEncomienda.ARRIBADA, Set.of(EstadoEncomienda.ENTREGADA),
 			EstadoEncomienda.ENTREGADA, Set.of(),
 			EstadoEncomienda.CANCELADA, Set.of(),
 			EstadoEncomienda.ABANDONADA, Set.of());
@@ -221,9 +222,6 @@ public class EncomiendaService {
 		if (r.estado() == EstadoEncomienda.EMBARCADA && e.getVuelo() == null)
 			throw new ReglaNegocioException("Debe asignar un vuelo antes de embarcar");
 		if (r.estado() == EstadoEncomienda.ENTREGADA) {
-			if (e.getVuelo() == null || e.getVuelo().getEstado() != EstadoVuelo.DESPACHADO
-					|| e.getVuelo().getFechaLlegada().isAfter(LocalDate.now()))
-				throw new ReglaNegocioException("No se puede entregar una encomienda cuyo vuelo aún no ha llegado");
 			if (r.recibidoPorNombre() == null || r.recibidoPorNombre().isBlank() || r.recibidoPorDni() == null
 					|| r.recibidoPorDni().isBlank())
 				throw new ReglaNegocioException("Debes registrar el nombre y DNI de quien recibió la encomienda");
@@ -267,15 +265,20 @@ public class EncomiendaService {
 	public EncomiendaDtos.Response marcarAbandonada(Long id) {
 		Encomienda e = buscar(id);
 
-		if (e.getEstado() != EstadoEncomienda.EMBARCADA)
-			throw new ReglaNegocioException("Solo se puede declarar en abandono una encomienda embarcada");
-
-		if (e.getVuelo() == null || e.getVuelo().getEstado() != EstadoVuelo.DESPACHADO
-				|| e.getVuelo().getFechaLlegada().isAfter(LocalDate.now()))
-			throw new ReglaNegocioException("La encomienda todavía no ha llegado a su destino");
+		if (e.getEstado() != EstadoEncomienda.ARRIBADA)
+			throw new ReglaNegocioException("Solo se puede declarar en abandono una encomienda ya arribada");
 
 		declararAbandono(e);
 		return dto(e);
+	}
+
+	@Scheduled(cron = "0 */5 * * * *")
+	@Transactional
+	public void marcarArribosAutomaticos() {
+		LocalDateTime ahora = LocalDateTime.now();
+		for (Encomienda e : repo.buscarEmbarcadasParaArribar(ahora.toLocalDate(), ahora.toLocalTime())) {
+			e.setEstado(EstadoEncomienda.ARRIBADA);
+		}
 	}
 
 	@Scheduled(cron = "0 0 3 * * *")
@@ -359,13 +362,9 @@ public class EncomiendaService {
 	}
 
 	private Integer diasEnAlmacen(Encomienda e) {
-		if (e.getEstado() != EstadoEncomienda.EMBARCADA || e.getVuelo() == null)
-			return null;
-		if (e.getVuelo().getEstado() != EstadoVuelo.DESPACHADO)
+		if (e.getEstado() != EstadoEncomienda.ARRIBADA || e.getVuelo() == null)
 			return null;
 		LocalDate llegada = e.getVuelo().getFechaLlegada();
-		if (llegada.isAfter(LocalDate.now()))
-			return null;
 		return (int) ChronoUnit.DAYS.between(llegada, LocalDate.now());
 	}
 

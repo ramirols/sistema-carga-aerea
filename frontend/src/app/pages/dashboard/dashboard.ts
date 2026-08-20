@@ -124,6 +124,7 @@ export class Dashboard implements OnInit {
         labels: [
             'En almacén',
             'Embarcada',
+            'Arribada',
             'Entregada',
             'Cancelada',
             'Abandonada',
@@ -132,6 +133,7 @@ export class Dashboard implements OnInit {
             data: [
                 this.contarEncomiendas('EN_ALMACEN'),
                 this.contarEncomiendas('EMBARCADA'),
+                this.contarEncomiendas('ARRIBADA'),
                 this.contarEncomiendas('ENTREGADA'),
                 this.contarEncomiendas('CANCELADA'),
                 this.contarEncomiendas('ABANDONADA'),
@@ -139,6 +141,7 @@ export class Dashboard implements OnInit {
             backgroundColor: [
                 '#f59e0b',
                 '#8b5cf6',
+                '#14b8a6',
                 '#22c55e',
                 '#ef4444',
                 '#64748b',

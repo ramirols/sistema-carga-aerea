@@ -181,6 +181,7 @@ export class Rastreo {
     const nombres: Record<string, string> = {
       EN_ALMACEN: 'En almacén',
       EMBARCADA: 'Embarcada',
+      ARRIBADA: 'Arribada',
       ENTREGADA: 'Entregada',
       CANCELADA: 'Cancelada',
       ABANDONADA: 'Abandonada',
@@ -195,6 +196,8 @@ export class Rastreo {
         'bg-amber-500/10 text-amber-700 dark:text-amber-400',
       EMBARCADA:
         'bg-blue-500/10 text-blue-700 dark:text-blue-400',
+      ARRIBADA:
+        'bg-teal-500/10 text-teal-700 dark:text-teal-400',
       ENTREGADA:
         'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
       CANCELADA:

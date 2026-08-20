@@ -280,6 +280,7 @@ export class Auditoria implements OnInit {
   private readonly etiquetasValor: Record<string, string> = {
     EN_ALMACEN: 'En almacén',
     EMBARCADA: 'Embarcada',
+    ARRIBADA: 'Arribada',
     ENTREGADA: 'Entregada',
     CANCELADA: 'Cancelada',
     ABANDONADA: 'Abandonada',

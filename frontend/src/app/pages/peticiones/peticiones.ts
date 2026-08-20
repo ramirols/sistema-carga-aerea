@@ -90,6 +90,7 @@ export class Peticiones implements OnInit {
     readonly opcionesEstado: Array<{ label: string; value: EstadoEncomienda }> = [
         { label: 'En almacén', value: 'EN_ALMACEN' },
         { label: 'Embarcada', value: 'EMBARCADA' },
+        { label: 'Arribada', value: 'ARRIBADA' },
         { label: 'Entregada', value: 'ENTREGADA' },
         { label: 'Cancelada', value: 'CANCELADA' },
     ];
@@ -163,6 +164,14 @@ export class Peticiones implements OnInit {
         if (valor.trim().length > 0) {
             this.vista.set('tarjetas');
         }
+    }
+
+    puedeRevisar(encomienda: Encomienda): boolean {
+        return (
+            encomienda.estado === 'EN_ALMACEN' ||
+            encomienda.estado === 'EMBARCADA' ||
+            encomienda.estado === 'ARRIBADA'
+        );
     }
 
     limpiarFiltros(): void {
@@ -343,6 +352,7 @@ export class Peticiones implements OnInit {
         const nombres: Record<EstadoEncomienda, string> = {
             EN_ALMACEN: 'En almacén',
             EMBARCADA: 'Embarcada',
+            ARRIBADA: 'Arribada',
             ENTREGADA: 'Entregada',
             CANCELADA: 'Cancelada',
             ABANDONADA: 'Abandonada',
@@ -355,6 +365,8 @@ export class Peticiones implements OnInit {
         switch (estado) {
             case 'EMBARCADA':
                 return 'info';
+            case 'ARRIBADA':
+                return 'warn';
             case 'ENTREGADA':
                 return 'success';
             case 'CANCELADA':
