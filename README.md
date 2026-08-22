@@ -180,7 +180,9 @@ El archivo de configuración se encuentra en:
 backend/src/main/resources/application.properties
 ```
 
-El archivo ya trae la configuración necesaria para desarrollo local: conexión a MySQL, JWT, CORS y Cloudinary (usado para guardar y entregar de forma firmada la carta poder del cambio de consignatario). También define `carga.almacenaje.dias-limite-abandono`, la cantidad de días que una encomienda puede esperar en almacén después de que su vuelo fue despachado antes de declararse **Abandonada** automáticamente. No necesitas modificar nada para levantar el proyecto tal como está en el repositorio.
+El archivo ya trae la configuración necesaria para desarrollo local: conexión a MySQL, JWT y CORS. También define `carga.almacenaje.dias-limite-abandono`, la cantidad de días que una encomienda puede esperar en almacén después de que su vuelo fue despachado antes de declararse **Abandonada** automáticamente.
+
+Las credenciales de Cloudinary (`cloudinary.cloud-name`, `cloudinary.api-key`, `cloudinary.api-secret`) se dejaron vacías a propósito tras la sustentación. Para que vuelva a funcionar la subida de la carta poder del cambio de consignatario, crea tu propia cuenta gratuita en [cloudinary.com](https://cloudinary.com) y coloca ahí tus credenciales. Sin ellas, el resto del sistema funciona con normalidad; solo falla la subida/visualización de la carta poder.
 
 > La clave JWT debe tener como mínimo 32 caracteres para trabajar con HS256.
 
